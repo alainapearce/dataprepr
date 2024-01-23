@@ -1,0 +1,33 @@
+Package: dataprepr
+Type: Package
+Title: CogNEATO Lab Data Tools
+Date: 2023-10-07
+Version: 0.1.0
+Author@R: as.person("Alaina Pearce <azp271@psu.edu> [aut, cre]")
+Maintainer: Alaina Pearce <azp271@psu.edu>
+Description: This is a collection of functions to be used in the Cognitive Neuroscience of Eating and Obesity (CogNEATO) Lab to assist with data processing.
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/alainapearce/dataprepr
+BugReports: https://github.com/alainapearce/dataprepr/issues
+Imports:
+    stats,
+    methods,
+    sjlabelled,
+    minpack.lm,
+    childsds,
+    lubridate,
+    reshape
+Remotes:
+    miyamot0/discountingtools
+Suggests: 
+    knitr,
+    rmarkdown,
+    devtools,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+Depends: 
+    R (>= 4.0)
+RoxygenNote: 7.2.3
