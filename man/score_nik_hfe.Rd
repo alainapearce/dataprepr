@@ -4,10 +4,12 @@
 \alias{score_nik_hfe}
 \title{score_nik_hfe: Scored data from the Home Food Environment Survey from the Neighborhood Impact on Kids Study}
 \usage{
-score_nik_hfe(hfe_data, id)
+score_nik_hfe(hfe_data, score_base = TRUE, id)
 }
 \arguments{
 \item{hfe_data}{a data.frame all items for the Home Food Environment Survey from the Neighborhood Impact on Kids Study following the naming conventions described above}
+
+\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 }

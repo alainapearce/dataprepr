@@ -16,7 +16,7 @@
 #'
 #' @param ffbs_data a data.frame all items for the Family Food Behavior Survey following the naming conventions described above
 #' @inheritParams score_bes
-#'  @inheritParams score_bes
+#'@inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Family Food Behavior Survey
 #' @examples
@@ -30,7 +30,7 @@
 #'
 #' @export
 
-score_ffbs <- function(ffbs_data, id) {
+score_ffbs <- function(ffbs_data, score_base = TRUE, id) {
 
     #### 1. Set up/initial checks #####
 

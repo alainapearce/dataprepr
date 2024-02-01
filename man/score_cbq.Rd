@@ -4,10 +4,12 @@
 \alias{score_cbq}
 \title{score_cbq: Scored data from the Child Behavior Questionnaire}
 \usage{
-score_cbq(cbq_data, id)
+score_cbq(cbq_data, score_base = TRUE, id)
 }
 \arguments{
 \item{cbq_data}{a data.frame all items for the Child Behavior Questionnaire following the naming conventions described above}
+
+\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 }
@@ -20,7 +22,7 @@ This function scores the Child Behavior Questionnaire and provides subscale scor
 \details{
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'cbq#' where # is the question number (1-94)
+2) The  columns/variables must match the following naming convention: 'cbq#' 'cbq_#' where # is the question number (1-94)
 3) All questions must have the numeric value for the choice: 1 - Extremely Untrue, 2 - Quite Untrue, 3 - Sightly Untrue, 4 - Neither True nor False, 5 - Slightly True, 6 - Quite True, 7 - Extremely True, NA - NA
 
 Note, as long as variable names match those listed, the dataset can include other variables
@@ -33,12 +35,10 @@ cbq_score_data <- score_cbq(cbq_data, id = 'ID')
 \dontrun{
 }
 
+
 }
 \references{
-Putnam SP, Rothbart MK. Development of Short and Very Short Forms of the Children’s Behavior Questionnaire. Journal of Personality Assessment. 2006;87(1):102-112. doi:10.1207/s15327752jpa8701_09 https://doi.org/10.1097/00004703-200112000-00007 (\href{https://pubmed.ncbi.nlm.nih.gov/16856791/}{PubMed})
+Putnam SP, Rothbart MK. Development of Short and Very Short Forms of the Children’s Behavior Questionnaire. Journal of Personality Assessment. 2006;87(1):102-112. doi:10.1207/s15327752jpa8701_09 (\href{https://pubmed.ncbi.nlm.nih.gov/16856791/}{PubMed})
 
 Rothbart MΚ, Ahadi SA, Hershey KL. Temperament and Social Behavior in Childhood. Merrill-Palmer Quarterly. 1994;40(1):21-39 (\href{https://www.jstor.org/stable/23087906}{jstore})
-}
-\seealso{
-Raw data from Qualtrics was processed using the following script: \code{\link{util_fbs_parent_v2dat}}
 }

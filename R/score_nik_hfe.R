@@ -28,7 +28,7 @@
 #'
 #' @export
 
-score_nik_hfe <- function(hfe_data, id) {
+score_nik_hfe <- function(hfe_data, score_base = TRUE, id) {
 
     #### 1. Set up/initial checks #####
 

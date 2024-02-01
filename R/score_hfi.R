@@ -50,7 +50,7 @@ score_hfi <- function(hfi_data, score_base = TRUE, id) {
     #### 2. Set Up Data #####
 
     # set up database for results create empty matrix
-    hfi_score_dat <- data.frame(dairy = rep(NA, nrow(hfi_data)), dairy_lowfat = rep(NA, nrow(hfi_data)), vegetables = rep(NA, nrow(hfi_data)), veg_nopotato = rep(NA, nrow(hfi_data)), fruit = rep(NA, nrow(hfi_data)), meat_protein = rep(NA, nrow(hfi_data)), meat_protein_processed = rep(NA, nrow(hfi_data)), added_fat = rep(NA, nrow(hfi_data)), added_fat_lowfat = rep(NA, nrow(hfi_data)), frozen_dessert = rep(NA, nrow(hfi_data)), frozen_dessert_lowfat = rep(NA, nrow(hfi_data)), prepared_dessert = rep(NA, nrow(hfi_data)), prepared_dessert_lowfat = rep(NA, nrow(hfi_data)), savory_snacks = rep(NA, nrow(hfi_data)), savory_snacks_lowfat = rep(NA, nrow(hfi_data)), microwave_quickfood = rep(NA, nrow(hfi_data)), bread = rep(NA, nrow(hfi_data)), bread_wheat = rep(NA, nrow(hfi_data)), cereal = rep(NA, nrow(hfi_data)), cereal_highsugar = rep(NA, nrow(hfi_data)), cereal_wg = rep(NA, nrow(hfi_data)), candy = rep(NA, nrow(hfi_data)), beverages = rep(NA, nrow(hfi_data)), bev_lowsugar = rep(NA, nrow(hfi_data)), fridge_accesible = rep(NA, nrow(hfi_data)), fridge_healthy = rep(NA, nrow(hfi_data)), fridge_unhealthy = rep(NA, nrow(hfi_data)), kitchen_accesible = rep(NA, nrow(hfi_data)), kitchen_healthy = rep(NA, nrow(hfi_data)), kitchen_unheathy = rep(NA, nrow(hfi_data)), obesogenic_foods = rep(NA, nrow(hfi_data)))
+    hfi_score_dat <- data.frame(hfi_dairy = rep(NA, nrow(hfi_data)), hfi_dairy_highfat = rep(NA, nrow(hfi_data)), hfi_vegetables = rep(NA, nrow(hfi_data)), hfi_veg_nopotato = rep(NA, nrow(hfi_data)), hfi_fruit = rep(NA, nrow(hfi_data)), hfi_meat_protein = rep(NA, nrow(hfi_data)), hfi_meat_protein_processed = rep(NA, nrow(hfi_data)), hfi_added_fat = rep(NA, nrow(hfi_data)), hfi_added_fat_reg = rep(NA, nrow(hfi_data)), hfi_frozen_dessert = rep(NA, nrow(hfi_data)), hfi_frozen_dessert_highfat = rep(NA, nrow(hfi_data)), hfi_prepared_dessert = rep(NA, nrow(hfi_data)), hfi_prepared_dessert_highfat = rep(NA, nrow(hfi_data)), hfi_savory_snacks = rep(NA, nrow(hfi_data)), hfi_savory_snacks_highfat = rep(NA, nrow(hfi_data)), hfi_bread = rep(NA, nrow(hfi_data)), hfi_bread_wheat = rep(NA, nrow(hfi_data)), hfi_cereal = rep(NA, nrow(hfi_data)), hfi_cereal_highsugar = rep(NA, nrow(hfi_data)), hfi_candy = rep(NA, nrow(hfi_data)), hfi_beverages = rep(NA, nrow(hfi_data)), hfi_bev_highsugar = rep(NA, nrow(hfi_data)), hfi_microwave_quickfood = rep(NA, nrow(hfi_data)), hfi_fridge_accessible = rep(NA, nrow(hfi_data)), hfi_fridge_healthy = rep(NA, nrow(hfi_data)), hfi_fridge_unhealthy = rep(NA, nrow(hfi_data)), hfi_kitchen_accessible = rep(NA, nrow(hfi_data)), hfi_kitchen_healthy = rep(NA, nrow(hfi_data)), hfi_kitchen_unhealthy = rep(NA, nrow(hfi_data)), hfi_obesogenic_foods = rep(NA, nrow(hfi_data)))
 
     if (isTRUE(ID_arg)) {
         hfi_score_dat <- data.frame(hfi_data[[id]], hfi_score_dat)
@@ -67,66 +67,85 @@ score_hfi <- function(hfi_data, score_base = TRUE, id) {
     ## Score Subscales
 
     # diary
-    hfi_score_dat[['dairy']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('dairy|cheese', names(hfi_data_edit))])) == 21, NA, base::rowSums(hfi_data_edit[ , grepl('dairy|cheese', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_dairy']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('dairy|cheese', names(hfi_data_edit))])) == 21, NA, base::rowSums(hfi_data_edit[ , grepl('dairy|cheese', names(hfi_data_edit))], na.rm = TRUE))
     
-    hfi_score_dat[['dairy_lowfat']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('cheese_c|cheese_d|cheese_e|cheese_f|cheese_h|cheese_j|dairy_a|dairy_b|dairy_f|dairy_g|dairy_h|dairy_j', names(hfi_data_edit))])) == 12, NA, base::rowSums(hfi_data_edit[ , grepl('dairy|cheese', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_dairy_highfat']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('cheese_a|cheese_b|cheese_g|cheese_i|cheese_k|dairy_c|dairy_d|dairy_e|dairy_i', names(hfi_data_edit))])) == 9, NA, base::rowSums(hfi_data_edit[ , grepl('cheese_a|cheese_b|cheese_g|cheese_i|cheese_k|dairy_c|dairy_d|dairy_e|dairy_i', names(hfi_data_edit))], na.rm = TRUE))
 
     # vegetables
-    hfi_score_dat[['vegetables']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('veg', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))])) == 20, NA, base::rowSums(hfi_data_edit[ , grepl('veg', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_vegetables']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('veg', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))])) == 20, NA, base::rowSums(hfi_data_edit[ , grepl('veg', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))], na.rm = TRUE))
     
-    hfi_score_dat[['veg_nopotato']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('veg', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit)) & !grepl('_o', names(hfi_data_edit))])) == 19, NA, base::rowSums(hfi_data_edit[ , grepl('veg', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit)) & !grepl('_o', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_veg_nopotato']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('veg', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit)) & !grepl('_o', names(hfi_data_edit))])) == 19, NA, base::rowSums(hfi_data_edit[ , grepl('veg', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit)) & !grepl('_o', names(hfi_data_edit))], na.rm = TRUE))
 
     # fruit
-    hfi_score_dat[['fruit']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('fruit', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))])) == 26, NA, base::rowSums(hfi_data_edit[ , grepl('veg', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_fruit']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('fruit', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))])) == 26, NA, base::rowSums(hfi_data_edit[ , grepl('veg', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))], na.rm = TRUE))
 
     # meat_protein
-    hfi_score_dat[['meat_protein']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('deli|protein', names(hfi_data_edit))])) == 16, NA, base::rowSums(hfi_data_edit[ , grepl('deli|protein', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_meat_protein']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('deli|protein', names(hfi_data_edit))])) == 16, NA, base::rowSums(hfi_data_edit[ , grepl('deli|protein', names(hfi_data_edit))], na.rm = TRUE))
     
-    hfi_score_dat[['meat_protein_processed']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('deli_c|deli_d|deli_e|deli_f', names(hfi_data_edit))])) == 13, NA, base::rowSums(hfi_data_edit[ , grepl('deli_c|deli_d|deli_e|deli_f', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_meat_protein_processed']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('deli_c|deli_d|deli_e|deli_f', names(hfi_data_edit))])) == 4, NA, base::rowSums(hfi_data_edit[ , grepl('deli_c|deli_d|deli_e|deli_f', names(hfi_data_edit))], na.rm = TRUE))
     
     # added fat
-    hfi_score_dat[['added_fat']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('oils|dressing|cond_a|cond_b|cond_c', names(hfi_data_edit))])) == 13, NA, base::rowSums(hfi_data_edit[ , grepl('oils|dressing|cond_a|cond_b|cond_c', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_added_fat']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('oils|dressing|cond_a|cond_b|cond_c', names(hfi_data_edit))])) == 13, NA, base::rowSums(hfi_data_edit[ , grepl('oils|dressing|cond_a|cond_b|cond_c', names(hfi_data_edit))], na.rm = TRUE))
     
-    hfi_score_dat[['added_fat_lowfat']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('oils_b|oils_d|dressing_b|cond_b|cond_c', names(hfi_data_edit))])) == 5, NA, base::rowSums(hfi_data_edit[ , grepl('oils_b|oils_d|dressing_b|cond_b|cond_c', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_added_fat_reg']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('oils_a|oils_c|oils_e|oils_f|oils_g|oils_h|dressing_a|cond_a', names(hfi_data_edit))])) == 8, NA, base::rowSums(hfi_data_edit[ , grepl('oils_a|oils_c|oils_e|oils_f|oils_g|oils_h|dressing_a|cond_a', names(hfi_data_edit))], na.rm = TRUE))
     
     # frozen desert
-    hfi_score_dat[['frozen_dessert']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('frozen', names(hfi_data_edit))])) == 7, NA, base::rowSums(hfi_data_edit[ , grepl('frozen', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_frozen_dessert']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('frozen', names(hfi_data_edit))])) == 7, NA, base::rowSums(hfi_data_edit[ , grepl('frozen', names(hfi_data_edit))], na.rm = TRUE))
     
-    hfi_score_dat[['frozen_dessert_lowfat']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('frozen_b|frozen_c|frozen_e|frozen_f', names(hfi_data_edit))])) == 4, NA, base::rowSums(hfi_data_edit[ , grepl('frozen_b|frozen_c|frozen_e|frozen_f', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_frozen_dessert_highfat']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('frozen_a|frozen_d|frozen_g', names(hfi_data_edit))])) == 3, NA, base::rowSums(hfi_data_edit[ , grepl('frozen_a|frozen_d|frozen_g', names(hfi_data_edit))], na.rm = TRUE))
     
     # prepared desert
-    hfi_score_dat[['prepared_dessert']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('dessert', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))])) == 8, NA, base::rowSums(hfi_data_edit[ , grepl('dessert', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_prepared_dessert']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('dessert', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))])) == 8, NA, base::rowSums(hfi_data_edit[ , grepl('dessert', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))], na.rm = TRUE))
     
-    hfi_score_dat[['prepared_dessert_lowfat']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('dessert_b|dessert_d', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))])) == 2, NA, base::rowSums(hfi_data_edit[ , grepl('dessert_b|dessert_d', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_prepared_dessert_highfat']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('dessert_a|dessert_c|dessert_e|dessert_f|dessert_g|dessert_h', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))])) == 6, NA, base::rowSums(hfi_data_edit[ , grepl('dessert_a|dessert_c|dessert_e|dessert_f|dessert_g|dessert_h', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))], na.rm = TRUE))
     
     # savory snacks
-    hfi_score_dat[['savory_snacks']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('snacks', names(hfi_data_edit))])) == 18, NA, base::rowSums(hfi_data_edit[ , grepl('snacks', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_savory_snacks']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('snacks', names(hfi_data_edit))])) == 18, NA, base::rowSums(hfi_data_edit[ , grepl('snacks', names(hfi_data_edit))], na.rm = TRUE))
     
-    hfi_score_dat[['savory_snacks_lowfat']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('snacks_c|snacks_e|snacks_h|snacks_j|snacks_l|snacks_m|snacks_n|snacks_r', names(hfi_data_edit))])) == 8, NA, base::rowSums(hfi_data_edit[ , grepl('snacks_c|snacks_e|snacks_h|snacks_j|snacks_l|snacks_m|snacks_n|snacks_r', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_savory_snacks_highfat']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('snacks_a|snacks_b|snacks_d|snacks_f|snacks_g|snacks_i|snacks_k|snacks_o|snacks_p|snacks_q', names(hfi_data_edit))])) == 10, NA, base::rowSums(hfi_data_edit[ , grepl('snacks_a|snacks_b|snacks_d|snacks_f|snacks_g|snacks_i|snacks_k|snacks_o|snacks_p|snacks_q', names(hfi_data_edit))], na.rm = TRUE))
     
     # bread
-    hfi_score_dat[['bread']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('bread', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))])) == 12, NA, base::rowSums(hfi_data_edit[ , grepl('bread', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_bread']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('bread', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))])) == 12, NA, base::rowSums(hfi_data_edit[ , grepl('bread', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))], na.rm = TRUE))
     
-    hfi_score_dat[['bread_wheat']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('bread_a|bread_c|bread_e|bread_g|bread_j', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))])) == 5, NA, base::rowSums(hfi_data_edit[ , grepl('bread_a|bread_c|bread_e|bread_g|bread_j', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_bread_wheat']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('bread_a|bread_c|bread_e|bread_g|bread_j', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))])) == 5, NA, base::rowSums(hfi_data_edit[ , grepl('bread_a|bread_c|bread_e|bread_g|bread_j', names(hfi_data_edit)) & !grepl('type', names(hfi_data_edit))], na.rm = TRUE))
     
     # cereal
     hfi_data_edit[ , grepl('hfi_17|hfi_18|hfi_19', names(hfi_data_edit))] <- sapply(hfi_data_edit[ , grepl('hfi_17|hfi_18|hfi_19', names(hfi_data_edit))], function(x) ifelse(x > 0, 1, 0))
     
-    hfi_score_dat[['cereal']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('hfi_17|hfi_18|hfi_19', names(hfi_data_edit))])) == 3, NA, base::rowSums(hfi_data_edit[ , grepl('hfi_17|hfi_18|hfi_19', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_cereal']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('hfi_17|hfi_18|hfi_19', names(hfi_data_edit))])) == 3, NA, base::rowSums(hfi_data_edit[ , grepl('hfi_17|hfi_18|hfi_19', names(hfi_data_edit))], na.rm = TRUE))
     
-    hfi_score_dat[['cereal_highsugar']] <- hfi_data_edit['hfi_19']
+    hfi_score_dat[['hfi_cereal_highsugar']] <- hfi_data_edit[['hfi_19']]
     
     
     # candy
-
+    hfi_score_dat[['hfi_candy']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('candy', names(hfi_data_edit))])) == 5, NA, base::rowSums(hfi_data_edit[ , grepl('candy', names(hfi_data_edit))], na.rm = TRUE))
+    
+    # beverages
+    hfi_score_dat[['hfi_beverages']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('bev', names(hfi_data_edit))])) == 9, NA, base::rowSums(hfi_data_edit[ , grepl('bev', names(hfi_data_edit))], na.rm = TRUE))
+    
+    hfi_score_dat[['hfi_bev_highsugar']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('bev_a|bev_c|bev_e|bev_f|bev_g|bev_i', names(hfi_data_edit))])) == 6, NA, base::rowSums(hfi_data_edit[ , grepl('bev_a|bev_c|bev_e|bev_f|bev_g|bev_i', names(hfi_data_edit))], na.rm = TRUE))
+    
+    # Microwave/Quick foods
+    hfi_score_dat[['hfi_microwave_quickfood']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('quick', names(hfi_data_edit))])) == 8, NA, base::rowSums(hfi_data_edit[ , grepl('quick', names(hfi_data_edit))], na.rm = TRUE))
+    
+    # fridge accessible
+    hfi_score_dat[['hfi_fridge_accessible']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('fridge', names(hfi_data_edit))])) == 15, NA, base::rowSums(hfi_data_edit[ , grepl('fridge', names(hfi_data_edit))], na.rm = TRUE))
+    
+    hfi_score_dat[['hfi_fridge_healthy']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('fridge_a|fridge_b|fridge_g|fridge_h|fridge_j|fridge_k|fridge_m|fridge_n|fridge_o', names(hfi_data_edit))])) == 9, NA, base::rowSums(hfi_data_edit[ , grepl('fridge_a|fridge_b|fridge_g|fridge_h|fridge_j|fridge_k|fridge_m|fridge_n|fridge_o', names(hfi_data_edit))], na.rm = TRUE))
+    
+    hfi_score_dat[['hfi_fridge_unhealthy']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('fridge_c|fridge_d|fridge_e|fridge_f|fridge_i|fridge_l', names(hfi_data_edit))])) == 6, NA, base::rowSums(hfi_data_edit[ , grepl('fridge_c|fridge_d|fridge_e|fridge_f|fridge_i|fridge_l', names(hfi_data_edit))], na.rm = TRUE))
+    
+    # kitchen accessible
+    hfi_score_dat[['hfi_kitchen_accessible']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('accesible', names(hfi_data_edit)) & !grepl('fridge', names(hfi_data_edit))])) == 12, NA, base::rowSums(hfi_data_edit[ , grepl('accesible', names(hfi_data_edit)) & !grepl('fridge', names(hfi_data_edit))], na.rm = TRUE))
+    
+    hfi_score_dat[['hfi_kitchen_healthy']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('accesible_a|accesible_b|accesible_c|accesible_e|accesible_i|accesible_l', names(hfi_data_edit))])) == 6, NA, base::rowSums(hfi_data_edit[ , grepl('accesible_a|accesible_b|accesible_c|accesible_e|accesible_i|accesible_l', names(hfi_data_edit))], na.rm = TRUE))
+    
+    hfi_score_dat[['hfi_kitchen_unhealthy']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('accesible_d|accesible_f|accesible_g|accesible_h|accesible_j|accesible_k', names(hfi_data_edit))])) == 6, NA, base::rowSums(hfi_data_edit[ , grepl('accesible_d|accesible_f|accesible_g|accesible_h|accesible_j|accesible_k', names(hfi_data_edit))], na.rm = TRUE))
+    
+    # obesogenic foods
+    hfi_score_dat[['hfi_obesogenic_foods']] <- ifelse(rowSums(is.na(hfi_score_dat[ , grepl('hfi_dairy_highfat|hfi_meat_protein_processed|hfi_added_fat_reg|hfi_frozen_dessert_highfat|hfi_prepared_dessert_highfat|hfi_savory_snacks_highfat|hfi_candy|hfi_bev_highsugar|hfi_microwave_quickfood|hfi_fridge_unhealthy|hfi_kitchen_unhealthy', names(hfi_score_dat))])) == 12, NA, base::rowSums(hfi_score_dat[ , grepl('hfi_dairy_highfat|hfi_meat_protein_processed|hfi_added_fat_reg|hfi_frozen_dessert_highfat|hfi_prepared_dessert_highfat|hfi_savory_snacks_highfat|hfi_candy|hfi_bev_highsugar|hfi_microwave_quickfood|hfi_fridge_unhealthy|hfi_kitchen_unhealthy', names(hfi_score_dat))], na.rm = TRUE))
+    
     #### 3. Clean Export/Scored Data #####
-    ## round data
-    if (isTRUE(ID_arg)){
-        hfi_score_dat[2:ncol(hfi_score_dat)] <- round(hfi_score_dat[2:ncol(hfi_score_dat)], digits = 3)
-    } else {
-        hfi_score_dat <- round(hfi_score_dat, digits = 3)
-    }
-
     ## merge raw responses with scored data
     if (isTRUE(ID_arg)){
       hfi_phenotype <- merge(hfi_data, hfi_score_dat, by = id)
