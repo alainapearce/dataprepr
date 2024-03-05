@@ -119,6 +119,7 @@ score_pds <- function(pds_data, respondent, score_base = TRUE, male = 0, female 
     }
   }
   
+
   # check if id exists
   ID_arg <- methods::hasArg(id)
   
@@ -132,7 +133,7 @@ score_pds <- function(pds_data, respondent, score_base = TRUE, male = 0, female 
   
   ## standard variable names
   pds_varnames <- c('pds_1', 'pds_2', 'pds_3', 'pds_4m', 'pds_5m', 'pds_4f', 'pds_5fa', 'pds_6')
-  
+
   if (sum(pds_varnames[1:3] %in% names(pds_data_edits)) < 3) {
     stop('Not all required variable are in pds_data or variable names match: "pds_1", "pds_2", "pds_3"')
   }
@@ -140,7 +141,7 @@ score_pds <- function(pds_data, respondent, score_base = TRUE, male = 0, female 
   ## determine single or mixed sex
   
   sex_levels <- unique(pds_data_edits[['sex']])
-  
+
   # check male variable names
   if (length(sex_levels) == 2) {
     if (sum(pds_varnames[4:5] %in% names(pds_data_edits)) < 2) {
@@ -165,11 +166,17 @@ score_pds <- function(pds_data, respondent, score_base = TRUE, male = 0, female 
   
   #### 2. Set Up Data #####
   
-  # re-scale data
+  # re-scale data except when value = 99
   if (isTRUE(score_base)){
-    pds_data[3:12] <- sapply(names(pds_data)[3:12], function(x) pds_data[[x]] + 1, simplify = TRUE)
+    pds_data[pds_varnames] <- sapply(names(pds_data)[pds_varnames], function(x) {
+      if(pds_data[[x]] != 99) {
+        return(pds_data[[x]] + 1)
+      } else {
+        return(pds_data[[x]])
+      }
+    }, simplify = TRUE)
   }
-  
+
   # check if variables are coded in appropriate range and change 99/'I Don't
   # Know' to NA
   for (var in 1:length(pds_varnames)) {
@@ -209,17 +216,18 @@ score_pds <- function(pds_data, respondent, score_base = TRUE, male = 0, female 
   
   pds_data_edits[['pds_tanner_cat']] <- ifelse(is.na(pds_data_edits[['pds_tanner_sum']]), NA, ifelse(pds_data_edits[['sex']] == 0, ifelse(pds_data_edits[['pds_tanner_sum']] == 12, 5, ifelse(pds_data_edits[['pds_tanner_sum']] >= 9, 4, ifelse(pds_data_edits[['pds_tanner_sum']] >= 6, ifelse(pds_data_edits['pds_2'] < 4 & pds_data_edits['pds_4m'] < 4 & pds_data_edits['pds_5m'] < 4, 3, 4), ifelse(pds_data_edits[['pds_tanner_sum']] >= 4, ifelse(pds_data_edits['pds_2'] < 3 & pds_data_edits['pds_4m'] < 3 & pds_data_edits['pds_5m'] < 3, 2, 3), 1)))), ifelse(pds_data_edits[['pds_5fa']] == 4, ifelse(pds_data_edits[['pds_tanner_sum']] == 8, 5, ifelse(pds_data_edits[['pds_tanner_sum']] <= 7, 4, NA)), ifelse(pds_data_edits[['pds_tanner_sum']] > 3, 3, ifelse(pds_data_edits[['pds_tanner_sum']] == 3, 2, ifelse(pds_data_edits[['pds_tanner_sum']] == 2, 1, NA))))))
   
-  
   #### 3. Clean Export/Scored Data #####
   
   ## merge raw responses with scored data
+  pds_scored <- pds_data_edits[, c(1, which(names(pds_data_edits) %in% c("pds_score_na", "pds_score", "pds_tanner_sum", "pds_tanner_cat")))]
+  
   if (isTRUE(ID_arg)){
-    pds_phenotype <- merge(pds_data, pds_data_edits[c(1, 13:16)], by = id)
-    
-    return(list(score_dat = as.data.frame(pds_data_edits),
+    pds_phenotype <- merge(pds_data, pds_scored, by = id)
+
+    return(list(score_dat = as.data.frame(pds_scored),
                 bids_phenotype = as.data.frame(pds_phenotype)))
   } else {
-    return(list(score_dat = as.data.frame(pds_data_edits)))
+    return(list(score_dat = as.data.frame(pds_scored)))
   }
   
   
