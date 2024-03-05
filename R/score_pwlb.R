@@ -92,9 +92,6 @@ score_pwlb <- function(pwlb_data, score_base = TRUE, id) {
     unhealthy_vars <- c("pwlb9", "pwlb11", "pwlb12", "pwlb13", "pwlb16", "pwlb17", "pwlb19", "pwlb20", "pwlb23")
     pwlb_score_dat[["pwlb_unhealthy"]] <- rowSums(pwlb_data_edit[unhealthy_vars])
 
-    ## add labels to data
-    pwlb_score_dat_labels[["pwlb_unhealthy"]] <- "PWLB Unhealthy Weight-Loss Strategy Score" #include this?
-
     ## Total
     pwlb_score_dat[["pwlb_total"]] <- rowSums(pwlb_data_edit[c(healthy_vars, unhealthy_vars)])
 
