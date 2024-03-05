@@ -34,7 +34,7 @@
 #'
 #' @export
 
-score_pwlb <- function(pwlb_data, id) {
+score_pwlb <- function(pwlb_data, score_base = TRUE, id) {
 
     #### 1. Set up/initial checks #####
 
@@ -67,44 +67,47 @@ score_pwlb <- function(pwlb_data, id) {
         names(pwlb_score_dat)[1] <- id
     }
 
-    # set up labels for pwlb_score_dat
-    pwlb_score_dat_labels <- lapply(pwlb_score_dat, function(x) attributes(x)$label)
-
+    # remove underscore if in column names
+    names(pwlb_data) <- gsub('pwlb_', 'pwlb', names(pwlb_data))
+    
+    # get primary questions to score
+    q_numbers <- seq(1, 24)
+    pwlb_primary_qs <- paste0("pwlb", q_numbers)
+    
+    # re-scale data
+    pwlb_data_edit <- pwlb_data
+    
+    if (isTRUE(score_base)){
+      pwlb_data_edit[pwlb_primary_qs] <- sapply(pwlb_primary_qs, function(x) pwlb_data[[x]] + 1, simplify = TRUE)
+    }
+    
     ## Score Subscales
 
-    # Helathy
+    # Healthy
     healthy_vars <- c("pwlb1", "pwlb2", "pwlb3", "pwlb4", "pwlb5", "pwlb6", "pwlb7", "pwlb8", "pwlb10", "pwlb14",
                       "pwlb15")
-    pwlb_score_dat[["pwlb_healthy"]] <- rowSums(pwlb_data[healthy_vars])
+    pwlb_score_dat[["pwlb_healthy"]] <- rowSums(pwlb_data_edit[healthy_vars])
 
-    ## add labels to data
-    pwlb_score_dat_labels[["pwlb_healthy"]] <- "PWLB Healthy Weight-Loss Strategy Score"
-
-    # Unhelathy
+    # Unhealthy
     unhealthy_vars <- c("pwlb9", "pwlb11", "pwlb12", "pwlb13", "pwlb16", "pwlb17", "pwlb19", "pwlb20", "pwlb23")
-    pwlb_score_dat[["pwlb_unhealthy"]] <- rowSums(pwlb_data[unhealthy_vars])
+    pwlb_score_dat[["pwlb_unhealthy"]] <- rowSums(pwlb_data_edit[unhealthy_vars])
 
     ## add labels to data
-    pwlb_score_dat_labels[["pwlb_unhealthy"]] <- "PWLB Unhealthy Weight-Loss Strategy Score"
+    pwlb_score_dat_labels[["pwlb_unhealthy"]] <- "PWLB Unhealthy Weight-Loss Strategy Score" #include this?
 
     ## Total
-    pwlb_score_dat[["pwlb_total"]] <- rowSums(pwlb_data[c(healthy_vars, unhealthy_vars)])
-
-    ## add labels to data
-    pwlb_score_dat_labels[["pwlb_total"]] <- "PWLB Total Score"
+    pwlb_score_dat[["pwlb_total"]] <- rowSums(pwlb_data_edit[c(healthy_vars, unhealthy_vars)])
 
     #### 3. Clean Export/Scored Data #####
-    ## round data
+
+    ## merge raw responses with scored data
     if (isTRUE(ID_arg)){
-        pwlb_score_dat[2:ncol(pwlb_score_dat)] <- round(pwlb_score_dat[2:ncol(pwlb_score_dat)], digits = 3)
+      pwlb_phenotype <- merge(pwlb_data, pwlb_score_dat, by = id)
+      
+      return(list(score_dat = as.data.frame(pwlb_score_dat),
+                  bids_phenotype = as.data.frame(pwlb_phenotype)))
     } else {
-        pwlb_score_dat <- round(pwlb_score_dat, digits = 3)
+      return(list(score_dat = as.data.frame(pwlb_score_dat)))
     }
-
-    ## make sure the variable labels match in the dataset
-    pwlb_score_dat = sjlabelled::set_label(pwlb_score_dat, label = matrix(unlist(pwlb_score_dat_labels,
-        use.names = FALSE)))
-
-    return(pwlb_score_dat)
 }
 
