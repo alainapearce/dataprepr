@@ -1,6 +1,6 @@
 #' score_tfeq18: Scored data from the Three-Factor Eating Questionnaire-R18
 #'
-#' This function scores the Three-Factor Eating Questionnaire-R18 and provides scores for cognitive restraint, uncontrolled eating, and emotional eating subscales
+#' This function scores the Three-Factor Eating Questionnaire-R18 and provides scores for cognitive restraint (cr), uncontrolled eating (ue), and emotional eating (ee) subscales
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
@@ -57,7 +57,7 @@ score_tfeq18 <- function(tfeq_data, score_base = TRUE, id) {
   #### 2. Set Up Data #####
   
   # set up database for results create empty matrix
-  tfeq_score_dat <- data.frame(cog_restraint = rep(NA, nrow(tfeq_data)), uncontrolled_eating = rep(NA, nrow(tfeq_data)), emotional_eating = rep(NA, nrow(tfeq_data)))
+  tfeq_score_dat <- data.frame(tfeq18_cr = rep(NA, nrow(tfeq_data)), tfeq18_ue = rep(NA, nrow(tfeq_data)), tfeq18_ee = rep(NA, nrow(tfeq_data)))
   
   if (isTRUE(ID_arg)) {
     tfeq_score_dat <- data.frame(tfeq_data[[id]], tfeq_score_dat)
@@ -88,15 +88,15 @@ score_tfeq18 <- function(tfeq_data, score_base = TRUE, id) {
 
   # Cognitive Restraint
   cr_vars <- c('tfeq2', 'tfeq11', 'tfeq12', 'tfeq15', 'tfeq16', 'tfeq18_recode')
-  tfeq_score_dat[["cog_restraint"]] <- rowSums(tfeq_data_edit[cr_vars])
+  tfeq_score_dat[["tfeq18_cr"]] <- rowSums(tfeq_data_edit[cr_vars])
   
   # Uncontrolled eating
   ue_vars <- c('tfeq1', 'tfeq4', 'tfeq5', 'tfeq7', 'tfeq8', 'tfeq9', 'tfeq13', 'tfeq14', 'tfeq17')
-  tfeq_score_dat[["uncontrolled_eating"]] <- rowSums(tfeq_data_edit[ue_vars])
+  tfeq_score_dat[["tfeq18_ue"]] <- rowSums(tfeq_data_edit[ue_vars])
   
   # Emotional eating
   ee_vars <- c('tfeq3', 'tfeq6', 'tfeq5', 'tfeq10')
-  tfeq_score_dat[["emotional_eating"]] <- rowSums(tfeq_data_edit[ee_vars])
+  tfeq_score_dat[["tfeq18_ee"]] <- rowSums(tfeq_data_edit[ee_vars])
   
 
   #### 3. Clean Export/Scored Data #####
