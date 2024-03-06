@@ -52,7 +52,7 @@ score_debq <- function(debq_data, score_base = TRUE, id) {
   #### 2. Set Up Data #####
   
   # set up database for results create empty matrix
-  debq_score_dat <- data.frame(bis = rep(NA, nrow(debq_data)), bas = rep(NA, nrow(debq_data)), bas_funseeking = rep(NA, nrow(debq_data)), bas_drive = rep(NA, nrow(debq_data)), bas_rewardresp = rep(NA, nrow(debq_data)))
+  debq_score_dat <- data.frame(debq_emotional = rep(NA, nrow(debq_data)), debq_external = rep(NA, nrow(debq_data)), debq_restrained = rep(NA, nrow(debq_data)))
   
   
   if (isTRUE(ID_arg)) {
@@ -64,7 +64,8 @@ score_debq <- function(debq_data, score_base = TRUE, id) {
   names(debq_data) <- gsub('debq_', 'debq', names(debq_data))
   
   # get primary questions
-  debq_primary_qs <- names(debq_data[, grepl('debq', names(debq_data))])
+  q_numbers <- seq(1, 33)
+  debq_primary_qs <- paste0("debq", q_numbers)
   
   # re-scale data
   debq_data_edit <- debq_data
@@ -72,19 +73,34 @@ score_debq <- function(debq_data, score_base = TRUE, id) {
   if (isTRUE(score_base)){
     debq_data_edit[debq_primary_qs] <- sapply(debq_primary_qs, function(x) debq_data[[x]] + 1, simplify = TRUE)
   }
-  
-  # calculate reversed scores
-  reverse_qs <- c("")
-  
-  for (var in 1:length(reverse_qs)) {
-    var_name <- reverse_qs[var]
-    reverse_name <- paste0(var_name, "_rev")
-    
-    debq_data_edit[[reverse_name]] <- ifelse(is.na(debq_data_edit[[var_name]]), NA, ifelse(debq_data_edit[[var_name]] == 1, 4, ifelse(debq_data_edit[[var_name]] == 2, 3,  ifelse(debq_data_edit[[var_name]] == 3, 2, 1))))
-  }
-  
+
+  # # calculate reversed scores -- NEED TO CONFIRM REVERSED ITEMS
+  # reverse_qs <- c("31")
+  # 
+  # for (var in 1:length(reverse_qs)) {
+  #   var_name <- reverse_qs[var]
+  #   reverse_name <- paste0(var_name, "_rev")
+  #   
+  #   debq_data_edit[[reverse_name]] <- ifelse(is.na(debq_data_edit[[var_name]]), NA, ifelse(debq_data_edit[[var_name]] == 1, 5, ifelse(debq_data_edit[[var_name]] == 2, 4,  ifelse(debq_data_edit[[var_name]] == 3, 3, NA))))
+  # }
+  # 
   ## Score Subscales
   
+  #Scores on each of the five scales, were obtained by dividing the sum of items scored by the total number of items on that scale
+  
+  # # Emotional Eating
+  # emotional_vars <- c('debq1', 'debq3', 'debq5', 'debq8', 'debq10', 'debq13', 'debq16', "debq20", 'debq23', 'debq25', 'debq28', 'debq30', 'debq32')
+  # debq_score_dat[['debq_emotional']] <- rowMeans(debq_data_edit[emotional_vars])
+  # 
+  # # External Eating
+  # external_vars <- c('debq2', 'debq6', 'debq9', 'debq12', 'debq10', 'debq15', 'debq18', "debq24", 'debq33')
+  # debq_score_dat[['debq_external']] <- rowMeans(debq_data_edit[external_vars])
+  # 
+  # # Restrained Eating
+  # restrained_vars <- c('debq4', 'debq7', 'debq11', 'debq17', 'debq19', 'debq22', 'debq26', "debq29", 'debq31')
+  # debq_score_dat[['debq_restrained']] <- rowMeans(debq_data_edit[restrained_vars])
+  # 
+  # 
   #### 3. Clean Export/Scored Data #####
   
   
