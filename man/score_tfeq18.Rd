@@ -17,7 +17,7 @@ score_tfeq18(tfeq_data, score_base = TRUE, id)
 A dataset with scores for the Three-Factor Eating Questionnaire-R18
 }
 \description{
-This function scores the Three-Factor Eating Questionnaire-R18 and provides scores for cognitive restraint, uncontrolled eating, and emotional eating subscales
+This function scores the Three-Factor Eating Questionnaire-R18 and provides scores for cognitive restraint (cr), uncontrolled eating (ue), and emotional eating (ee) subscales
 }
 \details{
 To use this function, the data must be prepared according to the following criteria:
