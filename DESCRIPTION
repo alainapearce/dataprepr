@@ -18,7 +18,8 @@ Imports:
     minpack.lm,
     childsds,
     lubridate,
-    reshape
+    reshape,
+    magrittr
 Remotes:
     miyamot0/discountingtools
 Suggests: 
