@@ -145,11 +145,15 @@ score_brief2 <- function(brief_data, age_var, sex_var, score_base = TRUE, male =
     # remove underscore if in column names
     names(brief_data) <- gsub('brief_', 'brief', names(brief_data))
     
+    # get primary questions
+    q_numbers <- seq(1, 63)
+    brief_primary_qs <- paste0("brief", q_numbers)
+    
     # re-scale data
     brief_data_edit <- brief_data
     
     if (isTRUE(score_base)){
-      brief_data_edit[4:66] <- sapply(names(brief_data_edit)[4:66], function(x) brief_data_edit[[x]] + 1, simplify = TRUE)
+      brief_data_edit[brief_primary_qs] <- sapply(names(brief_data_edit)[brief_primary_qs], function(x) brief_data_edit[[x]] + 1, simplify = TRUE)
     }
     
     ## Score Subscales
