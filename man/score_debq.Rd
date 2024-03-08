@@ -23,9 +23,11 @@ This function scores the Dutch Eating Behavior Questionnaire and provides subsca
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
 2) The  columns/variables must match the following naming convention: 'debq#' where # is the question number (1-24).
-3) Questions must have the numeric value for the choices: 1, Never | 2, Seldom | 3, Sometimes | 4, Often | 5, Very Often
+3) Questions must have the numeric value for the choices: 1=Never, 2=Rarely/Seldom, 3=Sometimes, 4=Often, 5=Very Often if score_base = FALSE or 0=Never, 1=Rarely/Seldom, 2=Sometimes, 3=Often, 4=Very Often if score_base = TRUE
 
 Note, as long as variable names match those listed, the dataset can include other variables
+
+Unlike the original Dutch version of the DEBQ (van Strien et al., 1986), the English version (Wardle, 1987) does not require reverse scoring of item 21. This function scores based on Wardle, 1987
 }
 \examples{
 
@@ -39,5 +41,5 @@ debq_score_data <- score_debq(debq_data, id = 'ID')
 
 }
 \references{
-need to add
+Wardle J. Eating style: a validation study of the Dutch Eating Behaviour Questionnaire in normal subjects and women with eating disorders. J Psychosom Res. 1987;31(2):161-9. doi: 10.1016/0022-3999(87)90072-9. PMID: 3473234.
 }

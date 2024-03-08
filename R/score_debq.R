@@ -5,12 +5,15 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
 #' 2) The  columns/variables must match the following naming convention: 'debq#' where # is the question number (1-24).
-#' 3) Questions must have the numeric value for the choices: 1, Never | 2, Seldom | 3, Sometimes | 4, Often | 5, Very Often
+#' 3) Questions must have the numeric value for the choices: 1=Never, 2=Rarely/Seldom, 3=Sometimes, 4=Often, 5=Very Often if score_base = FALSE or 0=Never, 1=Rarely/Seldom, 2=Sometimes, 3=Often, 4=Very Often if score_base = TRUE
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
-#'
+#' 
+#' Unlike the original Dutch version of the DEBQ (van Strien et al., 1986), the English version (Wardle, 1987) does not require reverse scoring of item 21. This function scores based on Wardle, 1987
+#' 
 #' @references
-#' need to add
+#' Wardle J. Eating style: a validation study of the Dutch Eating Behaviour Questionnaire in normal subjects and women with eating disorders. J Psychosom Res. 1987;31(2):161-9. doi: 10.1016/0022-3999(87)90072-9. PMID: 3473234.
+#' 
 #' @param debq_data a data.frame all items for the Dutch Eating Behavior Questionnaire following the naming conventions described above
 #' @inheritParams score_bes
 #'
@@ -74,35 +77,22 @@ score_debq <- function(debq_data, score_base = TRUE, id) {
     debq_data_edit[debq_primary_qs] <- sapply(debq_primary_qs, function(x) debq_data[[x]] + 1, simplify = TRUE)
   }
 
-  # # calculate reversed scores -- NEED TO CONFIRM REVERSED ITEMS
-  # reverse_qs <- c("31")
-  # 
-  # for (var in 1:length(reverse_qs)) {
-  #   var_name <- reverse_qs[var]
-  #   reverse_name <- paste0(var_name, "_rev")
-  #   
-  #   debq_data_edit[[reverse_name]] <- ifelse(is.na(debq_data_edit[[var_name]]), NA, ifelse(debq_data_edit[[var_name]] == 1, 5, ifelse(debq_data_edit[[var_name]] == 2, 4,  ifelse(debq_data_edit[[var_name]] == 3, 3, NA))))
-  # }
-  # 
   ## Score Subscales
   
-  #Scores on each of the five scales, were obtained by dividing the sum of items scored by the total number of items on that scale
+  # Emotional Eating
+  emotional_vars <- c('debq1', 'debq3', 'debq5', 'debq8', 'debq10', 'debq13', 'debq16', "debq20", 'debq23', 'debq25', 'debq28', 'debq30', 'debq32')
+  debq_score_dat[['debq_emotional']] <- rowMeans(debq_data_edit[emotional_vars])
   
-  # # Emotional Eating
-  # emotional_vars <- c('debq1', 'debq3', 'debq5', 'debq8', 'debq10', 'debq13', 'debq16', "debq20", 'debq23', 'debq25', 'debq28', 'debq30', 'debq32')
-  # debq_score_dat[['debq_emotional']] <- rowMeans(debq_data_edit[emotional_vars])
-  # 
-  # # External Eating
-  # external_vars <- c('debq2', 'debq6', 'debq9', 'debq12', 'debq10', 'debq15', 'debq18', "debq24", 'debq33')
-  # debq_score_dat[['debq_external']] <- rowMeans(debq_data_edit[external_vars])
-  # 
-  # # Restrained Eating
-  # restrained_vars <- c('debq4', 'debq7', 'debq11', 'debq17', 'debq19', 'debq22', 'debq26', "debq29", 'debq31')
-  # debq_score_dat[['debq_restrained']] <- rowMeans(debq_data_edit[restrained_vars])
-  # 
-  # 
+  # External Eating
+  external_vars <- c('debq2', 'debq6', 'debq9', 'debq12', 'debq15', 'debq18', 'debq21', 'debq24', 'debq27', 'debq33')
+  debq_score_dat[['debq_external']] <- rowMeans(debq_data_edit[external_vars])
+  
+  # Restrained Eating
+  restrained_vars <- c('debq4', 'debq7', 'debq11', 'debq14', 'debq17', 'debq19', 'debq22', 'debq26', 'debq29', 'debq31')
+  debq_score_dat[['debq_restrained']] <- rowMeans(debq_data_edit[restrained_vars])
+  
   #### 3. Clean Export/Scored Data #####
-  
+
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
