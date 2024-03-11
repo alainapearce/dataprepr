@@ -5,7 +5,8 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
 #' 2) The  columns/variables must match the following naming convention: 'pptq#' where # is the question number (1-15)
-#' 3) Questions 1-15 must have the numeric value for the choices: 1 - Definitely Yes (left side), 2 - A little bit (left side), 3 - It depends, 4 - A little bit (right side), 5 - Definitely yes (right side)
+#' 3) Questions 1-15 must have the numeric value for the choices: 1 - Definitely Yes (left side), 2 - A little bit (left side), 3 - It depends, 4 - A little bit (right side), 5 - Definitely yes (right side) if pptq_scale = 5 or
+#'                                                                1 - (left side), 2 - It depends (middle), 3 - (right side) if pptq_scale = 3
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
@@ -14,6 +15,7 @@
 #' Maćkiewicz M, Cieciuch J. Pictorial Personality Traits Questionnaire for Children (PPTQ-C)-A New Measure of Children's Personality Traits. Front Psychol. 2016 Apr 14;7:498. doi: 10.3389/fpsyg.2016.00498. PMID: 27252661; PMCID: PMC4879772.
 #' 
 #' @param pptq_data a data.frame all items for the Pictorial Personality Traits Questionnaire for Children  following the naming conventions described above
+#' @param pptq_scale 3 or 5: indicates if data was collected with a 3-point or 5-point likert scale
 #' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Pictorial Personality Traits Questionnaire for Children 
@@ -28,7 +30,7 @@
 #'
 #' @export
 
-score_pptq <- function(pptq_data, score_base = TRUE, id) {
+score_pptq <- function(pptq_data, pptq_scale, score_base = TRUE, id) {
   
   #### 1. Set up/initial checks #####
   
@@ -48,6 +50,16 @@ score_pptq <- function(pptq_data, score_base = TRUE, id) {
     if (!(id %in% names(pptq_data))) {
       stop("variable name entered as id is not in pptq_data")
     }
+  }
+  
+  if (isTRUE(pptq_scale)) {
+    if (!is.numeric(pptq_scale)) {
+      stop("pptq_scale must be be numeric: enter 3 or 5")
+    } else if (pptq_scale != 3 | pptq_scale != 5) {
+      stop("pptq_scale 3 or 5")
+    }
+  } else if (isFALSE(pptq_scale)) {
+    stop("pptq_scale must be entered as a number")
   }
   
   #### 2. Set Up Data #####
@@ -85,7 +97,21 @@ score_pptq <- function(pptq_data, score_base = TRUE, id) {
     var_name <- reverse_qs[var]
     reverse_name <- paste0(var_name, "_rev")
     
-    pptq_data_edit[[reverse_name]] <- ifelse(is.na(pptq_data_edit[[var_name]]), NA, ifelse(pptq_data_edit[[var_name]] == 1, 5, ifelse(pptq_data_edit[[var_name]] == 2, 4, 3)))
+    if (pptq_scale == 5) {
+      pptq_data_edit[[reverse_name]] <- ifelse(is.na(pptq_data_edit[[var_name]]), NA, 
+                                               ifelse(pptq_data_edit[[var_name]] == 1, 5, 
+                                                      ifelse(pptq_data_edit[[var_name]] == 2, 4, 
+                                                             ifelse(pptq_data_edit[[var_name]] == 3, 3,
+                                                                    ifelse(pptq_data_edit[[var_name]] == 4, 2, 1)))))
+      
+    } else {
+      if (pptq_scale == 3) {
+        pptq_data_edit[[reverse_name]] <- ifelse(is.na(pptq_data_edit[[var_name]]), NA, 
+                                                 ifelse(pptq_data_edit[[var_name]] == 1, 3, 
+                                                        ifelse(pptq_data_edit[[var_name]] == 2, 2, 1)))
+        
+      }
+    }
   }
   
   ## Score Subscales

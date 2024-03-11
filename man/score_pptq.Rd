@@ -4,10 +4,12 @@
 \alias{score_pptq}
 \title{score_pptq: Scored data from the Pictorial Personality Traits Questionnaire for Children}
 \usage{
-score_pptq(pptq_data, score_base = TRUE, id)
+score_pptq(pptq_data, pptq_scale, score_base = TRUE, id)
 }
 \arguments{
 \item{pptq_data}{a data.frame all items for the Pictorial Personality Traits Questionnaire for Children  following the naming conventions described above}
+
+\item{pptq_scale}{3 or 5: indicates if data was collected with a 3-point or 5-point likert scale}
 
 \item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
@@ -23,7 +25,8 @@ This function scores the Pictorial Personality Traits Questionnaire for Children
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
 2) The  columns/variables must match the following naming convention: 'pptq#' where # is the question number (1-15)
-3) Questions 1-15 must have the numeric value for the choices: 1 - Definitely Yes (left side), 2 - A little bit (left side), 3 - It depends, 4 - A little bit (right side), 5 - Definitely yes (right side)
+3) Questions 1-15 must have the numeric value for the choices: 1 - Definitely Yes (left side), 2 - A little bit (left side), 3 - It depends, 4 - A little bit (right side), 5 - Definitely yes (right side) if pptq_scale = 5 or
+                                                               1 - (left side), 2 - It depends (middle), 3 - (right side) if pptq_scale = 3
 
 Note, as long as variable names match those listed, the dataset can include other variables
 }
