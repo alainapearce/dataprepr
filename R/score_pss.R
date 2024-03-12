@@ -1,6 +1,6 @@
-#' score_pss: Scored data from the 10-item Percieved Stress Scale
+#' score_pss: Scored data from the 10-item Perceived Stress Scale
 #'
-#' This function scores the Percieved Stress Scale and provides XXX
+#' This function scores the 10-item Perceived Stress Scale and provides a total PSS score and subscale scores for: Perceived Helplessness and Perceived Self-efficacy
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
@@ -11,18 +11,17 @@
 #'
 #' @references
 #' 
-#' WHICH IS FOR THE 10-item?
 #' Cohen, S., Kamarck, T., and Mermelstein, R.(1983). A global measure of perceived stress. Journal of Health and Social Behavior, 24, 386-396. PMID: 6668417.
 #' Cohen, S. and Williamson, G. Perceived Stress in a Probability Sample of the United States. Spacapan, S. and Oskamp, S. (Eds.) The Social Psychology of Health. Newbury Park, CA: Sage, 1988.
 #' 
 #' 
-#' Subscale scoring comes from:
+#' Two-factor subscale scoring comes from:
 #' Taylor JM. Psychometric analysis of the Ten-Item Perceived Stress Scale. Psychol Assess. 2015 Mar;27(1):90-101. doi: 10.1037/a0038100. Epub 2014 Oct 27. PMID: 25346996.
 #' 
 #' @param pss_data a data.frame all items for the Percieved Stress Scale following the naming conventions described above
 #' @inheritParams score_bes
 #'
-#' @return A dataset with subscale scores for the Parent Weight-Loss Behavior Questionnaire
+#' @return A dataset with subscale scores for the Percieved Stress Scale
 #' @examples
 #'
 #' # scoring for the pss with IDs
@@ -105,10 +104,13 @@ score_pss <- function(pss_data, score_base = TRUE, id) {
   helplessness_vars <- c("pss1", "pss2", "pss3", "pss6", "pss9", "pss10")
   pss_score_dat[["pss_helplessness"]] <- rowSums(pss_data_edit[c(helplessness_vars)])
   
-  ## Lack of self-efficacy # confirm these used reverse scores 
-#  efficacy_vars <- c("pss4_rev", "pss5_rev", "pss7_rev", "pss8_rev")
-#  pss_score_dat[["pss_selfefficacy"]] <- rowSums(pss_data_edit[c(efficacy_vars)])
+  ## Perceived self-efficacy
+  # Note: Positive items are reverse-scored when calculating the total PSS score but are not reverse-scored when calculating the positive subset, 
+  # “Perceived Self-Efficacy,” allowing a higher positive subset score to represent higher coping ability.
   
+   efficacy_vars <- c("pss4", "pss5", "pss7", "pss8")
+   pss_score_dat[["pss_selfefficacy"]] <- rowSums(pss_data_edit[c(efficacy_vars)])
+
   
   #### 3. Clean Export/Scored Data #####
   

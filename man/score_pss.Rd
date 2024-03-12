@@ -2,7 +2,7 @@
 % Please edit documentation in R/score_pss.R
 \name{score_pss}
 \alias{score_pss}
-\title{score_pss: Scored data from the 10-item Percieved Stress Scale}
+\title{score_pss: Scored data from the 10-item Perceived Stress Scale}
 \usage{
 score_pss(pss_data, score_base = TRUE, id)
 }
@@ -14,10 +14,10 @@ score_pss(pss_data, score_base = TRUE, id)
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 }
 \value{
-A dataset with subscale scores for the Parent Weight-Loss Behavior Questionnaire
+A dataset with subscale scores for the Percieved Stress Scale
 }
 \description{
-This function scores the Percieved Stress Scale and provides XXX
+This function scores the 10-item Perceived Stress Scale and provides a total PSS score and subscale scores for: Perceived Helplessness and Perceived Self-efficacy
 }
 \details{
 To use this function, the data must be prepared according to the following criteria:
@@ -38,12 +38,11 @@ pss_score_data <- score_pss(pss_data, id = 'ID')
 
 }
 \references{
-WHICH IS FOR THE 10-item?
 Cohen, S., Kamarck, T., and Mermelstein, R.(1983). A global measure of perceived stress. Journal of Health and Social Behavior, 24, 386-396. PMID: 6668417.
 Cohen, S. and Williamson, G. Perceived Stress in a Probability Sample of the United States. Spacapan, S. and Oskamp, S. (Eds.) The Social Psychology of Health. Newbury Park, CA: Sage, 1988.
 
 
-Subscale scoring comes from:
+Two-factor subscale scoring comes from:
 Taylor JM. Psychometric analysis of the Ten-Item Perceived Stress Scale. Psychol Assess. 2015 Mar;27(1):90-101. doi: 10.1037/a0038100. Epub 2014 Oct 27. PMID: 25346996.
 }
 \seealso{
