@@ -5,7 +5,7 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
 #' 2) The  columns/variables must match the following naming convention: 'cshq#' or 'cshq_#' where # is the question number (1-33)
-#' 3) All questions must have the numeric value for the choice: 1 - Never, 2 - Rarely, 3 - Sometimes, 4 - Usually, 5 - Always
+#' 3) All questions must have the numeric value for the choice: 3 - Usually, 2 - Sometimes, 1 - Rarely
 #' 4) This script will apply reverse scoring so all levels must be true to the scale described above
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
@@ -92,6 +92,7 @@ score_cshq <- function(cshq_data, score_base = TRUE, id, reverse_score = FALSE) 
   # calculate reversed scores
   if (isFALSE(reverse_score)){
     
+    # are these the correct items?
     reverse_qs_set <- c('cshq1', 'cshq2', 'cshq3', 'cshq4', 'cshq5', 'cshq6')
     for (var in 1:length(reverse_qs_set)){
       var_name <- reverse_qs_set[var]
