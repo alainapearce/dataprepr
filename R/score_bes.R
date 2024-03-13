@@ -67,8 +67,9 @@ score_bes <- function(bes_data, score_base = TRUE, pna = NA, id) {
   names(bes_data) <- gsub('bes_', 'bes', names(bes_data))
   
   # get primary questions
-  bes_primary_qs <- names(bes_data[, grepl('bes', names(bes_data))])
-  
+  q_numbers <- seq(1, 16)
+  bes_primary_qs <- paste0("bes", q_numbers)
+
   # re-scale data
   bes_data_edit <- bes_data
   
