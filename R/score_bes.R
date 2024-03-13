@@ -108,7 +108,7 @@ score_bes <- function(bes_data, score_base = TRUE, pna = NA, id) {
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    bes_phenotype <- merge(bes_data_edit, bes_score_dat, by = id)
+    bes_phenotype <- merge(bes_data, bes_score_dat, by = id)
     
     return(list(score_dat = as.data.frame(bes_score_dat),
                 bids_phenotype = as.data.frame(bes_phenotype)))
