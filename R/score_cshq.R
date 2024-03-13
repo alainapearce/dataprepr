@@ -73,10 +73,11 @@ score_cshq <- function(cshq_data, score_base = TRUE, id, reverse_score = FALSE) 
   # remove underscore if in column names
   names(cshq_data) <- ifelse(grepl('id|notes|time|hour|min', names(cshq_data)), names(cshq_data), gsub('cshq_', 'cshq', names(cshq_data)))
   
-  # get primary questions
-  cshq_primary_qs <- names(cshq_data[, !grepl('id|prob|notes|time|hour|min', names(cshq_data))])
-  
-  # re-scale data
+  # get primary (scored) questions
+  q_numbers <- seq(1, 33)
+  cshq_primary_qs <- paste0("cshq", q_numbers)
+
+  # re-scale scored questions
   cshq_data_edit <- cshq_data
   
   if (isTRUE(score_base)){
@@ -92,16 +93,16 @@ score_cshq <- function(cshq_data, score_base = TRUE, id, reverse_score = FALSE) 
   if (isFALSE(reverse_score)){
     
     reverse_qs_set <- c('cshq1', 'cshq2', 'cshq3', 'cshq4', 'cshq5', 'cshq6')
-    for (var in 1:length(reverse_qs_set1)){
-      var_name <- reverse_qs[reverse_qs_set1]
-      
-      cshq_data_edit[[var_name]] <- ifelse(is.na(cshq_data_edit[[var_name]]), NA, ifelse(cshq_data_edit[[var_name]] == 1, 3, ifelse(cshq_data_edit[[var_name]] == 1, 3, 2)))
+    for (var in 1:length(reverse_qs_set)){
+      var_name <- reverse_qs_set[var]
+
+      cshq_data_edit[[var_name]] <- ifelse(is.na(cshq_data_edit[[var_name]]), NA, ifelse(cshq_data_edit[[var_name]] == 1, 3, ifelse(cshq_data_edit[[var_name]] == 3, 1, 2)))
     }
   }
   
   #adjust question with zero base
   if (min(cshq_data_edit[c('cshq7', 'cshq8')], na.rm = TRUE) == 1){
-    cshq_data_edit[c('cshq7', 'cshq8')] <- sapply(c('cshq7', 'cshq8'), function(x) cshq_data[[x]] - 1, simplify = TRUE)
+    cshq_data_edit[c('cshq7', 'cshq8')] <- sapply(c('cshq7', 'cshq8'), function(x) cshq_data_edit[[x]] - 1, simplify = TRUE)
   }
   
   # Bedtime Resistance
