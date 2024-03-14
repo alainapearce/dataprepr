@@ -22,7 +22,7 @@ This function scores the Lifestyle Behavior Checklist and provides subscale scor
 \details{
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'lbc#' where # is the question number (1-25)
+2) The  columns/variables must match the following naming convention: 'lbc#' or 'lbc_#' where # is the question number (1-25)
 3) All questions must have the numeric value for the choice with the base value being either 0 (score_base = TRUE) or 1 (score_base = FALSE)
 
 Note, as long as variable names match those listed, the dataset can include other variables

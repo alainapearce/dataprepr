@@ -4,7 +4,7 @@
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'sic#' where # is the question number (1-21)
+#' 2) The  columns/variables must match the following naming convention: 'sic#' or 'sic_#' where # is the question number (1-21)
 #' 3) All questions must have the numeric value for the choice: 1 - Never, 2 - Sometimes, 3 - Often, 4 - Very Often
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables. Up to 2 missing responses are allowed

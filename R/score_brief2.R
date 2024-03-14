@@ -6,7 +6,7 @@
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include sex, age in years, and all individual questionnaire items
-#' 2) The questionnaire items must match the following naming convention: brief#' where # is the question number (1-63)
+#' 2) The questionnaire items must match the following naming convention: 'brief#' or 'brief_#' where # is the question number (1-63)
 #' 3) All questions must have the numeric value for the choice with the base value being either 0 (score_base = TRUE) or 1 (score_base = FALSE)
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables

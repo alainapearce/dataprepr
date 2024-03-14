@@ -20,7 +20,7 @@ This function scores the Community Childhood Hunger Identification Project and p
 \details{
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'cchip#' where # is question number. For the Food and Brain Study, the 8 primary questions needed are: cchip1, cchip5, cchip9, cchip13, cchip17, cchip21, cchip25, and cchip29. Can be adapted to processes other data/studies in the future.
+2) The  columns/variables must match the following naming convention: 'cchip#' or 'cchip_#' where # is question number. For the Food and Brain Study, the 8 primary questions needed are: cchip1, cchip5, cchip9, cchip13, cchip17, cchip21, cchip25, and cchip29. Can be adapted to processes other data/studies in the future.
 3) The primary indicatory questions must have the following numeric values: Yes - 1, No - 0
 
 Note, as long as variable names match those listed, the dataset can include other variables

@@ -20,7 +20,7 @@ This function scores the Alcohol Use Disorders Identification Test
 \details{
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'audit#' where # is the question number (1-10)
+2) The  columns/variables must match the following naming convention: 'audit#' or 'audit_#' where # is the question number (1-10)
 3) All questions must have the numeric value for the choice:
 3a) question 1: 0 - Never, 1 - Monthly or Less, 2 - 2-4 times a month, 3 - 2-3 times a week, 4 - 4 or more times a week
 3b) question 2: 0 - 1 or 2, 1 - 3 or 4, 2 - 5 or 6, 3 - 7 to 9, 4 - 10

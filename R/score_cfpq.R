@@ -4,7 +4,7 @@
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'cfpq#' where # is the question number (1-49)
+#' 2) The  columns/variables must match the following naming convention: 'cfpq#' or 'cfpq_#' where # is the question number (1-49)
 #' 3) Questions 1-13 must have the numeric value for the choices: 1 - never, 2 - rarely, 3 - sometimes, 4 - mostly, 5 - always
 #'    Questions 14-49 must have the numeric value for the choices: 1 - disagree, 2 - slightly disagree, 3 - neutral, 4 - slightly agree, 5 - agree.
 #'

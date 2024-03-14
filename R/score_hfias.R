@@ -4,7 +4,7 @@
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention 'hfias#' for categorical questioans 'hfias#a' for frequency questions, where # is the question number (1-9)
+#' 2) The  columns/variables must match the following naming convention 'hfias#' or 'hfias_#' for categorical questions and 'hfias#a' or 'hfias_#a' for frequency questions, where # is the question number (1-9)
 #' 3) Categorical questions 1-9 must have the numeric value for the choices: 0 - no (skips frequency question), 1 - yes
 #'    Frequency Questions must have the numeric value for the choices: 0 - Rarely, 1 - Sometimes, 2 - Often (score_base = TRUE) or 1 - Rarely, 2 - Sometimes, 3 - Often (score_base = FALSE)
 #'

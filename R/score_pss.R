@@ -4,7 +4,7 @@
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'pss#' where # is the question number (1-10)
+#' 2) The  columns/variables must match the following naming convention: 'pss#' or 'pss_#' where # is the question number (1-10)
 #' 3) Questions 1-10 must have the numeric value for the choices: 0 - Never, 1 - Almost, 2 - Sometimes, 3 - Fairly Often, 4 - Very Often
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables

@@ -24,7 +24,7 @@ This function scores the Pictorial Personality Traits Questionnaire for Children
 \details{
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'pptq#' where # is the question number (1-15)
+2) The  columns/variables must match the following naming convention: 'pptq#' or 'pptq_#' where # is the question number (1-15)
 3) Questions 1-15 must have the numeric value for the choices: 1 - Definitely Yes (left side), 2 - A little bit (left side), 3 - It depends, 4 - A little bit (right side), 5 - Definitely yes (right side) if pptq_scale = 5 or
                                                                1 - (left side), 2 - It depends (middle), 3 - (right side) if pptq_scale = 3
 

@@ -4,7 +4,7 @@
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'efcr#' where # is the question number (1-9)
+#' 2) The  columns/variables must match the following naming convention: 'efcr#' or 'efcr_#' where # is the question number (1-9)
 #' 3) All questions must have the numeric value for the choice with the base value being either 0 (score_base = TRUE) or 1 (score_base = FALSE)
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables

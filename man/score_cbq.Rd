@@ -22,7 +22,7 @@ This function scores the Child Behavior Questionnaire and provides subscale scor
 \details{
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'cbq#' 'cbq_#' where # is the question number (1-94)
+2) The  columns/variables must match the following naming convention: 'cbq#' or 'cbq_#' where # is the question number (1-94)
 3) All questions must have the numeric value for the choice: 1 - Extremely Untrue, 2 - Quite Untrue, 3 - Sightly Untrue, 4 - Neither True nor False, 5 - Slightly True, 6 - Quite True, 7 - Extremely True, NA - NA
 
 Note, as long as variable names match those listed, the dataset can include other variables

@@ -22,7 +22,7 @@ This function scores the Behavioral Inhibition System (BIS)/Behavioral Activatio
 \details{
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'bisbas#' where # is the question number (1-24).
+2) The  columns/variables must match the following naming convention: 'bisbas#' or 'bisbas_#' where # is the question number (1-24).
 3) Questions must have the numeric value for the choices: 1 - Very True for Me, 2 - Somewhat True for Me, 3 - Somewhat False for Me, 4 - Very False for Me
 
 Note, as long as variable names match those listed, the dataset can include other variables

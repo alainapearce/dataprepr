@@ -6,7 +6,7 @@
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'cebq#' where # is the question number (1-35)
+#' 2) The  columns/variables must match the following naming convention: 'cebq#' or 'cebq_#' where # is the question number (1-35)
 #' 3) All questions must have the numeric value for the choice with the base value being either 0 (score_base = TRUE) or 1 (score_base = FALSE)
 #' 4) This script will apply reverse scoring so all levels must be true to the scale described above
 #'

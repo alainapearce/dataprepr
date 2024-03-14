@@ -4,7 +4,7 @@
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'tfeq#' where # is question number. 
+#' 2) The  columns/variables must match the following naming convention: 'tfeq#' or 'tfeq_#' where # is question number. 
 #' 3) Questions 1-13 must have the numeric value for the choices: 1, Definitely false | 2, Mostly false | 3, Mostly true | 4, Definitely true;
 #'    Questions 14 must have the numeric value for the choices: 1, Only at meal times | 2, Sometimes between meals | 3, Often between meals | 4, Almost always
 #'    Questions 15 must have the numeric value for the choices: 1, Almost never | 2, Seldom | 3, Usually | 4, Almost always

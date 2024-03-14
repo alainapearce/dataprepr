@@ -4,7 +4,7 @@
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'debq#' where # is the question number (1-24).
+#' 2) The  columns/variables must match the following naming convention: 'debq#' or 'debq_#' where # is the question number (1-24).
 #' 3) Questions must have the numeric value for the choices: 1=Never, 2=Rarely/Seldom, 3=Sometimes, 4=Often, 5=Very Often if score_base = FALSE or 0=Never, 1=Rarely/Seldom, 2=Sometimes, 3=Often, 4=Very Often if score_base = TRUE
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables

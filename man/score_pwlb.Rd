@@ -22,7 +22,7 @@ This function scores the Parent Weight-Loss Behavior Questionnaire and provides 
 \details{
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'pwlb#' where # is the question number (1-29; only 1-24 are needed to compute scale as 25-29 are contextual questions)
+2) The  columns/variables must match the following naming convention: 'pwlb#' or 'pwlb_#' where # is the question number (1-29; only 1-24 are needed to compute scale as 25-29 are contextual questions)
 3) Questions 1-24 must have the numeric value for the choices: 1 - Never, 2 - Rarely, 3 - Sometimes, 4 - Often, 5 - Always. Questions 25-29 are scored differently and are follow-up questions.
 
 Note, as long as variable names match those listed, the dataset can include other variables

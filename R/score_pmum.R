@@ -4,7 +4,7 @@
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'pmum#' where # is the question number (1-27).
+#' 2) The  columns/variables must match the following naming convention: 'pmum#' or 'pmum_#' where # is the question number (1-27).
 #' 3) Questions must have the numeric value for the choices: 1, Never | 2, Rarely | 3, Sometimes | 4, Often | 5, Always
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables

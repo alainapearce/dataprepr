@@ -6,7 +6,7 @@
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'tfeq#' where # is the question number (1-51)
+#' 2) The  columns/variables must match the following naming convention: 'tfeq#' or 'tfeq_#' where # is the question number (1-51)
 #' 3) Questions 1-36 must have the numeric value for the choices: 0 - False, 1 - True. Questions 37-51 must have numeric values 1-4 for the various responses with 1 corresponding to the least frequent/likely options and 4 corresponding to the most frequent/most likely option available. The option differ by question.
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
