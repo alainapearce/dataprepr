@@ -7,14 +7,14 @@
 score_pss(pss_data, score_base = TRUE, id)
 }
 \arguments{
-\item{pss_data}{a data.frame all items for the Percieved Stress Scale following the naming conventions described above}
+\item{pss_data}{a data.frame all items for the Perceived Stress Scale following the naming conventions described above}
 
 \item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 }
 \value{
-A dataset with subscale scores for the Percieved Stress Scale
+A dataset with subscale scores for the Perceived Stress Scale
 }
 \description{
 This function scores the 10-item Perceived Stress Scale and provides a total PSS score and subscale scores for: Perceived Helplessness and Perceived Self-efficacy
@@ -44,7 +44,4 @@ Cohen, S. and Williamson, G. Perceived Stress in a Probability Sample of the Uni
 
 Two-factor subscale scoring comes from:
 Taylor JM. Psychometric analysis of the Ten-Item Perceived Stress Scale. Psychol Assess. 2015 Mar;27(1):90-101. doi: 10.1037/a0038100. Epub 2014 Oct 27. PMID: 25346996.
-}
-\seealso{
-Raw data from Qualtrics was processed using the following script: \code{\link{util_fbs_parent_v3dat}}
 }

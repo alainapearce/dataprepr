@@ -2,7 +2,7 @@
 % Please edit documentation in R/score_sic.R
 \name{score_sic}
 \alias{score_sic}
-\title{score_sic: Scored data from the Stress in Children Questionnaire}
+\title{score_sic: INCOMPLETE FUNCTION Scored data from the Stress in Children Questionnaire}
 \usage{
 score_sic(sic_data, score_base = TRUE, id)
 }
@@ -35,10 +35,8 @@ sic_score_data <- score_sic(sic_data, id = 'ID')
 \dontrun{
 }
 
+
 }
 \references{
 1. Osika W, Friberg P, Wahrborg P. A new short self-rating questionnaire to assess stress in children. Int J Behav Med. 2007;14(2):108-117. doi:10.1007/BF03004176 (\href{https://pubmed.ncbi.nlm.nih.gov/17926439/}{PubMed})
-}
-\seealso{
-Raw data from Qualtrics was processed using the following script: \code{\link{util_fbs_parent_v2dat}}
 }

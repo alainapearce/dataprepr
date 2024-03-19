@@ -18,10 +18,10 @@
 #' Two-factor subscale scoring comes from:
 #' Taylor JM. Psychometric analysis of the Ten-Item Perceived Stress Scale. Psychol Assess. 2015 Mar;27(1):90-101. doi: 10.1037/a0038100. Epub 2014 Oct 27. PMID: 25346996.
 #' 
-#' @param pss_data a data.frame all items for the Percieved Stress Scale following the naming conventions described above
+#' @param pss_data a data.frame all items for the Perceived Stress Scale following the naming conventions described above
 #' @inheritParams score_bes
 #'
-#' @return A dataset with subscale scores for the Percieved Stress Scale
+#' @return A dataset with subscale scores for the Perceived Stress Scale
 #' @examples
 #'
 #' # scoring for the pss with IDs
@@ -30,9 +30,6 @@
 #'
 #' \dontrun{
 #' }
-#'
-#' @seealso Raw data from Qualtrics was processed using the following script: \code{\link{util_fbs_parent_v3dat}}
-#'
 #'
 #' @export
 

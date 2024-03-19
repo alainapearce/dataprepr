@@ -1,4 +1,4 @@
-#' score_sic: Scored data from the Stress in Children Questionnaire
+#' score_sic: INCOMPLETE FUNCTION Scored data from the Stress in Children Questionnaire
 #'
 #' This function scores the Stress in Children Questionnaire and provides subscale scores for the following behaviors: Well Being, Distress, Social Support, and the Global Mean Score.
 #'
@@ -14,8 +14,7 @@
 #'
 #' @param sic_data a data.frame all items for the Child Behavior Questionnaire following the naming conventions described above
 #' @inheritParams score_bes
-#' @inheritParams score_bes
-#'
+#' 
 #' @return A dataset with subscale scores for the Stress in Chidlren Questionnaire
 #' @examples
 #'
@@ -24,8 +23,6 @@
 #'
 #' \dontrun{
 #' }
-#'
-#' @seealso Raw data from Qualtrics was processed using the following script: \code{\link{util_fbs_parent_v2dat}}
 #'
 #'
 #' @export
@@ -57,39 +54,41 @@ score_sic <- function(sic_data, score_base = TRUE, id) {
     # set up database for results
 
     ## create empty matrix
-    sic_score_dat <- data.frame(sic_wellbeing = rep(NA, nrow(sic_data)), sic_distress = rep(NA, nrow(sic_data)), sic_socialsupport = rep(NA, nrow(sic_data)), sic_grand_mean = rep(NA, nrow(sic_data)))
+    sic_score_dat <- data.frame(sic_lackwellbeing = rep(NA, nrow(sic_data)), sic_distress = rep(NA, nrow(sic_data)), sic_lacksocialsupport = rep(NA, nrow(sic_data)), sic_grand_mean = rep(NA, nrow(sic_data)))
 
     if (isTRUE(ID_arg)) {
         sic_score_dat <- data.frame(sic_data[[id]], sic_score_dat)
         names(sic_score_dat)[1] <- id
     }
 
-    # re-scale data
-    sic_data_edit <- sic_data
+    # get primary questions to score
+    q_numbers <- seq(1, 21)
+    sic_primary_qs <- paste0("sic", q_numbers)
     
-    if (isTRUE(score_base)){
-      sic_data_edit[2:17] <- sapply(names(sic_data)[2:17], function(x) sic_data[[x]] + 1, simplify = TRUE)
-    }
+    # # re-scale data -- check if data should be base 0 or 1
+    # sic_data_edit <- sic_data
+    # 
+    # if (isTRUE(score_base)){
+    #   sic_data_edit[sic_primary_qs] <- sapply(sic_primary_qs, function(x) sic_data[[x]] + 1, simplify = TRUE)
+    # }
 
     ## Score Subscales
 
-    # Well Being
-    activity_vars <- c("sic1", "sic12", "sic18_rev", "sic22", "sic50_rev", "sic85",
-        "sic93_rev")
-    sic_score_dat[["sic_activity"]] <- rowMeans(sic_data[activity_vars], na.rm = TRUE)
+    # Lack of Well Being
+    lackwellbeing_vars <- c("")
+    sic_score_dat[["sic_lackwellbeing"]] <- rowMeans(sic_data[lackwellbeing_vars], na.rm = TRUE)
 
     # Distress
-    anger_vars <- c("sic2", "sic14", "sic30", "sic40", "sic61_rev", "sic87")
-    sic_score_dat[["sic_anger"]] <- rowMeans(sic_data[anger_vars], na.rm = TRUE)
+    distress_vars <- c("")
+    sic_score_dat[["sic_distress"]] <- rowMeans(sic_data[distress_vars], na.rm = TRUE)
 
-    # Social Support
-    approach_vars <- c("sic6", "sic15", "sic46", "sic58", "sic90_rev", "sic92_rev")
-    sic_score_dat[["sic_approach"]] <- rowMeans(sic_data[approach_vars], na.rm = TRUE)
+    # Lack of Social Support
+    lacksocialsupport_vars <- c("")
+    sic_score_dat[["sic_lacksocialsupport"]] <- rowMeans(sic_data[lacksocialsupport_vars], na.rm = TRUE)
 
     # Grand Mean
-    attention_vars <- c("sic16_rev", "sic21_rev", "sic62", "sic71", "sic84_rev",
-        "sic89")
-    sic_score_dat[["sic_attention"]] <- rowMeans(sic_data[attention_vars], na.rm = TRUE)
+    grandmean_vars <- sic_primary_qs
+    sic_score_dat[["sic_grand_mean"]] <- rowMeans(sic_data[grandmean_vars], na.rm = TRUE)
 
     #### 3. Clean Export/Scored Data #####
     ## round data
@@ -98,22 +97,15 @@ score_sic <- function(sic_data, score_base = TRUE, id) {
     } else {
         sic_score_dat <- round(sic_score_dat, digits = 3)
     }
-
-    ## round data
-    if (isTRUE(ID_arg)){
-      hfi_score_dat[2:ncol(hfi_score_dat)] <- round(hfi_score_dat[2:ncol(hfi_score_dat)], digits = 3)
-    } else {
-      hfi_score_dat <- round(hfi_score_dat, digits = 3)
-    }
     
     ## merge raw responses with scored data
     if (isTRUE(ID_arg)){
-      hfi_phenotype <- merge(hfi_data, hfi_score_dat, by = id)
+      sic_phenotype <- merge(sic_data, sic_score_dat, by = id)
       
-      return(list(score_dat = as.data.frame(hfi_score_dat),
-                  bids_phenotype = as.data.frame(hfi_phenotype)))
+      return(list(score_dat = as.data.frame(sic_score_dat),
+                  bids_phenotype = as.data.frame(sic_phenotype)))
     } else {
-      return(list(score_dat = as.data.frame(hfi_score_dat)))
+      return(list(score_dat = as.data.frame(sic_score_dat)))
     }
 
     return(sic_score_dat)
