@@ -81,7 +81,7 @@ score_cshq <- function(cshq_data, score_base = TRUE, id, reverse_score = FALSE) 
   cshq_data_edit <- cshq_data
   
   if (isTRUE(score_base)){
-    cshq_data_edit[cshq_primary_qs] <- sapply(cshq_primary_qs, function(x) cshq_data[[x]] + 1, simplify = TRUE)
+    cshq_data_edit[cshq_primary_qs] <- sapply(cshq_primary_qs, function(x) cshq_data_edit[[x]] + 1, simplify = TRUE)
   }
   
   #### 2. Set Up Data #####

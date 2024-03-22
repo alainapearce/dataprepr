@@ -104,7 +104,7 @@ score_brief2 <- function(brief_data, age_var, sex_var, score_base = TRUE, male =
 
         if (sum(isTRUE(male_arg), isTRUE(female_arg)) == nsex_unique) {
             if (nsex_unique == 2) {
-                # change values of sex in pds_data to default
+                # change values of sex in brief_data to default
                 brief_data[[sex_var]] <- ifelse(brief_data[[sex_var]] ==
                                                   male, 0, 1)
                 brief_data[[sex_var]] <- factor(brief_data[[sex_var]], levels = c(0,
@@ -142,18 +142,19 @@ score_brief2 <- function(brief_data, age_var, sex_var, score_base = TRUE, male =
         names(brief_score_dat)[1] <- id
     }
 
-    # remove underscore if in column names
-    names(brief_data) <- gsub('brief_', 'brief', names(brief_data))
-    
     # get primary questions
     q_numbers <- seq(1, 63)
     brief_primary_qs <- paste0("brief", q_numbers)
+    
+    # remove underscore if in brief question column names
+    cols_to_rename <- paste0("brief_", q_numbers)
+    names(brief_data)[names(brief_data) %in% cols_to_rename] <- gsub('brief_', 'brief', names(brief_data)[names(brief_data) %in% cols_to_rename])
     
     # re-scale data
     brief_data_edit <- brief_data
     
     if (isTRUE(score_base)){
-      brief_data_edit[brief_primary_qs] <- sapply(names(brief_data_edit)[brief_primary_qs], function(x) brief_data_edit[[x]] + 1, simplify = TRUE)
+      brief_data_edit[brief_primary_qs] <- sapply(brief_primary_qs, function(x) brief_data[[x]] + 1, simplify = TRUE)
     }
     
     ## Score Subscales
