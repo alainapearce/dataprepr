@@ -83,6 +83,10 @@ ref_brief2_lookup <- function(sex, age, value, item) {
         }
 
         #identify data.frame for age and sex
+        
+        # Load brief2_scoretables into the package's namespace
+        data("brief2_scoretables")
+        
         if (sex == 0){
             if (age < 5){
                 stop('minimum age for the BRIEF-2 is 5 years old')
