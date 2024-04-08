@@ -10,7 +10,6 @@
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
 #' @references
-#' Primary References for the child version of the Behavioral Inhibition Scale/Behavioral Activation Scale and Scoring:
 #' Domoff SE, Harrison K, Gearhardt AN, Gentile DA, Lumeng JC, Miller AL. Development and Validation of the Problematic Media Use Measure: A Parent Report Measure of Screen Media "Addiction" in Children. Psychol Pop Media Cult. 2019 Jan;8(1):2-11. doi: 10.1037/ppm0000163. Epub 2017 Nov 16. PMID: 30873299; PMCID: PMC6411079.
 #'
 #' @param pmum_data a data.frame all items for the Problematic Media Use Measure following the naming conventions described above
