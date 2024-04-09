@@ -87,13 +87,13 @@ ref_brief2_lookup <- function(sex, age, value, item) {
             if (age < 5){
                 stop('minimum age for the BRIEF-2 is 5 years old')
             } else if (age < 8){
-                ref_dat <- as.data.frame(brief2_scoretables$boys5_7)
+                ref_dat <- as.data.frame(dataprepr::brief2_scoretables$boys5_7)
             } else if (age < 11){
-                ref_dat <- as.data.frame(brief2_scoretables$boys8_10)
+                ref_dat <- as.data.frame(dataprepr::brief2_scoretables$boys8_10)
             } else if (age < 14){
-                ref_dat <- as.data.frame(brief2_scoretables$boys11_13)
+                ref_dat <- as.data.frame(dataprepr::brief2_scoretables$boys11_13)
             } else if (age <= 18){
-                ref_dat <- as.data.frame(brief2_scoretables$boys14_18)
+                ref_dat <- as.data.frame(dataprepr::brief2_scoretables$boys14_18)
             } else {
                 stop('maximum age for the BRIEF-2 is 18 years old')
             }
@@ -101,13 +101,13 @@ ref_brief2_lookup <- function(sex, age, value, item) {
             if (age < 5){
                 stop('minimum age for the BRIEF-2 is 5 years old')
             } else if (age < 8){
-                ref_dat <- as.data.frame(brief2_scoretables$girls5_7)
+                ref_dat <- as.data.frame(dataprepr::brief2_scoretables$girls5_7)
             } else if (age < 11){
-                ref_dat <- as.data.frame(brief2_scoretables$girls8_10)
+                ref_dat <- as.data.frame(dataprepr::brief2_scoretables$girls8_10)
             } else if (age < 14){
-                ref_dat <- as.data.frame(brief2_scoretables$girls11_13)
+                ref_dat <- as.data.frame(dataprepr::brief2_scoretables$girls11_13)
             } else if (age <= 18){
-                ref_dat <- as.data.frame(brief2_scoretables$girls14_18)
+                ref_dat <- as.data.frame(dataprepr::brief2_scoretables$girls14_18)
             } else {
                 stop('maximum age for the BRIEF-2 is 18 years old')
             }
