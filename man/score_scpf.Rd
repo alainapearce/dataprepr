@@ -17,7 +17,7 @@ score_scpf(scpf_data, score_base = TRUE, id)
 A dataset with subscale scores for the Structure and Control in Parent Feeding questionnaire
 }
 \description{
-This function scores the Structure and Control in Parent Feeding questionnaire and provides subscale scores for: Limit Exposure, Consistent feeding routines, Restriction, Pressure to eat, Structure (superfactor of Limit Exposure, Consistent feeding routines) and Control (superfactor of Restriction and Pressure to eat)
+This function scores the Structure and Control in Parent Feeding questionnaire and provides subscale scores for: Limit Exposure, Consistent feeding routines, Restriction, Pressure to eat
 }
 \details{
 To use this function, the data must be prepared according to the following criteria:

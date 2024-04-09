@@ -1,6 +1,6 @@
 #' score_scpf: Scored data from the Structure and Control in Parent Feeding questionnaire
 #'
-#' This function scores the Structure and Control in Parent Feeding questionnaire and provides subscale scores for: Limit Exposure, Consistent feeding routines, Restriction, Pressure to eat, Structure (superfactor of Limit Exposure, Consistent feeding routines) and Control (superfactor of Restriction and Pressure to eat)
+#' This function scores the Structure and Control in Parent Feeding questionnaire and provides subscale scores for: Limit Exposure, Consistent feeding routines, Restriction, Pressure to eat
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
@@ -59,9 +59,7 @@ score_scpf <- function(scpf_data, score_base = TRUE, id) {
       scpf_limit_exp = rep(NA, nrow(scpf_data)),
       scpf_consistent = rep(NA, nrow(scpf_data)),
       scpf_restriction = rep(NA, nrow(scpf_data)),
-      scpf_pressure = rep(NA, nrow(scpf_data)),
-      scpf_structure = rep(NA, nrow(scpf_data)),
-      scpf_control = rep(NA, nrow(scpf_data))
+      scpf_pressure = rep(NA, nrow(scpf_data))
     )
   
   if (isTRUE(ID_arg)) {
@@ -84,45 +82,37 @@ score_scpf <- function(scpf_data, score_base = TRUE, id) {
   }
 
   # calculate reversed scores
-  reverse_qs <- c("scpf2", "scpf4", "scpf6", "scpf8", "scpf13", "scpf16", "scpf21", "scpf22", "scpf31")
+  reverse_qs <- c("scpf2", "scpf4", "scpf6", "scpf8", "scpf13", "scpf16", "scpf22", "scpf31")
 
   for (var in 1:length(reverse_qs)) {
     var_name <- reverse_qs[var]
-
-  scpf_data_edit[[var_name]] <- ifelse(is.na(scpf_data_edit[[var_name]]), NA,
-                                      ifelse(scpf_data_edit[[var_name]] == 0, 4,
-                                             ifelse(scpf_data_edit[[var_name]] == 1, 3,
-                                                    ifelse(scpf_data_edit[[var_name]] == 3, 1,
-                                                           ifelse(scpf_data_edit[[var_name]] == 4, 0, 2)))))
+    
+    scpf_data_edit[[var_name]] <- ifelse(is.na(scpf_data_edit[[var_name]]), NA,
+                                        ifelse(scpf_data_edit[[var_name]] == 0, 4,
+                                               ifelse(scpf_data_edit[[var_name]] == 1, 3,
+                                                      ifelse(scpf_data_edit[[var_name]] == 3, 1,
+                                                             ifelse(scpf_data_edit[[var_name]] == 4, 0, 
+                                                                    ifelse(scpf_data_edit[[var_name]] == 2, 2, NA))))))
   }
 
   
   ## Score Subscales
-  # sums or means? 
 
   # Limit Exposure
-  exposure_vars <- c("")
-  scpf_score_dat[["scpf_limit_exp"]] <- rowSums(scpf_data_edit[exposure_vars])
+  exposure_vars <- c("scpf1", "scpf2", "scpf3", "scpf4", "scpf6", "scpf8", "scpf13", "scpf22", "scpf31", "scpf32", "scpf33")
+  scpf_score_dat[["scpf_limit_exp"]] <- rowMeans(scpf_data_edit[exposure_vars], na.rm = TRUE)
 
   # Consistent feeding routines
-  consistent_vars <- c("")
-  scpf_score_dat[["scpf_consistent"]] <- rowSums(scpf_data_edit[consistent_vars])
+  consistent_vars <- c("scpf5", "scpf7", "scpf15", "scpf16", "scpf20", "scpf23", "scpf25", "scpf26", "scpf27", "scpf28", "scpf30")
+  scpf_score_dat[["scpf_consistent"]] <- rowMeans(scpf_data_edit[consistent_vars], na.rm = TRUE)
 
   # Restriction
-  restriction_vars <- c("")
-  scpf_score_dat[["scpf_restriction"]] <- rowSums(scpf_data_edit[restriction_vars])
+  restriction_vars <- c("scpf9", "scpf10", "scpf12", "scpf14", "scpf34")
+  scpf_score_dat[["scpf_restriction"]] <- rowMeans(scpf_data_edit[restriction_vars], na.rm = TRUE)
   
   # Pressure to eat
-  pressure_vars <- c("")
-  scpf_score_dat[["scpf_pressure"]] <- rowSums(scpf_data_edit[pressure_vars])
-  
-  # Structure
-  structure_vars <- c("")
-  scpf_score_dat[["scpf_structure"]] <- rowSums(scpf_data_edit[structure_vars])
-  
-  # Control
-  control_vars <- c("")
-  scpf_score_dat[["scpf_control"]] <- rowSums(scpf_data_edit[control_vars])
+  pressure_vars <- c("scpf17", "scpf18", "scpf19", "scpf21", "scpf24", "scpf29")
+  scpf_score_dat[["scpf_pressure"]] <- rowMeans(scpf_data_edit[pressure_vars], na.rm = TRUE)
   
 
   #### 3. Clean Export/Scored Data #####
