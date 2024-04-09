@@ -19,7 +19,7 @@ ref_brief2_lookup(sex, age, value, item)
 A list with values from the lookup table
 }
 \description{
-This function pulls t-scores and percentiles based on age and sex for the the Behavioral Rating Inventory of Executive Function-2
+This function pulls t-scores and percentiles based on age and sex for the the Behavioral Rating Inventory of Executive Function-2 using brief2_scoretables data available in dataprepr
 }
 \examples{
 

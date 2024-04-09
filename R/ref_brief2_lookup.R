@@ -1,6 +1,6 @@
 #' ref_brief2_lookup: Lookup function the Behavioral Rating Inventory of Executive Function-2
 #'
-#' This function pulls t-scores and percentiles based on age and sex for the the Behavioral Rating Inventory of Executive Function-2
+#' This function pulls t-scores and percentiles based on age and sex for the the Behavioral Rating Inventory of Executive Function-2 using brief2_scoretables data available in dataprepr
 #'
 #' @param value raw value/score to look up
 #' @param age numeric value for age. Required for the following for subscale, index, and GEC values. Not needed for quality control scales (i.e., negativity, inconsistency, and frequency)
