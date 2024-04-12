@@ -63,15 +63,20 @@ score_cebq <- function(cebq_data, score_base = TRUE, id) {
         cebq_score_dat <- data.frame(cebq_data[[id]], cebq_score_dat)
         names(cebq_score_dat)[1] <- id
     }
-
-    # remove underscore if in column names
-    names(cebq_data) <- gsub('cebq_', 'cebq', names(cebq_data))
+    
+    # get primary questions
+    q_numbers <- seq(1, 35)
+    cebq_primary_qs <- paste0("cebq", q_numbers)
+    
+    # remove underscore if in primary questions column names
+    cols_to_rename <- paste0("cebq_", q_numbers)
+    names(cebq_data)[names(cebq_data) %in% cols_to_rename] <- gsub('cebq_', 'cebq', names(cebq_data)[names(cebq_data) %in% cols_to_rename])
     
     # re-scale data
     cebq_data_edit <- cebq_data
     
     if (isTRUE(score_base)){
-      cebq_data_edit[2:36] <- sapply(names(cebq_data_edit)[2:36], function(x) cebq_data_edit[[x]] + 1, simplify = TRUE)
+      cebq_data_edit[cebq_primary_qs] <- sapply(cebq_primary_qs, function(x) cebq_data_edit[[x]] + 1, simplify = TRUE)
     }
     
     # calculate reversed scores
