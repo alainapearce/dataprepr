@@ -90,15 +90,19 @@ score_cfq <- function(cfq_data, score_base = TRUE, restriction_split = FALSE, id
     names(cfq_score_dat)[1] <- id
   }
   
+  # get primary questions
+  q_numbers <- seq(1, 63)
+  cfq_primary_qs <- paste0("cfq", q_numbers)
   
-  # remove underscore if in column names
-  names(cfq_data) <- gsub('cfq_', 'cfq', names(cfq_data))
+  # remove underscore if in cfq question column names
+  cols_to_rename <- paste0("cfq_", q_numbers)
+  names(cfq_data)[names(cfq_data) %in% cols_to_rename] <- gsub('cfq_', 'cfq', names(cfq_data)[names(cfq_data) %in% cols_to_rename])
   
   # re-scale data
   cfq_data_edit <- cfq_data
   
   if (isTRUE(score_base)){
-    cfq_data_edit[2:31] <- sapply(names(cfq_data_edit)[2:31], function(x) cfq_data_edit[[x]] + 1, simplify = TRUE)
+    cfq_data_edit[cfq_primary_qs] <- sapply(cfq_primary_qs, function(x) cfq_data_edit[[x]] + 1, simplify = TRUE)
   }
   
   ## Score Subscales
