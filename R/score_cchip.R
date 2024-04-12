@@ -13,6 +13,7 @@
 #' Wehler CA, Scott RI, Anderson JJ. The community childhood hunger identification project: A model of domestic hunger—Demonstration project in Seattle, Washington. Journal of Nutrition Education. 1992;24(1):29S-35S. doi:10.1016/S0022-3182(12)80135-X
 #'
 #' @param cchip_data a data.frame all items for the Community Childhood Hunger Identification Project following the naming conventions described above
+#' @param extra_scale_cols a vector of character strings that begin with 'cchip' but are not scale items. Any columns in cchip_data that begin with 'cchip' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
 #'
 #' @return A dataset with scores for the Community Childhood Hunger Identification Project
@@ -28,7 +29,7 @@
 #'
 #' @export
 
-score_cchip <- function(cchip_data, id) {
+score_cchip <- function(cchip_data, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -60,8 +61,11 @@ score_cchip <- function(cchip_data, id) {
     names(cchip_score_dat)[1] <- id
   }
   
-  # remove underscore if in column names
-  names(cchip_data) <- gsub('cchip_', 'cchip', names(cchip_data))
+  # assign cchip scale items to cchip_items, excluding columns in extra_scale_cols
+  cchip_items <- grep("^cchip", names(cchip_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  
+  # remove underscore in column names for cchip_items
+  names(cchip_data)[names(cchip_data) %in% cchip_items] <- gsub('cchip_', 'cchip', names(cchip_data)[names(cchip_data) %in% cchip_items])
   
   ## Score Subscales
   # CCHIP score

@@ -69,8 +69,8 @@ score_hfssm <- function(hfssm_data, score_base = TRUE, id) {
     names(hfssm_score_dat)[1] <- id
   }
   
-  # get primary questions to score
-  hfssm_primary_qs <- c("hfssm_hh2", "hfssm_hh3", "hfssm_hh4", 
+  # get hfssm items to score
+  hfssm_items <- c("hfssm_hh2", "hfssm_hh3", "hfssm_hh4", 
                         "hfssm_ad1", "hfssm_ad1a", "hfssm_ad2", "hfssm_ad3", "hfssm_ad4", "hfssm_ad5", "hfssm_ad5a",
                         "hfssm_ch1", "hfssm_ch2", "hfssm_ch3", "hfssm_ch4","hfssm_ch5", "hfssm_ch5a", "hfssm_ch6", "hfssm_ch7")
 
@@ -78,7 +78,7 @@ score_hfssm <- function(hfssm_data, score_base = TRUE, id) {
   hfssm_data_edit <- hfssm_data
   
   if (isTRUE(score_base)){
-    hfssm_data_edit[hfssm_primary_qs] <- sapply(hfssm_primary_qs, function(x) hfssm_data[[x]] + 1, simplify = TRUE)
+    hfssm_data_edit[hfssm_items] <- sapply(hfssm_items, function(x) hfssm_data[[x]] + 1, simplify = TRUE)
   }
   
   ## Score Subscales
@@ -114,7 +114,7 @@ score_hfssm <- function(hfssm_data, score_base = TRUE, id) {
   hfssm_score_dat$hfssm_household_haschildren <- !is.na(hfssm_data_edit$hfssm_ch1)
   
   # score for household with children (HH2 through CH7)
-  hh_vars <- hfssm_primary_qs
+  hh_vars <- hfssm_items
   hfssm_score_dat$hfssm_household_rawscore <- rowSums(affirmative_df[hh_vars], na.rm = TRUE)
   
     
@@ -130,7 +130,7 @@ score_hfssm <- function(hfssm_data, score_base = TRUE, id) {
 
   # U.S. Adult Food Security Scale
   # isolate questions HH2 through AD5a
-  ad_vars <- hfssm_primary_qs[4:9]
+  ad_vars <- hfssm_items[4:9]
   
   hfssm_score_dat$hfssm_adult_rawscore <- rowSums(affirmative_df[ad_vars], na.rm = TRUE)
   hfssm_score_dat$hfssm_adult_cat <- ifelse(is.na(hfssm_score_dat$hfssm_adult_rawscore), NA, 
@@ -139,7 +139,7 @@ score_hfssm <- function(hfssm_data, score_base = TRUE, id) {
                                                         ifelse(hfssm_score_dat$hfssm_adult_rawscore <= 5, "low", "very low"))))    
   # 6-item Food Security Scale
   # isolate questions HH3 through AD3
-  short_vars <- hfssm_primary_qs[2:7]
+  short_vars <- hfssm_items[2:7]
   
   hfssm_score_dat$hfssm_short_rawscore <- rowSums(affirmative_df[short_vars], na.rm = TRUE)
   hfssm_score_dat$hfssm_short_cat <- ifelse(is.na(hfssm_score_dat$hfssm_short_rawscore), NA, 
@@ -148,7 +148,7 @@ score_hfssm <- function(hfssm_data, score_base = TRUE, id) {
   
   # U.S. Children’s Food Security Scale
   # isolate questions CH1 through CH7 
-  child_vars <- hfssm_primary_qs[11:18]
+  child_vars <- hfssm_items[11:18]
   
   hfssm_score_dat$hfssm_children_rawscore <- rowSums(affirmative_df[child_vars], na.rm = TRUE)
   hfssm_score_dat$hfssm_children_cat <- ifelse(is.na(hfssm_score_dat$hfssm_children_rawscore), NA, 

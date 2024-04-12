@@ -4,7 +4,13 @@
 \alias{score_cfq}
 \title{score_cfq: Scored data from the Child Feeding Questionnaire}
 \usage{
-score_cfq(cfq_data, score_base = TRUE, restriction_split = FALSE, id)
+score_cfq(
+  cfq_data,
+  score_base = TRUE,
+  restriction_split = FALSE,
+  id,
+  extra_scale_cols = c()
+)
 }
 \arguments{
 \item{cfq_data}{a data.frame all items for the Child Feeding Questionnaire following the naming conventions described above}
@@ -14,6 +20,8 @@ score_cfq(cfq_data, score_base = TRUE, restriction_split = FALSE, id)
 \item{restriction_split}{a boolean incating if the Restriction subscale should be split to remove food as reward items. Default = FALSE. The standard Restriction subscale will always be available. If restriction_split = TRUE, then two adtional scales will be computed: 1) cfq_rest_noreward: questions 17-20, 23-24 and 1) cfq_foodreward: questions 21-22}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+
+\item{extra_scale_cols}{a vector of character strings that begin with 'cfq' but are not scale items. Any columns in cfq_data that begin with 'cfq' but are not scale items must be included here. Default is empty vector.}
 }
 \value{
 A dataset with subscale scores for the Child Feeding Questionnaire

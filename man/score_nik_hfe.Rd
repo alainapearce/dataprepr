@@ -4,7 +4,7 @@
 \alias{score_nik_hfe}
 \title{score_nik_hfe: Scored data from the Home Food Environment Survey from the Neighborhood Impact on Kids Study}
 \usage{
-score_nik_hfe(hfe_data, score_base = TRUE, id)
+score_nik_hfe(hfe_data, score_base = TRUE, id, extra_scale_cols = c())
 }
 \arguments{
 \item{hfe_data}{a data.frame all items for the Home Food Environment Survey from the Neighborhood Impact on Kids Study following the naming conventions described above}
@@ -12,6 +12,8 @@ score_nik_hfe(hfe_data, score_base = TRUE, id)
 \item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+
+\item{extra_scale_cols}{a vector of character strings that begin with 'hfe' but are not scale items. Any columns in hfe_data that begin with 'hfe' but are not scale items must be included here. Default is empty vector.}
 }
 \value{
 A dataset with subscale scores for the Home Food Environment Survey from the Neighborhood Impact on Kids Study

@@ -16,6 +16,8 @@
 #' 
 #' @param pptq_data a data.frame all items for the Pictorial Personality Traits Questionnaire for Children  following the naming conventions described above
 #' @param pptq_scale 3 or 5: indicates if data was collected with a 3-point or 5-point likert scale
+#' @param extra_scale_cols a vector of character strings that begin with 'pptq' but are not scale items. Any columns in pptq_data that begin with 'pptq' but are not scale items must be included here. Default is empty vector.
+
 #' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Pictorial Personality Traits Questionnaire for Children 
@@ -30,7 +32,7 @@
 #'
 #' @export
 
-score_pptq <- function(pptq_data, pptq_scale, score_base = TRUE, id) {
+score_pptq <- function(pptq_data, pptq_scale, score_base = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -79,15 +81,20 @@ score_pptq <- function(pptq_data, pptq_scale, score_base = TRUE, id) {
   # remove underscore if in column names
   names(pptq_data) <- gsub('pptq_', 'pptq', names(pptq_data))
   
-  # get primary questions to score
-  q_numbers <- seq(1, 15)
-  pptq_primary_qs <- paste0("pptq", q_numbers)
+  # assign pptq scale items to pptq_items, excluding columns in extra_scale_cols
+  pptq_items <- grep("^pptq", names(pptq_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  
+  # remove underscore in column names for pptq_items
+  names(pptq_data)[names(pptq_data) %in% pptq_items] <- gsub('pptq_', 'pptq', names(pptq_data)[names(pptq_data) %in% pptq_items])
+  
+  # remove underscore in pptq_items
+  pptq_items <- gsub("pptq_", "pptq", pptq_items)
   
   # re-scale data
   pptq_data_edit <- pptq_data
   
   if (isTRUE(score_base)){
-    pptq_data_edit[pptq_primary_qs] <- sapply(pptq_primary_qs, function(x) pptq_data[[x]] + 1, simplify = TRUE)
+    pptq_data_edit[pptq_items] <- sapply(pptq_items, function(x) pptq_data[[x]] + 1, simplify = TRUE)
   }
   
   # calculate reversed scores

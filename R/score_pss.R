@@ -19,6 +19,7 @@
 #' Taylor JM. Psychometric analysis of the Ten-Item Perceived Stress Scale. Psychol Assess. 2015 Mar;27(1):90-101. doi: 10.1037/a0038100. Epub 2014 Oct 27. PMID: 25346996.
 #' 
 #' @param pss_data a data.frame all items for the Perceived Stress Scale following the naming conventions described above
+#' @param extra_scale_cols a vector of character strings that begin with 'pss' but are not scale items. Any columns in pss_data that begin with 'pss' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Perceived Stress Scale
@@ -65,18 +66,20 @@ score_pss <- function(pss_data, score_base = TRUE, id) {
     names(pss_score_dat)[1] <- id
   }
   
-  # remove underscore if in column names
-  names(pss_data) <- gsub('pss_', 'pss', names(pss_data))
+  # assign pptq scale items to pptq_items, excluding columns in extra_scale_cols
+  pptq_items <- grep("^pptq", names(pptq_data), value = TRUE) %>% setdiff(extra_scale_cols)
   
-  # get primary questions to score
-  q_numbers <- seq(1, 10)
-  pss_primary_qs <- paste0("pss", q_numbers)
+  # remove underscore in column names for pptq_items
+  names(pptq_data)[names(pptq_data) %in% pptq_items] <- gsub('pptq_', 'pptq', names(pptq_data)[names(pptq_data) %in% pptq_items])
+  
+  # remove underscore in pptq_items
+  pptq_items <- gsub("pptq_", "pptq", pptq_items)
   
   # re-scale data
   pss_data_edit <- pss_data
   
   if (!isTRUE(score_base)){
-    pss_data_edit[pss_primary_qs] <- sapply(pss_primary_qs, function(x) pss_data[[x]] - 1, simplify = TRUE)
+    pss_data_edit[pptq_items] <- sapply(pptq_items, function(x) pss_data[[x]] - 1, simplify = TRUE)
   }
   
   

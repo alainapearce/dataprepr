@@ -17,7 +17,7 @@
 #'
 #' @param lbc_data a data.frame all items for the Lifestyle Behavior Checklist following the naming conventions described above
 #' @inheritParams score_bes
-#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'lbc' but are not scale items. Any columns in lbc_data that begin with 'lbc' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with subscale scores for the Lifestyle Behavior Checklist
 #' @examples
@@ -28,7 +28,7 @@
 #'
 #' @export
 
-score_lbc <- function(lbc_data, score_base = TRUE, id) {
+score_lbc <- function(lbc_data, score_base = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -60,14 +60,20 @@ score_lbc <- function(lbc_data, score_base = TRUE, id) {
         names(lbc_score_dat)[1] <- id
     }
 
-    # remove underscore if in column names
-    names(lbc_data) <- gsub('lbc_', 'lbc', names(lbc_data))
+    # assign lbc scale items to lbc_items, excluding columns in extra_scale_cols
+    lbc_items <- grep("^lbc", names(lbc_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    
+    # remove underscore in column names for lbc_items
+    names(lbc_data)[names(lbc_data) %in% lbc_items] <- gsub('lbc_', 'lbc', names(lbc_data)[names(lbc_data) %in% lbc_items])
+    
+    # remove underscore in lbc_items
+    lbc_items <- gsub("lbc_", "lbc", lbc_items)
     
     # re-scale data
     lbc_data_edit <- lbc_data
     
     if (isTRUE(score_base)){
-      lbc_data_edit[2:26] <- sapply(names(lbc_data_edit)[2:26], function(x) lbc_data_edit[[x]] + 1, simplify = TRUE)
+      lbc_data_edit[lbc_items] <- sapply(lbc_items, function(x) lbc_data_edit[[x]] + 1, simplify = TRUE)
     }
     
     ## Score Subscales

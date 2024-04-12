@@ -20,7 +20,7 @@
 #'
 #' @param spsrq_data a data.frame all items for the Sensitivity to Punishment and Sensitivity to Reward Questionnaire following the naming conventions described above
 #' @inheritParams score_bes
-#'
+#' @param extra_scale_cols a vector of character strings that begin with 'spsrq' but are not scale items. Any columns in spsrq_data that begin with 'spsrq' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with subscale scores for the Sensitivity to Punishment and Sensitivity to Reward Questionnaire
 #' @examples
 #'
@@ -34,7 +34,7 @@
 #'
 #' @export
 
-score_spsrq <- function(spsrq_data, score_base = TRUE, id) {
+score_spsrq <- function(spsrq_data, score_base = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -67,17 +67,20 @@ score_spsrq <- function(spsrq_data, score_base = TRUE, id) {
         names(spsrq_score_dat)[1] <- id
     }
 
-    # remove underscore if in column names
-    names(spsrq_data) <- gsub('spsrq_', 'spsrq', names(spsrq_data))
+    # assign spsrq scale items to spsrq_items, excluding columns in extra_scale_cols
+    spsrq_items <- grep("^spsrq", names(spsrq_data), value = TRUE) %>% setdiff(extra_scale_cols)
     
-    # get primary questions
-    spsrq_primary_qs <- names(spsrq_data[, grepl('spsrq', names(spsrq_data))])
+    # remove underscore in column names for spsrq_items
+    names(spsrq_data)[names(spsrq_data) %in% spsrq_items] <- gsub('spsrq_', 'spsrq', names(spsrq_data)[names(spsrq_data) %in% spsrq_items])
+    
+    # remove underscore in spsrq_items
+    spsrq_items <- gsub("spsrq_", "spsrq", spsrq_items)
     
     # re-scale data
     spsrq_data_edit <- spsrq_data
     
     if (isTRUE(score_base)){
-      spsrq_data_edit[spsrq_primary_qs] <- sapply(spsrq_primary_qs, function(x) spsrq_data[[x]] + 1, simplify = TRUE)
+      spsrq_data_edit[spsrq_items] <- sapply(spsrq_items, function(x) spsrq_data[[x]] + 1, simplify = TRUE)
     }
     
     ## Score Subscales

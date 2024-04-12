@@ -13,6 +13,7 @@
 #' Domoff SE, Harrison K, Gearhardt AN, Gentile DA, Lumeng JC, Miller AL. Development and Validation of the Problematic Media Use Measure: A Parent Report Measure of Screen Media "Addiction" in Children. Psychol Pop Media Cult. 2019 Jan;8(1):2-11. doi: 10.1037/ppm0000163. Epub 2017 Nov 16. PMID: 30873299; PMCID: PMC6411079.
 #'
 #' @param pmum_data a data.frame all items for the Problematic Media Use Measure following the naming conventions described above
+#' @param extra_scale_cols a vector of character strings that begin with 'pmum' but are not scale items. Any columns in pmum_data that begin with 'pmum' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
 #'
 #' @return A dataset with total score for the Problematic Media Use Measure
@@ -27,7 +28,7 @@
 #'
 #' @export
 
-score_pmum <- function(pmum_data, score_base = TRUE, id) {
+score_pmum <- function(pmum_data, score_base = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -60,24 +61,26 @@ score_pmum <- function(pmum_data, score_base = TRUE, id) {
     names(pmum_score_dat)[1] <- id
   }
   
-  # remove underscore if in column names
-  names(pmum_data) <- gsub('pmum_', 'pmum', names(pmum_data))
+  # assign pmum scale items to pmum_items, excluding columns in extra_scale_cols
+  pmum_items <- grep("^pmum", names(pmum_data), value = TRUE) %>% setdiff(extra_scale_cols)
   
-  # get primary questions
-  q_numbers <- seq(1, 27)
-  pmum_primary_qs <- paste0("pmum", q_numbers)
+  # remove underscore in column names for pmum_items
+  names(pmum_data)[names(pmum_data) %in% pmum_items] <- gsub('pmum_', 'pmum', names(pmum_data)[names(pmum_data) %in% pmum_items])
+  
+  # remove underscore in pmum_items
+  pmum_items <- gsub("pmum_", "pmum", pmum_items)
   
   # re-scale data
   pmum_data_edit <- pmum_data
   
   if (isTRUE(score_base)){
-    pmum_data_edit[pmum_primary_qs] <- sapply(pmum_primary_qs, function(x) pmum_data[[x]] + 1, simplify = TRUE)
+    pmum_data_edit[pmum_items] <- sapply(pmum_items, function(x) pmum_data[[x]] + 1, simplify = TRUE)
   }
   
   
   ## Score 
   
-  pmum_score_dat[["pmum_total"]] <- rowMeans(pmum_data_edit[c(pmum_primary_qs)])
+  pmum_score_dat[["pmum_total"]] <- rowMeans(pmum_data_edit[c(pmum_items)])
   
   #### 3. Clean Export/Scored Data #####
   

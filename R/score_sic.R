@@ -14,7 +14,7 @@
 #'
 #' @param sic_data a data.frame all items for the Child Behavior Questionnaire following the naming conventions described above
 #' @inheritParams score_bes
-#' 
+#' @param extra_scale_cols a vector of character strings that begin with 'sic' but are not scale items. Any columns in sic_data that begin with 'sic' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with subscale scores for the Stress in Chidlren Questionnaire
 #' @examples
 #'
@@ -27,7 +27,7 @@
 #'
 #' @export
 
-score_sic <- function(sic_data, score_base = TRUE, id) {
+score_sic <- function(sic_data, score_base = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -61,15 +61,20 @@ score_sic <- function(sic_data, score_base = TRUE, id) {
         names(sic_score_dat)[1] <- id
     }
 
-    # get primary questions to score
-    q_numbers <- seq(1, 21)
-    sic_primary_qs <- paste0("sic", q_numbers)
+    # assign bes scale items to bes_items, excluding columns in extra_scale_cols
+    sic_items <- grep("^sic", names(sic_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    
+    # remove underscore in column names for sic_items
+    names(sic_data)[names(sic_data) %in% sic_items] <- gsub('sic_', 'sic', names(sic_data)[names(sic_data) %in% sic_items])
+    
+    # remove underscore in sic_items
+    sic_items <- gsub("sic_", "sic", sic_items)
     
     # # re-scale data -- check if data should be base 0 or 1
     # sic_data_edit <- sic_data
     # 
     # if (isTRUE(score_base)){
-    #   sic_data_edit[sic_primary_qs] <- sapply(sic_primary_qs, function(x) sic_data[[x]] + 1, simplify = TRUE)
+    #   sic_data_edit[sic_items] <- sapply(sic_items, function(x) sic_data[[x]] + 1, simplify = TRUE)
     # }
 
     ## Score Subscales

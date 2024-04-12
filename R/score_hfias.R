@@ -65,12 +65,13 @@ score_hfias <- function(hfias_data, score_base = TRUE, id) {
     names(hfias_score_dat)[1] <- id
   }
   
-  # remove underscore if in column names
-  names(hfias_data) <- gsub('hfias_', 'hfias', names(hfias_data))
-  
   # get primary questions to score
   hfias_categorical_qs <- c("hfias1", "hfias2", "hfias3", "hfias4", "hfias5", "hfias6", "hfias7", "hfias8", "hfias9")
   hfias_frequency_qs <- c("hfias1a", "hfias2a", "hfias3a", "hfias4a", "hfias5a", "hfias6a", "hfias7a", "hfias8a", "hfias9a")
+  
+  # remove underscore in categorical and frequency column names
+  names(hfias_data)[names(hfias_data) %in% hfias_categorical_qs] <- gsub('hfias_', 'hfias', names(hfias_data)[names(hfias_data) %in% hfias_categorical_qs])
+  names(hfias_data)[names(hfias_data) %in% hfias_frequency_qs] <- gsub('hfias_', 'hfias', names(hfias_data)[names(hfias_data) %in% hfias_frequency_qs])
   
   # make copy of dataset
   hfias_data_edit <- hfias_data

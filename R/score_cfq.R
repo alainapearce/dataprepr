@@ -15,6 +15,7 @@
 #' @param cfq_data a data.frame all items for the Child Feeding Questionnaire following the naming conventions described above
 #' @inheritParams score_bes
 #' @param restriction_split a boolean incating if the Restriction subscale should be split to remove food as reward items. Default = FALSE. The standard Restriction subscale will always be available. If restriction_split = TRUE, then two adtional scales will be computed: 1) cfq_rest_noreward: questions 17-20, 23-24 and 1) cfq_foodreward: questions 21-22
+#' @param extra_scale_cols a vector of character strings that begin with 'cfq' but are not scale items. Any columns in cfq_data that begin with 'cfq' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Child Feeding Questionnaire
@@ -33,7 +34,7 @@
 #'
 #' @export
 
-score_cfq <- function(cfq_data, score_base = TRUE, restriction_split = FALSE, id) {
+score_cfq <- function(cfq_data, score_base = TRUE, restriction_split = FALSE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -90,19 +91,20 @@ score_cfq <- function(cfq_data, score_base = TRUE, restriction_split = FALSE, id
     names(cfq_score_dat)[1] <- id
   }
   
-  # get primary questions
-  q_numbers <- seq(1, 63)
-  cfq_primary_qs <- paste0("cfq", q_numbers)
+  # assign cfq scale items to cfq_items, excluding columns in extra_scale_cols
+  cfq_items <- grep("^cfq", names(cfq_data), value = TRUE) %>% setdiff(extra_scale_cols)
   
-  # remove underscore if in cfq question column names
-  cols_to_rename <- paste0("cfq_", q_numbers)
-  names(cfq_data)[names(cfq_data) %in% cols_to_rename] <- gsub('cfq_', 'cfq', names(cfq_data)[names(cfq_data) %in% cols_to_rename])
+  # remove underscore in column names for cfq_items
+  names(cfq_data)[names(cfq_data) %in% cfq_items] <- gsub('cfq_', 'cfq', names(cfq_data)[names(cfq_data) %in% cfq_items])
+  
+  # remove underscore in cfq_items
+  cfq_items <- gsub("cfq_", "cfq", cfq_items)
   
   # re-scale data
   cfq_data_edit <- cfq_data
   
   if (isTRUE(score_base)){
-    cfq_data_edit[cfq_primary_qs] <- sapply(cfq_primary_qs, function(x) cfq_data_edit[[x]] + 1, simplify = TRUE)
+    cfq_data_edit[cfq_items] <- sapply(cfq_items, function(x) cfq_data_edit[[x]] + 1, simplify = TRUE)
   }
   
   ## Score Subscales

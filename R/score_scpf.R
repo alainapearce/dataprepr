@@ -14,7 +14,7 @@
 #' Savage, J.S., Rollins, B.Y., Kugler, K.C. et al. Development of a theory-based questionnaire to assess structure and control in parent feeding (SCPF). Int J Behav Nutr Phys Act 14, 9 (2017). https://doi.org/10.1186/s12966-017-0466-2
 #' 
 #' @param scpf_data a data.frame all items for the Structure and Control in Parent Feeding questionnaire following the naming conventions described above
-#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'scpf' but are not scale items. Any columns in scpf_data that begin with 'scpf' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Structure and Control in Parent Feeding questionnaire
@@ -29,7 +29,7 @@
 #'
 #' @export
 
-score_scpf <- function(scpf_data, score_base = TRUE, id) {
+score_scpf <- function(scpf_data, score_base = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -67,18 +67,20 @@ score_scpf <- function(scpf_data, score_base = TRUE, id) {
     names(scpf_score_dat)[1] <- id
   }
   
-  # remove underscore if in column names
-  names(scpf_data) <- gsub('scpf_', 'scpf', names(scpf_data))
+  # assign scpf scale items to scpf_items, excluding columns in extra_scale_cols
+  scpf_items <- grep("^scpf", names(scpf_data), value = TRUE) %>% setdiff(extra_scale_cols)
   
-  # get primary questions
-  q_numbers <- seq(1, 34)
-  scpf_primary_qs <- paste0("scpf", q_numbers)
+  # remove underscore in column names for scpf_items
+  names(scpf_data)[names(scpf_data) %in% scpf_items] <- gsub('scpf_', 'scpf', names(scpf_data)[names(scpf_data) %in% scpf_items])
+  
+  # remove underscore in scpf_items
+  scpf_items <- gsub("scpf_", "scpf", scpf_items)
   
   # re-scale data
   scpf_data_edit <- scpf_data
 
   if (isFALSE(score_base)){
-    scpf_data_edit[scpf_primary_qs] <- sapply(scpf_primary_qs, function(x) scpf_data[[x]] - 1, simplify = TRUE)
+    scpf_data_edit[scpf_items] <- sapply(scpf_items, function(x) scpf_data[[x]] - 1, simplify = TRUE)
   }
 
   # calculate reversed scores

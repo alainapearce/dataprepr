@@ -13,7 +13,7 @@
 #' B1. Couch SC, Glanz K, Zhou C, Sallis JF, Saelens BE. Home Food Environment in Relation to Children’s Diet Quality and Weight Status. Journal of the Academy of Nutrition and Dietetics. 2014;114(10):1569-1579.e1. doi:10.1016/j.jand.2014.05.015 (\href{https://pubmed.ncbi.nlm.nih.gov/25066057/}{PubMed})
 #'
 #' @param hfe_data a data.frame all items for the Home Food Environment Survey from the Neighborhood Impact on Kids Study following the naming conventions described above
-#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'hfe' but are not scale items. Any columns in hfe_data that begin with 'hfe' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Home Food Environment Survey from the Neighborhood Impact on Kids Study
@@ -28,7 +28,7 @@
 #'
 #' @export
 
-score_nik_hfe <- function(hfe_data, score_base = TRUE, id) {
+score_nik_hfe <- function(hfe_data, score_base = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -66,7 +66,7 @@ score_nik_hfe <- function(hfe_data, score_base = TRUE, id) {
     names(hfe_data) <- ifelse(grepl('_a$', names(hfe_data)), gsub('_a', '_taste', names(hfe_data)), ifelse(grepl('_b$', names(hfe_data)), gsub('_b', '_nutr', names(hfe_data)), ifelse(grepl('_c$', names(hfe_data)), gsub('_c', '_cost', names(hfe_data)), ifelse(grepl('_d$', names(hfe_data)), gsub('_d', '_convenience', names(hfe_data)), ifelse(grepl('_e$', names(hfe_data)), gsub('_e', '_weightcontrol', names(hfe_data)), names(hfe_data))))))
     
     # get primary questions
-    hfe_primary_qs <- names(hfe_data[, grepl('hfe', names(hfe_data))])
+    hfe_primary_qs <- grep("^hfe", names(hfe_data), value = TRUE) %>% setdiff(extra_scale_cols)
     
     # re-scale data
     hfe_data_edit <- hfe_data

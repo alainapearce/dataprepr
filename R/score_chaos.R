@@ -13,6 +13,7 @@
 #' need to add
 #'
 #' @param chaos_data a data.frame all items for the Confusion, Hubbub, and Order Scale following the naming conventions described above
+#' @param extra_scale_cols a vector of character strings that begin with 'chaos' but are not scale items. Any columns in chaos_data that begin with 'chaos' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Confusion, Hubbub, and Order Scale 
@@ -29,7 +30,7 @@
 #'
 #' @export
 
-score_chaos <- function(chaos_data, score_base = TRUE, id) {
+score_chaos <- function(chaos_data, score_base = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -62,18 +63,20 @@ score_chaos <- function(chaos_data, score_base = TRUE, id) {
     names(chaos_score_dat)[1] <- id
   }
   
-  # remove underscore if in column names
-  names(chaos_data) <- gsub('chaos_', 'chaos', names(chaos_data))
+  # assign chaos scale items to chaos_items, excluding columns in extra_scale_cols
+  chaos_items <- grep("^chaos", names(chaos_data), value = TRUE) %>% setdiff(extra_scale_cols)
   
-  # get primary questions
-  q_numbers <- seq(1, 15)
-  chaos_primary_qs <- paste0("chaos", q_numbers)
+  # remove underscore in column names for chaos_items
+  names(chaos_data)[names(chaos_data) %in% chaos_items] <- gsub('chaos_', 'chaos', names(chaos_data)[names(chaos_data) %in% chaos_items])
+  
+  # remove underscore in chaos_items
+  chaos_items <- gsub("chaos_", "chaos", chaos_items)
   
   # re-scale data
   chaos_data_edit <- chaos_data
   
   if (isTRUE(score_base)){
-    chaos_data_edit[chaos_primary_qs] <- sapply(chaos_primary_qs, function(x) chaos_data[[x]] + 1, simplify = TRUE)
+    chaos_data_edit[chaos_items] <- sapply(chaos_items, function(x) chaos_data[[x]] + 1, simplify = TRUE)
   }
   
   # # calculate reversed scores

@@ -17,8 +17,7 @@
 #' @param brief_data a data.frame all items for the Behavioral Rating Inventory of Executive Function-2 following the naming conventions described above
 #' @param age_var a string with the name of the age variable in brief_data
 #' @param sex_var a string with the name of the sex variable in brief_data
-#' @inheritParams score_bes
-#' @inheritParams score_pds
+#' @param extra_scale_cols a vector of character strings that begin with 'brief' but are not scale items. Any columns in brief_data that begin with 'brief' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_pds
 #' @inheritParams score_bes
 #'
@@ -53,7 +52,7 @@
 #'
 #' @export
 
-score_brief2 <- function(brief_data, age_var, sex_var, score_base = TRUE, male = 0, female = 1, id) {
+score_brief2 <- function(brief_data, age_var, sex_var, score_base = TRUE, male = 0, female = 1, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -142,19 +141,19 @@ score_brief2 <- function(brief_data, age_var, sex_var, score_base = TRUE, male =
         names(brief_score_dat)[1] <- id
     }
 
-    # get primary questions
-    q_numbers <- seq(1, 63)
-    brief_primary_qs <- paste0("brief", q_numbers)
+    # assign brief scale items to brief_items, excluding columns in extra_scale_cols
+    brief_items <- grep("^brief", names(brief_data), value = TRUE) %>% setdiff(extra_scale_cols)
     
-    # remove underscore if in brief question column names
-    cols_to_rename <- paste0("brief_", q_numbers)
-    names(brief_data)[names(brief_data) %in% cols_to_rename] <- gsub('brief_', 'brief', names(brief_data)[names(brief_data) %in% cols_to_rename])
+    # remove underscore in column names for brief_items
+    names(brief_data)[names(brief_data) %in% brief_items] <- gsub('brief_', 'brief', names(brief_data)[names(brief_data) %in% brief_items])
+    
+    # remove underscore in brief_items
+    brief_items <- gsub("brief_", "brief", brief_items)
     
     # re-scale data
     brief_data_edit <- brief_data
-    
     if (isTRUE(score_base)){
-      brief_data_edit[brief_primary_qs] <- sapply(brief_primary_qs, function(x) brief_data[[x]] + 1, simplify = TRUE)
+      brief_data_edit[brief_items] <- sapply(brief_items, function(x) brief_data[[x]] + 1, simplify = TRUE)
     }
     
     ## Score Subscales

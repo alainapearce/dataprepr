@@ -16,7 +16,7 @@
 #'
 #' @param ffbs_data a data.frame all items for the Family Food Behavior Survey following the naming conventions described above
 #' @inheritParams score_bes
-#'@inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'ffbs' but are not scale items. Any columns in ffbs_data that begin with 'ffbs' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with subscale scores for the Family Food Behavior Survey
 #' @examples
@@ -30,7 +30,7 @@
 #'
 #' @export
 
-score_ffbs <- function(ffbs_data, score_base = TRUE, id) {
+score_ffbs <- function(ffbs_data, score_base = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -64,17 +64,20 @@ score_ffbs <- function(ffbs_data, score_base = TRUE, id) {
         names(ffbs_score_dat)[1] <- id
     }
 
-    # remove underscore if in column names
-    names(ffbs_data) <- gsub('ffbs_', 'ffbs', names(ffbs_data))
+    # assign ffbs scale items to ffbs_items, excluding columns in extra_scale_cols
+    ffbs_items <- grep("^ffbs", names(ffbs_data), value = TRUE) %>% setdiff(extra_scale_cols)
     
-    # get primary questions
-    ffbs_primary_qs <- names(ffbs_data[, grepl('ffbs', names(ffbs_data))])
+    # remove underscore in column names for ffbs_items
+    names(ffbs_data)[names(ffbs_data) %in% ffbs_items] <- gsub('ffbs_', 'ffbs', names(ffbs_data)[names(ffbs_data) %in% ffbs_items])
+    
+    # remove underscore in ffbs_items
+    ffbs_items <- gsub("ffbs_", "ffbs", ffbs_items)
     
     # re-scale data
     ffbs_data_edit <- ffbs_data
     
     if (isFALSE(score_base)){
-      ffbs_data_edit[ffbs_primary_qs] <- sapply(ffbs_primary_qs, function(x) ffbs_data[[x]] - 1, simplify = TRUE)
+      ffbs_data_edit[ffbs_items] <- sapply(ffbs_items, function(x) ffbs_data[[x]] - 1, simplify = TRUE)
     }
 
     # calculate reversed scores
@@ -83,10 +86,18 @@ score_ffbs <- function(ffbs_data, score_base = TRUE, id) {
     for (var in 1:length(reverse_qs)) {
         var_name <- reverse_qs[var]
 
-        ffbs_data_edit[[var_name]] <- ifelse(is.na(ffbs_data_edit[[var_name]]), NA,
-            ifelse(ffbs_data_edit[[var_name]] == 0, 4, ifelse(ffbs_data_edit[[var_name]] ==
-                1, 3, ifelse(ffbs_data_edit[[var_name]] == 3, 1, ifelse(ffbs_data_edit[[var_name]] ==
-                4, 0, 2)))))
+        ffbs_data_edit[[var_name]] <-
+          ifelse(is.na(ffbs_data_edit[[var_name]]),
+                 NA,
+                 ifelse(ffbs_data_edit[[var_name]] == 0, 4, ifelse(
+                   ffbs_data_edit[[var_name]] ==
+                     1, 3, ifelse(ffbs_data_edit[[var_name]] == 3, 1, ifelse(
+                       ffbs_data_edit[[var_name]] ==
+                         4, 0,
+                       ifelse(ffbs_data_edit[[var_name]] ==
+                                2, 2, NA)
+                     ))
+                 )))
     }
 
     ## Score Subscales

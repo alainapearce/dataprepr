@@ -21,7 +21,7 @@
 #'
 #' @param cebq_data a data.frame all items for the Children's Eating Behavior Questionnaire following the naming conventions described above
 #' @inheritParams score_bes
-#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'cebq' but are not scale items. Any columns in cebq_data that begin with 'cebq' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with subscale scores for the Children's Eating Behavior Questionnaire
 #' @examples
@@ -32,7 +32,7 @@
 #' 
 #' @export
 
-score_cebq <- function(cebq_data, score_base = TRUE, id) {
+score_cebq <- function(cebq_data, score_base = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -64,19 +64,20 @@ score_cebq <- function(cebq_data, score_base = TRUE, id) {
         names(cebq_score_dat)[1] <- id
     }
     
-    # get primary questions
-    q_numbers <- seq(1, 35)
-    cebq_primary_qs <- paste0("cebq", q_numbers)
+    # assign cebq scale items to cebq_items, excluding columns in extra_scale_cols
+    cebq_items <- grep("^cebq", names(cebq_data), value = TRUE) %>% setdiff(extra_scale_cols)
     
-    # remove underscore if in primary questions column names
-    cols_to_rename <- paste0("cebq_", q_numbers)
-    names(cebq_data)[names(cebq_data) %in% cols_to_rename] <- gsub('cebq_', 'cebq', names(cebq_data)[names(cebq_data) %in% cols_to_rename])
+    # remove underscore in column names for cebq_items
+    names(cebq_data)[names(cebq_data) %in% cebq_items] <- gsub('cebq_', 'cebq', names(cebq_data)[names(cebq_data) %in% cebq_items])
+    
+    # remove underscore in cebq_items
+    cebq_items <- gsub("cebq_", "cebq", cebq_items)
     
     # re-scale data
     cebq_data_edit <- cebq_data
     
     if (isTRUE(score_base)){
-      cebq_data_edit[cebq_primary_qs] <- sapply(cebq_primary_qs, function(x) cebq_data_edit[[x]] + 1, simplify = TRUE)
+      cebq_data_edit[cebq_items] <- sapply(cebq_items, function(x) cebq_data_edit[[x]] + 1, simplify = TRUE)
     }
     
     # calculate reversed scores

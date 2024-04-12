@@ -15,6 +15,7 @@
 #' Musher-Eizenman, D., Holub. S., Comprehensive Feeding Practices Questionnaire: Validation of a New Measure of Parental Feeding Practices, Journal of Pediatric Psychology, 32, 8, September 2007, Pages 960–972, https://doi.org/10.1093/jpepsy/jsm037
 #'
 #' @param cfpq_data a data.frame all items for the Comprehensive Feeding Practices Questionnaire following the naming conventions described above
+#' @param extra_scale_cols a vector of character strings that begin with 'cfpq' but are not scale items. Any columns in bes_data that begin with 'cfpq' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Comprehensive Feeding Practices Questionnaire 
@@ -29,7 +30,7 @@
 #'
 #' @export
 
-score_cfpq <- function(cfpq_data, score_base = TRUE, id) {
+score_cfpq <- function(cfpq_data, score_base = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -72,18 +73,20 @@ score_cfpq <- function(cfpq_data, score_base = TRUE, id) {
     names(cfpq_score_dat)[1] <- id
   }
   
-  # remove underscore if in column names
-  names(cfpq_data) <- gsub('cfpq_', 'cfpq', names(cfpq_data))
+  # assign cfpq scale items to cfpq_items, excluding columns in extra_scale_cols
+  cfpq_items <- grep("^cfpq", names(cfpq_data), value = TRUE) %>% setdiff(extra_scale_cols)
   
-  # get primary questions to score
-  q_numbers <- seq(1, 49)
-  cfpq_primary_qs <- paste0("cfpq", q_numbers)
+  # remove underscore in column names for cfpq_items
+  names(cfpq_data)[names(cfpq_data) %in% cfpq_items] <- gsub('cfpq_', 'cfpq', names(cfpq_data)[names(cfpq_data) %in% cfpq_items])
+  
+  # remove underscore in cfpq_items
+  cfpq_items <- gsub("cfpq_", "cfpq", cfpq_items)
   
   # re-scale data
   cfpq_data_edit <- cfpq_data
   
   if (isTRUE(score_base)){
-    cfpq_data_edit[cfpq_primary_qs] <- sapply(cfpq_primary_qs, function(x) cfpq_data[[x]] + 1, simplify = TRUE)
+    cfpq_data_edit[cfpq_items] <- sapply(cfpq_items, function(x) cfpq_data[[x]] + 1, simplify = TRUE)
   }
   
   # calculate reversed scores

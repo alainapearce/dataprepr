@@ -16,7 +16,7 @@
 #' 
 #' @param debq_data a data.frame all items for the Dutch Eating Behavior Questionnaire following the naming conventions described above
 #' @inheritParams score_bes
-#'
+#' @param extra_scale_cols a vector of character strings that begin with 'debq' but are not scale items. Any columns in debq_data that begin with 'debq' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with subscale scores for the Dutch Eating Behavior Questionnaire
 #' @examples
 #'
@@ -30,7 +30,7 @@
 #'
 #' @export
 
-score_debq <- function(debq_data, score_base = TRUE, id) {
+score_debq <- function(debq_data, score_base = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -63,18 +63,20 @@ score_debq <- function(debq_data, score_base = TRUE, id) {
     names(debq_score_dat)[1] <- id
   }
   
-  # remove underscore if in column names
-  names(debq_data) <- gsub('debq_', 'debq', names(debq_data))
+  # assign debq scale items to debq_items, excluding columns in extra_scale_cols
+  debq_items <- grep("^debq", names(debq_data), value = TRUE) %>% setdiff(extra_scale_cols)
   
-  # get primary questions
-  q_numbers <- seq(1, 33)
-  debq_primary_qs <- paste0("debq", q_numbers)
+  # remove underscore in column names for debq_items
+  names(debq_data)[names(debq_data) %in% debq_items] <- gsub('debq_', 'debq', names(debq_data)[names(debq_data) %in% debq_items])
+  
+  # remove underscore in debq_items
+  debq_items <- gsub("debq_", "debq", debq_items)
   
   # re-scale data
   debq_data_edit <- debq_data
   
   if (isTRUE(score_base)){
-    debq_data_edit[debq_primary_qs] <- sapply(debq_primary_qs, function(x) debq_data[[x]] + 1, simplify = TRUE)
+    debq_data_edit[debq_items] <- sapply(debq_items, function(x) debq_data[[x]] + 1, simplify = TRUE)
   }
 
   ## Score Subscales

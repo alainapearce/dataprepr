@@ -17,6 +17,7 @@
 #' French SA, Perry CL, Leon GR, Fulkerson JA. Dieting behaviors and weight change history in female adolescents. Health Psychology. 1995;14(6):548-555. doi:http://dx.doi.org/10.1037/0278-6133.14.6.548 (\href{https://pubmed.ncbi.nlm.nih.gov/8565929/}{PubMed})
 #'
 #' @param pwlb_data a data.frame all items for the Parent Weight-Loss Behavior Questionnaire following the naming conventions described above
+#' @param extra_scale_cols a vector of character strings that begin with 'pwlb' but are not scale items. Any columns in pwlb_data that begin with 'pwlb' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Parent Weight-Loss Behavior Questionnaire
@@ -34,7 +35,7 @@
 #'
 #' @export
 
-score_pwlb <- function(pwlb_data, score_base = TRUE, id) {
+score_pwlb <- function(pwlb_data, score_base = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -67,18 +68,20 @@ score_pwlb <- function(pwlb_data, score_base = TRUE, id) {
         names(pwlb_score_dat)[1] <- id
     }
 
-    # remove underscore if in column names
-    names(pwlb_data) <- gsub('pwlb_', 'pwlb', names(pwlb_data))
+    # assign pwlb scale items to pwlb_items, excluding columns in extra_scale_cols
+    pwlb_items <- grep("^pwlb", names(pwlb_data), value = TRUE) %>% setdiff(extra_scale_cols)
     
-    # get primary questions to score
-    q_numbers <- seq(1, 24)
-    pwlb_primary_qs <- paste0("pwlb", q_numbers)
+    # remove underscore in column names for pwlb_items
+    names(pwlb_data)[names(pwlb_data) %in% pwlb_items] <- gsub('pwlb_', 'pwlb', names(pwlb_data)[names(pwlb_data) %in% pwlb_items])
+    
+    # remove underscore in pwlb_items
+    pwlb_items <- gsub("pwlb_", "pwlb", pwlb_items)
     
     # re-scale data
     pwlb_data_edit <- pwlb_data
     
     if (isTRUE(score_base)){
-      pwlb_data_edit[pwlb_primary_qs] <- sapply(pwlb_primary_qs, function(x) pwlb_data[[x]] + 1, simplify = TRUE)
+      pwlb_data_edit[pwlb_items] <- sapply(pwlb_items, function(x) pwlb_data[[x]] + 1, simplify = TRUE)
     }
     
     ## Score Subscales

@@ -17,6 +17,7 @@
 #'
 #'
 #' @param bisbas_data a data.frame all items for the Behavioral Inhibition Scale/Behavioral Activation Scale following the naming conventions described above
+#' @param extra_scale_cols a vector of character strings that begin with 'bisbas' but are not scale items. Any columns in bisbas_data that begin with 'bisbas' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Behavioral Inhibition Scale/Behavioral Activation Scale
@@ -34,7 +35,7 @@
 #'
 #' @export
 
-score_bisbas <- function(bisbas_data, score_base = TRUE, id) {
+score_bisbas <- function(bisbas_data, score_base = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -67,17 +68,20 @@ score_bisbas <- function(bisbas_data, score_base = TRUE, id) {
     names(bisbas_score_dat)[1] <- id
   }
   
-  # remove underscore if in column names
-  names(bisbas_data) <- gsub('bisbas_', 'bisbas', names(bisbas_data))
+  # assign bisbas scale items to bisbas_items, excluding columns in extra_scale_cols
+  bisbas_items <- grep("^bisbas", names(bisbas_data), value = TRUE) %>% setdiff(extra_scale_cols)
   
-  # get primary questions
-  bisbas_primary_qs <- names(bisbas_data[, grepl('bisbas', names(bisbas_data))])
+  # remove underscore in column names for bisbas_items
+  names(bisbas_data)[names(bisbas_data) %in% bisbas_items] <- gsub('bisbas_', 'bisbas', names(bisbas_data)[names(bisbas_data) %in% bisbas_items])
+  
+  # remove underscore in bisbas_items
+  bisbas_items <- gsub("bisbas_", "bisbas", bisbas_items)
   
   # re-scale data
   bisbas_data_edit <- bisbas_data
   
   if (isTRUE(score_base)){
-    bisbas_data_edit[bisbas_primary_qs] <- sapply(bisbas_primary_qs, function(x) bisbas_data[[x]] + 1, simplify = TRUE)
+    bisbas_data_edit[bisbas_items] <- sapply(bisbas_items, function(x) bisbas_data[[x]] + 1, simplify = TRUE)
   }
   
   # calculate reversed scores

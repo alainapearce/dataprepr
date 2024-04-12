@@ -18,7 +18,7 @@
 #' 
 #' @param tfeq_data a data.frame all items for the Three-Factor Eating Questionnaire-R18 following the naming conventions described above
 #' @inheritParams score_bes
-#'
+#' @param extra_scale_cols a vector of character strings that begin with 'tfeq' but are not scale items. Any columns in tfeq_data that begin with 'tfeq' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with scores for the Three-Factor Eating Questionnaire-R18
 #' @examples
 #'
@@ -32,7 +32,7 @@
 #'
 #' @export
 
-score_tfeq18 <- function(tfeq_data, score_base = TRUE, id) {
+score_tfeq18 <- function(tfeq_data, score_base = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -64,18 +64,20 @@ score_tfeq18 <- function(tfeq_data, score_base = TRUE, id) {
     names(tfeq_score_dat)[1] <- id
   }
   
-  # remove underscore if in column names
-  names(tfeq_data) <- gsub('tfeq_', 'tfeq', names(tfeq_data))
+  # assign tfeq scale items to tfeq_items, excluding columns in extra_scale_cols
+  tfeq_items <- grep("^tfeq", names(tfeq_data), value = TRUE) %>% setdiff(extra_scale_cols)
   
-  # get primary questions to score
-  q_numbers <- seq(1, 18)
-  tfeq_primary_qs <- paste0("tfeq", q_numbers)
+  # remove underscore in column names for tfeq_items
+  names(tfeq_data)[names(tfeq_data) %in% tfeq_items] <- gsub('tfeq_', 'tfeq', names(tfeq_data)[names(tfeq_data) %in% tfeq_items])
+  
+  # remove underscore in tfeq_items
+  tfeq_items <- gsub("tfeq_", "tfeq", tfeq_items)
   
   # re-scale data
   tfeq_data_edit <- tfeq_data
   
   if (isTRUE(score_base)){
-    tfeq_data_edit[tfeq_primary_qs] <- sapply(tfeq_primary_qs, function(x) tfeq_data[[x]] + 1, simplify = TRUE)
+    tfeq_data_edit[tfeq_items] <- sapply(tfeq_items, function(x) tfeq_data[[x]] + 1, simplify = TRUE)
   }
   
   # re-code item 18

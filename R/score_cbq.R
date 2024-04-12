@@ -15,9 +15,8 @@
 #'Rothbart MΚ, Ahadi SA, Hershey KL. Temperament and Social Behavior in Childhood. Merrill-Palmer Quarterly. 1994;40(1):21-39 (\href{https://www.jstor.org/stable/23087906}{jstore})
 #'
 #' @param cbq_data a data.frame all items for the Child Behavior Questionnaire following the naming conventions described above
+#' @param extra_scale_cols a vector of character strings that begin with 'cbq' but are not scale items. Any columns in cbq_data that begin with 'cbq' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
-#' @inheritParams score_bes
-#'
 #' @return A dataset with subscale scores for the Child Behavior Questionnaire
 #' @examples
 #'
@@ -30,7 +29,7 @@
 #'
 #' @export
 
-score_cbq <- function(cbq_data, score_base = TRUE, id) {
+score_cbq <- function(cbq_data, score_base = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -64,21 +63,24 @@ score_cbq <- function(cbq_data, score_base = TRUE, id) {
         names(cbq_score_dat)[1] <- id
     }
     
-    # remove underscore if in column names
-    names(cbq_data) <- gsub('cbq_', 'cbq', names(cbq_data))
+    # assign cbq scale items to cbq_items, excluding columns in extra_scale_cols
+    cbq_items <- grep("^cbq", names(cbq_data), value = TRUE) %>% setdiff(extra_scale_cols)
     
-    # get primary questions
-    cbq_primary_qs <- names(cbq_data[, grepl('cbq', names(cbq_data))])
+    # remove underscore in column names for cbq_items
+    names(cbq_data)[names(cbq_data) %in% cbq_items] <- gsub('cbq_', 'cbq', names(cbq_data)[names(cbq_data) %in% cbq_items])
+    
+    # remove underscore in cbq_items
+    cbq_items <- gsub("cbq_", "cbq", cbq_items)
     
     # re-scale data
     cbq_data_edit <- cbq_data
     
     if (isTRUE(score_base)){
-      cbq_data_edit[cbq_primary_qs] <- sapply(cbq_primary_qs, function(x) cbq_data[[x]] + 1, simplify = TRUE)
+      cbq_data_edit[cbq_items] <- sapply(cbq_items, function(x) cbq_data[[x]] + 1, simplify = TRUE)
     }
     
     # set 99 to NA
-    cbq_data_edit[cbq_primary_qs] <- sapply(cbq_primary_qs, function (x) ifelse(cbq_data_edit[[x]] == 99, NA, cbq_data_edit[[x]]), simplify = TRUE)
+    cbq_data_edit[cbq_items] <- sapply(cbq_items, function (x) ifelse(cbq_data_edit[[x]] == 99, NA, cbq_data_edit[[x]]), simplify = TRUE)
     
     # calculate reversed scores
     reverse_qs <- c("cbq3", "cbq11", "cbq16", "cbq18", "cbq19", "cbq21", "cbq25",

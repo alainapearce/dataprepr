@@ -17,7 +17,7 @@
 #'
 #' @param efcr_data a data.frame all items for the External Food Cue Responsiveness Scale following the naming conventions described above
 #' @inheritParams score_bes
-#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'efcr' but are not scale items. Any columns in efcr_data that begin with 'efcr' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with subscale scores for the External Food Cue Responsiveness Scale
 #' @examples
@@ -28,7 +28,7 @@
 #' 
 #' @export
 
-score_efcr <- function(efcr_data, score_base = TRUE, id) {
+score_efcr <- function(efcr_data, score_base = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -60,18 +60,24 @@ score_efcr <- function(efcr_data, score_base = TRUE, id) {
         names(efcr_score_dat)[1] <- id
     }
 
-    # remove underscore if in column names
-    names(efcr_data) <- gsub('efcr_', 'efcr', names(efcr_data))
+    # assign efcr scale items to efcr_items, excluding columns in extra_scale_cols
+    efcr_items <- grep("^efcr", names(efcr_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    
+    # remove underscore in column names for efcr_items
+    names(efcr_data)[names(efcr_data) %in% efcr_items] <- gsub('efcr_', 'efcr', names(efcr_data)[names(efcr_data) %in% efcr_items])
+    
+    # remove underscore in efcr_items
+    efcr_items <- gsub("efcr_", "efcr", efcr_items)
     
     # re-scale data
     efcr_data_edit <- efcr_data
     
     if (isTRUE(score_base)){
-      efcr_data_edit[2:10] <- sapply(names(efcr_data_edit)[2:10], function(x) efcr_data_edit[[x]] + 1, simplify = TRUE)
+      efcr_data_edit[efcr_items] <- sapply(efcr_items, function(x) efcr_data_edit[[x]] + 1, simplify = TRUE)
     }
     
     ## Score
-    efcr_score_dat[['efcr_score']] <- rowMeans(efcr_data_edit[2:10])
+    efcr_score_dat[['efcr_score']] <- rowMeans(efcr_data_edit[efcr_items])
  
     #### 3. Clean Export/Scored Data #####
     ## round data
