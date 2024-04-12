@@ -66,20 +66,20 @@ score_pss <- function(pss_data, score_base = TRUE, id, extra_scale_cols = c()) {
     names(pss_score_dat)[1] <- id
   }
   
-  # assign pptq scale items to pptq_items, excluding columns in extra_scale_cols
-  pptq_items <- grep("^pptq", names(pptq_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  # assign pss scale items to pss_items, excluding columns in extra_scale_cols
+  pss_items <- grep("^pss", names(pss_data), value = TRUE) %>% setdiff(extra_scale_cols)
   
-  # remove underscore in column names for pptq_items
-  names(pptq_data)[names(pptq_data) %in% pptq_items] <- gsub('pptq_', 'pptq', names(pptq_data)[names(pptq_data) %in% pptq_items])
+  # remove underscore in column names for pss_items
+  names(pss_data)[names(pss_data) %in% pss_items] <- gsub('pss_', 'pss', names(pss_data)[names(pss_data) %in% pss_items])
   
-  # remove underscore in pptq_items
-  pptq_items <- gsub("pptq_", "pptq", pptq_items)
+  # remove underscore in pss_items
+  pss_items <- gsub("pss_", "pss", pss_items)
   
   # re-scale data
   pss_data_edit <- pss_data
   
   if (!isTRUE(score_base)){
-    pss_data_edit[pptq_items] <- sapply(pptq_items, function(x) pss_data[[x]] - 1, simplify = TRUE)
+    pss_data_edit[pss_items] <- sapply(pss_items, function(x) pss_data[[x]] - 1, simplify = TRUE)
   }
   
   
