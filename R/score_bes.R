@@ -18,12 +18,12 @@
 #' @param pna value used when participant prefers not to answer/elects to skip
 #' @param score_base the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.
 #' @param id (optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)
-#'
+#' @param extra_scale_cols a vector of character strings that begin with 'bes' but are not scale items. Any columns in bes_data that begin with 'bes' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with total score for the Binge Eating Scale
 #' @examples
 #'
 #' # scoring for the bes with IDs
-#' bes_score_data <- score_bes(bes_data, id = 'ID')
+#' bes_score_data <- score_bes(bes_data, id = 'ID', extra_scale_cols = c("bes_date"))
 #'
 #' \dontrun{
 #' }
@@ -31,7 +31,7 @@
 #'
 #' @export
 
-score_bes <- function(bes_data, score_base = TRUE, pna = NA, id) {
+score_bes <- function(bes_data, score_base = TRUE, pna = NA, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -63,19 +63,22 @@ score_bes <- function(bes_data, score_base = TRUE, pna = NA, id) {
     names(bes_score_dat)[1] <- id
   }
   
-  # remove underscore if in column names
-  names(bes_data) <- gsub('bes_', 'bes', names(bes_data))
-  
-  # get primary questions
-  q_numbers <- seq(1, 16)
-  bes_primary_qs <- paste0("bes", q_numbers)
+  # assign bes scale items to bes_items, excluding columns in extra_scale_cols
+  bes_items <- grep("^bes", names(bes_data), value = TRUE) %>% setdiff(extra_scale_cols)
 
+  # remove underscore in column names for bes_items
+  names(bes_data)[names(bes_data) %in% bes_items] <- gsub('bes_', 'bes', names(bes_data)[names(bes_data) %in% bes_items])
+  
+  # remove underscore in bes_items
+  bes_items <- gsub("bes_", "bes", bes_items)
+    
   # re-scale data
   bes_data_edit <- bes_data
   
   if (isFALSE(score_base)){
-    bes_data_edit[bes_primary_qs] <- sapply(bes_primary_qs, function(x) bes_data[[x]] - 1, simplify = TRUE)
+    bes_data_edit[bes_items] <- sapply(bes_items, function(x) bes_data[[x]] - 1, simplify = TRUE)
     
+    # update numeric pna to accomodate rescaling
     if (is.numeric(pna)){
       pna <- pna - 1
     }
@@ -84,7 +87,7 @@ score_bes <- function(bes_data, score_base = TRUE, pna = NA, id) {
   # calculate question - specific scoring values
   
   # reset pna value to NA
-  bes_data_edit[bes_primary_qs] <- sapply(bes_primary_qs, function(x) ifelse(bes_data[[x]] == pna, NA, bes_data[[x]]), simplify = TRUE)
+  bes_data_edit[bes_items] <- sapply(bes_items, function(x) ifelse(bes_data[[x]] == pna, NA, bes_data[[x]]), simplify = TRUE)
   
   # custom scoring by question
   bes_data_edit[['bes1']] <- ifelse(is.na(bes_data_edit[['bes1']]), NA, ifelse(bes_data_edit[['bes1']] < 2, 0, ifelse(bes_data_edit[['bes1']] == 2, 1, 3)))
@@ -102,7 +105,7 @@ score_bes <- function(bes_data, score_base = TRUE, pna = NA, id) {
   ## Score
   
   # Total Score
-  bes_score_dat[['bes_total']] <- rowSums(bes_data_edit[bes_primary_qs])
+  bes_score_dat[['bes_total']] <- rowSums(bes_data_edit[bes_items])
   
   #### 3. Clean Export/Scored Data ####
   
