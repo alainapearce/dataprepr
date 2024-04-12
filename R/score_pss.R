@@ -34,7 +34,7 @@
 #'
 #' @export
 
-score_pss <- function(pss_data, score_base = TRUE, id) {
+score_pss <- function(pss_data, score_base = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   

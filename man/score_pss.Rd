@@ -4,7 +4,7 @@
 \alias{score_pss}
 \title{score_pss: Scored data from the 10-item Perceived Stress Scale}
 \usage{
-score_pss(pss_data, score_base = TRUE, id)
+score_pss(pss_data, score_base = TRUE, id, extra_scale_cols = c())
 }
 \arguments{
 \item{pss_data}{a data.frame all items for the Perceived Stress Scale following the naming conventions described above}
