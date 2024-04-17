@@ -14,7 +14,7 @@
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
 #' @references
-#' The Three-Factor Eating Questionnaire-R18 Is Able to Distinguish among Different Eating Patterns in a General Population
+#' Karlsson J, Persson LO, Sjöström L, Sullivan M. Psychometric properties and factor structure of the Three-Factor Eating Questionnaire (TFEQ) in obese men and women. Results from the Swedish Obese Subjects (SOS) study. Int J Obes Relat Metab Disord. 2000 Dec;24(12):1715-25. doi: 10.1038/sj.ijo.0801442. PMID: 11126230.
 #' 
 #' @param tfeq_data a data.frame all items for the Three-Factor Eating Questionnaire-R18 following the naming conventions described above
 #' @inheritParams score_bes
