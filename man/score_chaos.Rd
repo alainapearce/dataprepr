@@ -24,7 +24,7 @@ This function scores the Confusion, Hubbub, and Order Scale and provides XXX
 \details{
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'chaos#' or 'chaos_#' where # is the question number (1-24).
+2) The  columns/variables must match the following naming convention: 'chaos#' or 'chaos_#' where # is the question number (1-15).
 3) Questions must have the numeric value for the choices: 1 - Very much like your own home, 2 - Somewhat like your own home, 3 - A little bit like your own home, 4 - Not at all like your own home
 
 Note, as long as variable names match those listed, the dataset can include other variables
@@ -42,5 +42,5 @@ chaos_score_data <- score_chaos(chaos_data, id = 'ID')
 
 }
 \references{
-need to add
+Matheny, A. P., Jr., Wachs, T. D., Ludwig, J. L., Phillips, K. (1995). Bringing order out of chaos: Psychometric characteristics of the confusion, hubbub, and order scale. Journal of Applied Developmental Psychology, 16(3), 429–444. https://doi.org/10.1016/0193-3973(95)90028-4
 }
