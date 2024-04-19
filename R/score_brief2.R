@@ -101,25 +101,10 @@ score_brief2 <- function(brief_data, age_var, sex_var, score_base = TRUE, male =
     # entered arguments match number of different sexes in data
     if (isTRUE(male_arg) | isTRUE(female_arg)) {
 
-        if (sum(isTRUE(male_arg), isTRUE(female_arg)) == nsex_unique) {
-            if (nsex_unique == 2) {
-                # change values of sex in brief_data to default
-                brief_data[[sex_var]] <- ifelse(brief_data[[sex_var]] ==
-                                                  male, 0, 1)
-                brief_data[[sex_var]] <- factor(brief_data[[sex_var]], levels = c(0,
-                                                                              1))
-            } else if (nsex_unique == 1 & isTRUE(male_arg)) {
-                # if only 1 value for sex and male is specified, set default to 0
-                brief_data[[sex_var]] <- 0
-            } else if (nsex_unique == 1 & isTRUE(female_arg)) {
-                # if only 1 value for sex and female is specified, set default to 1
-                brief_data[[sex_var]] <- 1
-            }
-        } else {
+        if (sum(isTRUE(male_arg), isTRUE(female_arg)) != nsex_unique) {
+          
             stop('The number of alternate values entered for sex do not match the number of different sexes in data. If specifying non-default values for male and/or female, must provide all values that exist in data (e.g., if have both males and females, need to provide values for both)')
         }
-    } else if (sum(isTRUE(male_arg), isTRUE(female_arg)) == 0) {
-        brief_data[[sex_var]] <- factor(brief_data[[sex_var]])
     }
 
     # check if id exists
@@ -150,10 +135,33 @@ score_brief2 <- function(brief_data, age_var, sex_var, score_base = TRUE, male =
     # remove underscore in brief_items
     brief_items <- gsub("brief_", "brief", brief_items)
     
-    # re-scale data
+    #make copy of data
     brief_data_edit <- brief_data
+    
+    # change values of sex in brief_data_edit to default
+    if (sum(isTRUE(male_arg), isTRUE(female_arg)) == nsex_unique) {
+      if (nsex_unique == 2) {
+        brief_data_edit[[sex_var]] <-
+          ifelse(brief_data_edit[[sex_var]] == male, 0, 1)
+        
+        brief_data_edit[[sex_var]] <-
+          factor(brief_data_edit[[sex_var]], levels = c(0, 1))
+        
+      } else if (nsex_unique == 1 & isTRUE(male_arg)) {
+        # if only 1 value for sex and male is specified, set default to 0
+        brief_data_edit[[sex_var]] <- 0
+      } else if (nsex_unique == 1 & isTRUE(female_arg)) {
+        # if only 1 value for sex and female is specified, set default to 1
+        brief_data_edit[[sex_var]] <- 1
+      }
+    } else if (sum(isTRUE(male_arg), isTRUE(female_arg)) == 0) {
+      brief_data_edit[[sex_var]] <- factor(brief_data_edit[[sex_var]])
+    }
+
+    
+    # re-scale data
     if (isTRUE(score_base)){
-      brief_data_edit[brief_items] <- sapply(brief_items, function(x) brief_data[[x]] + 1, simplify = TRUE)
+      brief_data_edit[brief_items] <- sapply(brief_items, function(x) brief_data_edit[[x]] + 1, simplify = TRUE)
     }
     
     ## Score Subscales
