@@ -19,7 +19,7 @@ score_pwlb(pwlb_data, score_base = TRUE, id, extra_scale_cols = c())
 A dataset with subscale scores for the Parent Weight-Loss Behavior Questionnaire
 }
 \description{
-This function scores the Parent Weight-Loss Behavior Questionnaire and provides subscale scores for the following behaviors: Healthy Weight Control and Unhelathy Weight Control.
+This function scores the Parent Weight-Loss Behavior Questionnaire and provides subscale scores for the following behaviors: Healthy Weight Control and Unhealthy Weight Control.
 }
 \details{
 To use this function, the data must be prepared according to the following criteria:
@@ -38,6 +38,8 @@ pwlb_score_data <- score_pwlb(pwlb_data, id = 'ID')
 \dontrun{
 }
 
+
+
 }
 \references{
 Primary References for the Parent Weight-Loss Behavior Questionnaire and Scoring:
@@ -45,7 +47,4 @@ Savage JS, Birch LL. Patterns of weight control strategies predict differences i
 
 Measure Adapted from:
 French SA, Perry CL, Leon GR, Fulkerson JA. Dieting behaviors and weight change history in female adolescents. Health Psychology. 1995;14(6):548-555. doi:http://dx.doi.org/10.1037/0278-6133.14.6.548 (\href{https://pubmed.ncbi.nlm.nih.gov/8565929/}{PubMed})
-}
-\seealso{
-Raw data from Qualtrics was processed using the following script: \code{\link{util_fbs_parent_v3dat}}
 }

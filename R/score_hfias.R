@@ -149,7 +149,7 @@ score_hfias <- function(hfias_data, score_base = TRUE, id) {
   # Insufficient Quality (response == 1 to Q2, Q3, or Q4)
   hfias_score_dat[["hfias_quality_domain"]] <- ifelse((rowSums(hfias_data_edit[hfias_categorical_qs[2:4]]) > 0), 1, 0)
     
-  # Insufficient food intake and physical consequences (response == 1 to Q5, Q6, or Q7, Q8, or Q9)
+  # Insufficient food intake and physical consequences (response == 1 to Q5, Q6, Q7, Q8, or Q9)
   hfias_score_dat[["hfias_intake_domain"]] <- ifelse((rowSums(hfias_data_edit[hfias_categorical_qs[5:9]]) > 0), 1, 0)
 
   #### 3. Clean Export/Scored Data #####

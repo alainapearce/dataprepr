@@ -1,6 +1,6 @@
 #' score_pwlb: Scored data from the Parent Weight-Loss Behavior Questionnaire
 #'
-#' This function scores the Parent Weight-Loss Behavior Questionnaire and provides subscale scores for the following behaviors: Healthy Weight Control and Unhelathy Weight Control.
+#' This function scores the Parent Weight-Loss Behavior Questionnaire and provides subscale scores for the following behaviors: Healthy Weight Control and Unhealthy Weight Control.
 #'
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
@@ -30,7 +30,6 @@
 #' \dontrun{
 #' }
 #'
-#' @seealso Raw data from Qualtrics was processed using the following script: \code{\link{util_fbs_parent_v3dat}}
 #'
 #'
 #' @export

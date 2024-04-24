@@ -16,7 +16,7 @@ score_sic(sic_data, score_base = TRUE, id, extra_scale_cols = c())
 \item{extra_scale_cols}{a vector of character strings that begin with 'sic' but are not scale items. Any columns in sic_data that begin with 'sic' but are not scale items must be included here. Default is empty vector.}
 }
 \value{
-A dataset with subscale scores for the Stress in Chidlren Questionnaire
+A dataset with subscale scores for the Stress in Children Questionnaire
 }
 \description{
 This function scores the Stress in Children Questionnaire and provides subscale scores for the following behaviors: Well Being, Distress, Social Support, and the Global Mean Score.
@@ -25,7 +25,7 @@ This function scores the Stress in Children Questionnaire and provides subscale 
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
 2) The  columns/variables must match the following naming convention: 'sic#' or 'sic_#' where # is the question number (1-21)
-3) All questions must have the numeric value for the choice: 1 - Never, 2 - Sometimes, 3 - Often, 4 - Very Often
+3) If score_base = FALSE, all questions must have the numeric value for the choice: 1 - Never, 2 - Sometimes, 3 - Often, 4 - Very Often; If score_base = TRUE, all questions must have the numeric value for the choice: 0 - Never, 1 - Sometimes, 2 - Often, 3 - Very Often
 
 Note, as long as variable names match those listed, the dataset can include other variables. Up to 2 missing responses are allowed
 }
