@@ -5,7 +5,8 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
 #' 2) The  columns/variables must match the following naming convention: 'cshq#' or 'cshq_#' where # is the question number (1-33)
-#' 3) All questions must have the numeric value for the choice: 3 - Usually, 2 - Sometimes, 1 - Rarely
+#' 3a) If score_base = FALSE, all questions must have the numeric values 1-3: (3 - Usually, 2 - Sometimes, 1 - Rarely or 1 - not sleepy, 2 - very sleepy, 3 - falls asleep)
+#' 3b) If score_base = TRUE, all questions must have the numeric values 0-2: (2 - Usually, 1 - Sometimes, 0 - Rarely or 0 - not sleepy, 1 - very sleepy, 2 - falls asleep)
 #' 4) This script will apply reverse scoring so all levels must be true to the scale described above
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
@@ -84,24 +85,19 @@ score_cshq <- function(cshq_data, score_base = TRUE, id, reverse_score = FALSE) 
     cshq_data_edit[cshq_primary_qs] <- sapply(cshq_primary_qs, function(x) cshq_data_edit[[x]] + 1, simplify = TRUE)
   }
   
-  #### 2. Set Up Data #####
-  
-  # set up database for results
-  ## create empty matrix
- 
   # calculate reversed scores
   if (isFALSE(reverse_score)){
     
-    # are these the correct items?
     reverse_qs_set <- c('cshq1', 'cshq2', 'cshq3', 'cshq4', 'cshq5', 'cshq6')
     for (var in 1:length(reverse_qs_set)){
       var_name <- reverse_qs_set[var]
 
-      cshq_data_edit[[var_name]] <- ifelse(is.na(cshq_data_edit[[var_name]]), NA, ifelse(cshq_data_edit[[var_name]] == 1, 3, ifelse(cshq_data_edit[[var_name]] == 3, 1, 2)))
+      cshq_data_edit[[var_name]] <- ifelse(cshq_data_edit[[var_name]] == 1, 3, ifelse(cshq_data_edit[[var_name]] == 2, 2, ifelse(cshq_data_edit[[var_name]] == 3, 1, NA)))
+      
     }
   }
   
-  #adjust question with zero base
+  #adjust question with zero base (7 and 8)
   if (min(cshq_data_edit[c('cshq7', 'cshq8')], na.rm = TRUE) == 1){
     cshq_data_edit[c('cshq7', 'cshq8')] <- sapply(c('cshq7', 'cshq8'), function(x) cshq_data_edit[[x]] - 1, simplify = TRUE)
   }
