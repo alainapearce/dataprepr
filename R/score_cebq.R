@@ -7,7 +7,7 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
 #' 2) The  columns/variables must match the following naming convention: 'cebq#' or 'cebq_#' where # is the question number (1-35)
-#' 3) All questions must have the numeric value for the choice with the base value being either 0 (score_base = TRUE) or 1 (score_base = FALSE)
+#' 3) All questions must have the numeric value for the ranging from 0-4 (score_base = TRUE) or 1-5 (score_base = FALSE)
 #' 4) This script will apply reverse scoring so all levels must be true to the scale described above
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
@@ -54,6 +54,7 @@ score_cebq <- function(cebq_data, score_base = TRUE, id, extra_scale_cols = c())
         }
     }
 
+
     #### 2. Set Up Data #####
 
     # set up database for results create empty matrix
@@ -73,6 +74,26 @@ score_cebq <- function(cebq_data, score_base = TRUE, id, extra_scale_cols = c())
     # remove underscore in cebq_items
     cebq_items <- gsub("cebq_", "cebq", cebq_items)
     
+    # check range of data and print warnings
+    min <- min(cebq_data[c(cebq_items)], na.rm = TRUE)
+    max <- max(cebq_data[c(cebq_items)], na.rm = TRUE)
+    
+    if (isTRUE(score_base)){
+      if (min < 0) {
+        print("warning: minimum value in CEBQ data below expected min value given score_base = TRUE")
+      } 
+      if (max > 4) {
+        print("warning: maximum value in CEBQ data exceeds expected max value for score_base = TRUE")
+      } 
+    } else {
+      if (min < 1) {
+        print("warning: minimum value in CEBQ data below min expected value given score_base = FALSE")
+      } 
+      if (max > 5) {
+        print("warning: maximum value in CEBQ data exceeds expected value for score_base = FALSE")
+      } 
+    }
+
     # re-scale data
     cebq_data_edit <- cebq_data
     
