@@ -1,18 +1,25 @@
-#' score_chaos: INCOMPLETE FUNCTION -- Scored data from the 15-item Confusion, Hubbub, and Order Scale
+#' score_chaos: Scored data from the 15-item Confusion, Hubbub, and Order Scale administered with 4-point likert scale 
 #'
-#' This function scores the Confusion, Hubbub, and Order Scale and provides XXX
+#' This function scores the 15-item Confusion, Hubbub, and Order Scale and provides a total score. Note, this function will only provide accurate scores if a 4-point likert scale was used during data collection.
 #'
-#' To use this function, the data must be prepared according to the following criteria:
-#' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'chaos#' or 'chaos_#' where # is the question number (1-15).
-#' 3) Questions must have the numeric value for the choices: 1 - Very much like your own home, 2 - Somewhat like your own home, 3 - A little bit like your own home, 4 - Not at all like your own home
-#'
-#' Note, as long as variable names match those listed, the dataset can include other variables
+#' To use this function, the data must be prepared according to the following criteria: \cr
+#' \cr
+#' 1) The data must include all individual questionnaire items \cr
+#' \cr
+#' 2) The  columns/variables must match the following naming convention: 'chaos#' or 'chaos_#' where # is the question number (1-15). \cr
+#' \cr
+#' 3) Item values must adhere to 1 of the following options: \cr
+#' \itemize{
+#'  \item a) If base_zero = TRUE, questions must have the numeric value for the choices: 0 - Very much like your own home, 1 - Somewhat like your own home, 2 - A little bit like your own home, 3 - Not at all like your own home \cr
+#'  \item b) If base_zero = FALSE, questions must have the numeric value for the choices: 1 - Very much like your own home, 2 - Somewhat like your own home, 3 - A little bit like your own home, 4 - Not at all like your own home \cr
+#' } 
+#' \cr
+#' Note, as long as variable names match those listed, the dataset can include other variables. See extra_scale_cols argument
 #'
 #' @references
 #' Matheny, A. P., Jr., Wachs, T. D., Ludwig, J. L., Phillips, K. (1995). Bringing order out of chaos: Psychometric characteristics of the confusion, hubbub, and order scale. Journal of Applied Developmental Psychology, 16(3), 429–444. https://doi.org/10.1016/0193-3973(95)90028-4
 #'
-#' @param chaos_data a data.frame all items for the Confusion, Hubbub, and Order Scale following the naming conventions described above
+#' @param chaos_data a data.frame all items for the Confusion, Hubbub, and Order Scale following the naming conventions described in Details
 #' @param extra_scale_cols a vector of character strings that begin with 'chaos' but are not scale items. Any columns in chaos_data that begin with 'chaos' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
 #'
@@ -30,11 +37,11 @@
 #'
 #' @export
 
-score_chaos <- function(chaos_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_chaos <- function(chaos_data, base_zero = FALSE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
-  # check that bisbas_data exist and is a data.frame
+  # check that chaos_data exist and is a data.frame
   data_arg <- methods::hasArg(chaos_data)
   
   if (isTRUE(data_arg) & !is.data.frame(chaos_data)) {
@@ -52,11 +59,15 @@ score_chaos <- function(chaos_data, base_zero = TRUE, id, extra_scale_cols = c()
     }
   }
   
+  # check base_zero is logical
+  if (!is.logical(base_zero)) {
+    stop("base_zero arg must be logical (TRUE/FALSE)")
+  }
+  
   #### 2. Set Up Data #####
   
   # set up database for results create empty matrix
-  chaos_score_dat <- data.frame()
-  
+  chaos_score_dat <- data.frame(chaos_total = rep(NA, nrow(chaos_data)))
   
   if (isTRUE(ID_arg)) {
     chaos_score_dat <- data.frame(chaos_data[[id]], chaos_score_dat)
@@ -78,21 +89,25 @@ score_chaos <- function(chaos_data, base_zero = TRUE, id, extra_scale_cols = c()
   if (isTRUE(base_zero)){
     chaos_data_edit[chaos_items] <- sapply(chaos_items, function(x) chaos_data[[x]] + 1, simplify = TRUE)
   }
+
+  # calculate reversed scores
+  reverse_qs <- c("chaos3", "chaos5", "chaos6", "chaos8", "chaos9", "chaos10","chaos11", "chaos13")
+
+  for (var in 1:length(reverse_qs)) {
+    
+    var_name <- reverse_qs[var]
+    chaos_data_edit[[var_name]] <- ifelse(chaos_data_edit[[var_name]] == 1, 4, ifelse(chaos_data_edit[[var_name]] == 2, 3,  ifelse(chaos_data_edit[[var_name]] == 3, 2, ifelse(chaos_data_edit[[var_name]] == 4, 1, NA))))
+    
+  }
+
+  ## Score
+  score_vars <- c("chaos1", "chaos2", "chaos3", "chaos4", "chaos5", "chaos6", "chaos7", "chaos8", "chaos9", "chaos10", "chaos11", "chaos12", "chaos13", "chaos14","chaos15")
   
-  # # calculate reversed scores
-  # reverse_qs <- c("", "")
-  # 
-  # for (var in 1:length(reverse_qs)) {
-  #   var_name <- reverse_qs[var]
-  #   reverse_name <- paste0(var_name, "_rev")
-  #   
-  #   chaos_data_edit[[reverse_name]] <- ifelse(is.na(chaos_data_edit[[var_name]]), NA, ifelse(chaos_data_edit[[var_name]] == 1, 4, ifelse(chaos_data_edit[[var_name]] == 2, 3,  ifelse(chaos_data_edit[[var_name]] == 3, 2, 1))))
-  # }
-  # 
-  # ## Score
-  # 
-  # #### 3. Clean Export/Scored Data #####
-  # 
+  chaos_score_dat[['chaos_total']] <- rowSums(chaos_data_edit[score_vars])
+  
+  
+  #### 3. Clean Export/Scored Data #####
+
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
