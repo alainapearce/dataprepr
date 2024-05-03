@@ -29,7 +29,7 @@
 #' }
 #'
 #' @export
-score_hfssm <- function(hfssm_data, score_base = TRUE, id) {
+score_hfssm <- function(hfssm_data, base_zero = TRUE, id) {
   
   #### 1. Set up/initial checks #####
   
@@ -77,7 +77,7 @@ score_hfssm <- function(hfssm_data, score_base = TRUE, id) {
   # re-scale data
   hfssm_data_edit <- hfssm_data
   
-  if (isTRUE(score_base)){
+  if (isTRUE(base_zero)){
     hfssm_data_edit[hfssm_items] <- sapply(hfssm_items, function(x) hfssm_data[[x]] + 1, simplify = TRUE)
   }
   

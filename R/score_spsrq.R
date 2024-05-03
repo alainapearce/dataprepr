@@ -34,7 +34,7 @@
 #'
 #' @export
 
-score_spsrq <- function(spsrq_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_spsrq <- function(spsrq_data, base_zero = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -79,7 +79,7 @@ score_spsrq <- function(spsrq_data, score_base = TRUE, id, extra_scale_cols = c(
     # re-scale data
     spsrq_data_edit <- spsrq_data
     
-    if (isTRUE(score_base)){
+    if (isTRUE(base_zero)){
       spsrq_data_edit[spsrq_items] <- sapply(spsrq_items, function(x) spsrq_data[[x]] + 1, simplify = TRUE)
     }
     

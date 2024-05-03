@@ -4,12 +4,12 @@
 \alias{score_cebq}
 \title{score_cebq: Scored data from the Children's Eating Behavior Questionnaire}
 \usage{
-score_cebq(cebq_data, score_base = TRUE, id, extra_scale_cols = c())
+score_cebq(cebq_data, base_zero = TRUE, id, extra_scale_cols = c())
 }
 \arguments{
 \item{cebq_data}{a data.frame all items for the Children's Eating Behavior Questionnaire following the naming conventions described above}
 
-\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 
@@ -27,7 +27,7 @@ Recent analyses by Manzano et al., (2021) indicate a better-fitting 3 factor sol
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
 2) The  columns/variables must match the following naming convention: 'cebq#' or 'cebq_#' where # is the question number (1-35)
-3) All questions must have the numeric value for the ranging from 0-4 (score_base = TRUE) or 1-5 (score_base = FALSE)
+3) All questions must have the numeric value for the ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE)
 4) This script will apply reverse scoring so all levels must be true to the scale described above
 
 Note, as long as variable names match those listed, the dataset can include other variables
@@ -35,7 +35,7 @@ Note, as long as variable names match those listed, the dataset can include othe
 \examples{
 
 # scoring for the CEBQ with IDs
-cebq_score_data <- score_cebq(cebq_data, score_base, id = 'ID')
+cebq_score_data <- score_cebq(cebq_data, base_zero, id = 'ID')
 
 
 }

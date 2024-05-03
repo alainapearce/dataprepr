@@ -4,12 +4,12 @@
 \alias{score_spsrq}
 \title{score_spsrq: Scored data from the Sensitivity to Punishment and Sensitivity to Reward Questionnaire}
 \usage{
-score_spsrq(spsrq_data, score_base = TRUE, id, extra_scale_cols = c())
+score_spsrq(spsrq_data, base_zero = TRUE, id, extra_scale_cols = c())
 }
 \arguments{
 \item{spsrq_data}{a data.frame all items for the Sensitivity to Punishment and Sensitivity to Reward Questionnaire following the naming conventions described above}
 
-\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 

@@ -51,7 +51,7 @@
 #' @seealso \code{\link{json_pds}}
 #' @export
 
-score_pds <- function(pds_data, respondent, score_base = TRUE, male = 0, female = 1, id) {
+score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female = 1, id) {
   
   #### 1. Set up/initial checks #####
   
@@ -167,7 +167,7 @@ score_pds <- function(pds_data, respondent, score_base = TRUE, male = 0, female 
   #### 2. Set Up Data #####
   
   # re-scale data except when value = 99
-  if (isTRUE(score_base)){
+  if (isTRUE(base_zero)){
     pds_data[pds_varnames] <- sapply(names(pds_data)[pds_varnames], function(x) {
       if(pds_data[[x]] != 99) {
         return(pds_data[[x]] + 1)
@@ -189,7 +189,7 @@ score_pds <- function(pds_data, respondent, score_base = TRUE, male = 0, female 
       
       # check range of values
       if (min(pds_data_edits[[var_name]], na.rm = TRUE) < 1 & max(pds_data_edits[[var_name]], na.rm = TRUE) > 4) {
-        stop('coded level values should fall between the values 1 and 4. Try setting score_base = TRUE')
+        stop('coded level values should fall between the values 1 and 4. Try setting base_zero = TRUE')
       }
       
       # recode menarche

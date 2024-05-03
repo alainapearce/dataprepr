@@ -1,4 +1,4 @@
-#' score_chaos: INCOMPLETE FUNCTION -- Scored data from the Confusion, Hubbub, and Order Scale
+#' score_chaos: INCOMPLETE FUNCTION -- Scored data from the 15-item Confusion, Hubbub, and Order Scale
 #'
 #' This function scores the Confusion, Hubbub, and Order Scale and provides XXX
 #'
@@ -30,7 +30,7 @@
 #'
 #' @export
 
-score_chaos <- function(chaos_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_chaos <- function(chaos_data, base_zero = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -75,7 +75,7 @@ score_chaos <- function(chaos_data, score_base = TRUE, id, extra_scale_cols = c(
   # re-scale data
   chaos_data_edit <- chaos_data
   
-  if (isTRUE(score_base)){
+  if (isTRUE(base_zero)){
     chaos_data_edit[chaos_items] <- sapply(chaos_items, function(x) chaos_data[[x]] + 1, simplify = TRUE)
   }
   

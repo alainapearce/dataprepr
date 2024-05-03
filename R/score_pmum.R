@@ -28,7 +28,7 @@
 #'
 #' @export
 
-score_pmum <- function(pmum_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_pmum <- function(pmum_data, base_zero = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -73,7 +73,7 @@ score_pmum <- function(pmum_data, score_base = TRUE, id, extra_scale_cols = c())
   # re-scale data
   pmum_data_edit <- pmum_data
   
-  if (isTRUE(score_base)){
+  if (isTRUE(base_zero)){
     pmum_data_edit[pmum_items] <- sapply(pmum_items, function(x) pmum_data[[x]] + 1, simplify = TRUE)
   }
   

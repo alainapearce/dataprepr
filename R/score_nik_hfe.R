@@ -20,7 +20,7 @@
 #' @examples
 #'
 #' # scoring for the hfe with IDs
-#' hfe_score_data <- score_hfe(hfe_data, id = 'ID', score_base = TRUE)
+#' hfe_score_data <- score_hfe(hfe_data, id = 'ID', base_zero = TRUE)
 #'
 #' \dontrun{
 #' }
@@ -28,7 +28,7 @@
 #'
 #' @export
 
-score_nik_hfe <- function(hfe_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_nik_hfe <- function(hfe_data, base_zero = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -71,7 +71,7 @@ score_nik_hfe <- function(hfe_data, score_base = TRUE, id, extra_scale_cols = c(
     # re-scale data
     hfe_data_edit <- hfe_data
     
-    if (isTRUE(score_base)){
+    if (isTRUE(base_zero)){
       hfe_data_edit[hfe_primary_qs] <- sapply(hfe_primary_qs, function(x) hfe_data[[x]] + 1, simplify = TRUE)
     }
 

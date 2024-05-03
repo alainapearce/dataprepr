@@ -11,7 +11,7 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
 #' 2) The columns/variables must match the following naming convention: 'ffq_xxx#' xxx is the food category and the # is the item number for the category
-#' 3) All questions must have the numeric value for the choice with the base value being either 0 (score_base = TRUE) or 1 (score_base = FALSE)
+#' 3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE)
 #'
 #' Note, as long as variable names match those listed in this script, the dataset can include other variables
 #'
@@ -34,7 +34,7 @@
 #' @examples
 #'
 #' # scoring for the bes with IDs
-#' ffq_score_data <- score_ffq_helix(ffq_data, score_base = TRUE, id = 'ID')
+#' ffq_score_data <- score_ffq_helix(ffq_data, base_zero = TRUE, id = 'ID')
 #'
 #' \dontrun{
 #' } 
@@ -42,7 +42,7 @@
 #'
 #' @export
 
-score_ffq_helix <- function(ffq_data, score_base = TRUE, id) {
+score_ffq_helix <- function(ffq_data, base_zero = TRUE, id) {
   
   #### 1. Set up/initial checks #####
   
@@ -77,7 +77,7 @@ score_ffq_helix <- function(ffq_data, score_base = TRUE, id) {
   # re-scale data
   ffq_data_edit <- ffq_data
   
-  if (isTRUE(score_base)){
+  if (isTRUE(base_zero)){
     ffq_data_edit[2:44] <- sapply(names(ffq_data_edit)[2:44], function(x) ffq_data_edit[[x]] + 1, simplify = TRUE)
   }
   

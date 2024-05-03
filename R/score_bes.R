@@ -16,7 +16,7 @@
 #'
 #' @param bes_data a data.frame all items for the Binge Eating Scale following the naming conventions described above
 #' @param pna value used when participant prefers not to answer/elects to skip
-#' @param score_base the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.
+#' @param base_zero the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.
 #' @param id (optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)
 #' @param extra_scale_cols a vector of character strings that begin with 'bes' but are not scale items. Any columns in bes_data that begin with 'bes' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with total score for the Binge Eating Scale
@@ -31,7 +31,7 @@
 #'
 #' @export
 
-score_bes <- function(bes_data, score_base = TRUE, pna = NA, id, extra_scale_cols = c()) {
+score_bes <- function(bes_data, base_zero = TRUE, pna = NA, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -75,7 +75,7 @@ score_bes <- function(bes_data, score_base = TRUE, pna = NA, id, extra_scale_col
   # re-scale data
   bes_data_edit <- bes_data
   
-  if (isFALSE(score_base)){
+  if (isFALSE(base_zero)){
     bes_data_edit[bes_items] <- sapply(bes_items, function(x) bes_data[[x]] - 1, simplify = TRUE)
     
     # update numeric pna to accomodate rescaling

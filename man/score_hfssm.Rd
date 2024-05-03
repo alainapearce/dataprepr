@@ -4,12 +4,12 @@
 \alias{score_hfssm}
 \title{score_hfssm: Scored data from the U.S. Household Food Security Survey Module}
 \usage{
-score_hfssm(hfssm_data, score_base = TRUE, id)
+score_hfssm(hfssm_data, base_zero = TRUE, id)
 }
 \arguments{
 \item{hfssm_data}{a data.frame all items for the U.S. Household Food Security Survey Module following the naming conventions described above}
 
-\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 }

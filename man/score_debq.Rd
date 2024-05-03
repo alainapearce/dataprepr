@@ -4,12 +4,12 @@
 \alias{score_debq}
 \title{score_debq: INCOMPLETE FUNCTION. Scored data from the Dutch Eating Behavior Questionnaire}
 \usage{
-score_debq(debq_data, score_base = TRUE, id, extra_scale_cols = c())
+score_debq(debq_data, base_zero = TRUE, id, extra_scale_cols = c())
 }
 \arguments{
 \item{debq_data}{a data.frame all items for the Dutch Eating Behavior Questionnaire following the naming conventions described above}
 
-\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 
@@ -25,7 +25,7 @@ This function scores the Dutch Eating Behavior Questionnaire and provides subsca
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
 2) The  columns/variables must match the following naming convention: 'debq#' or 'debq_#' where # is the question number (1-24).
-3) Questions must have the numeric value for the choices: 1=Never, 2=Rarely/Seldom, 3=Sometimes, 4=Often, 5=Very Often if score_base = FALSE or 0=Never, 1=Rarely/Seldom, 2=Sometimes, 3=Often, 4=Very Often if score_base = TRUE
+3) Questions must have the numeric value for the choices: 1=Never, 2=Rarely/Seldom, 3=Sometimes, 4=Often, 5=Very Often if base_zero = FALSE or 0=Never, 1=Rarely/Seldom, 2=Sometimes, 3=Often, 4=Very Often if base_zero = TRUE
 
 Note, as long as variable names match those listed, the dataset can include other variables
 

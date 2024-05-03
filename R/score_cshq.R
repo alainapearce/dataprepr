@@ -5,8 +5,8 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
 #' 2) The  columns/variables must match the following naming convention: 'cshq#' or 'cshq_#' where # is the question number (1-33)
-#' 3a) If score_base = FALSE, all questions must have the numeric values 1-3: (3 - Usually, 2 - Sometimes, 1 - Rarely or 1 - not sleepy, 2 - very sleepy, 3 - falls asleep)
-#' 3b) If score_base = TRUE, all questions must have the numeric values 0-2: (2 - Usually, 1 - Sometimes, 0 - Rarely or 0 - not sleepy, 1 - very sleepy, 2 - falls asleep)
+#' 3a) If base_zero = FALSE, all questions must have the numeric values 1-3: (3 - Usually, 2 - Sometimes, 1 - Rarely or 1 - not sleepy, 2 - very sleepy, 3 - falls asleep)
+#' 3b) If base_zero = TRUE, all questions must have the numeric values 0-2: (2 - Usually, 1 - Sometimes, 0 - Rarely or 0 - not sleepy, 1 - very sleepy, 2 - falls asleep)
 #' 4) This script will apply reverse scoring so all levels must be true to the scale described above
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
@@ -36,7 +36,7 @@
 #'
 #' @export
 
-score_cshq <- function(cshq_data, score_base = TRUE, id, reverse_score = FALSE) {
+score_cshq <- function(cshq_data, base_zero = TRUE, id, reverse_score = FALSE) {
   
   #### 1. Set up/initial checks #####
   
@@ -81,7 +81,7 @@ score_cshq <- function(cshq_data, score_base = TRUE, id, reverse_score = FALSE) 
   # re-scale scored questions
   cshq_data_edit <- cshq_data
   
-  if (isTRUE(score_base)){
+  if (isTRUE(base_zero)){
     cshq_data_edit[cshq_primary_qs] <- sapply(cshq_primary_qs, function(x) cshq_data_edit[[x]] + 1, simplify = TRUE)
   }
   

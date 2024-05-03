@@ -4,12 +4,12 @@
 \alias{score_efcr}
 \title{score_efcr: Scored data from the External Food Cue Responsiveness Scale}
 \usage{
-score_efcr(efcr_data, score_base = TRUE, id, extra_scale_cols = c())
+score_efcr(efcr_data, base_zero = TRUE, id, extra_scale_cols = c())
 }
 \arguments{
 \item{efcr_data}{a data.frame all items for the External Food Cue Responsiveness Scale following the naming conventions described above}
 
-\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 
@@ -25,14 +25,14 @@ This function scores the External Food Cue Responsiveness Scale
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
 2) The  columns/variables must match the following naming convention: 'efcr#' or 'efcr_#' where # is the question number (1-9)
-3) All questions must have the numeric value for the choice with the base value being either 0 (score_base = TRUE) or 1 (score_base = FALSE)
+3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE)
 
 Note, as long as variable names match those listed, the dataset can include other variables
 }
 \examples{
 
 # scoring for the EFCR Scale with IDs
-efcr_score_data <- score_efcr(efcr_data, score_base = TRUE, id = 'ID')
+efcr_score_data <- score_efcr(efcr_data, base_zero = TRUE, id = 'ID')
 
 
 }

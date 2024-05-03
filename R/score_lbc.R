@@ -5,7 +5,7 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
 #' 2) The  columns/variables must match the following naming convention: 'lbc#' or 'lbc_#' where # is the question number (1-25)
-#' 3) All questions must have the numeric value for the choice with the base value being either 0 (score_base = TRUE) or 1 (score_base = FALSE)
+#' 3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE)
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
@@ -28,7 +28,7 @@
 #'
 #' @export
 
-score_lbc <- function(lbc_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_lbc <- function(lbc_data, base_zero = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -72,7 +72,7 @@ score_lbc <- function(lbc_data, score_base = TRUE, id, extra_scale_cols = c()) {
     # re-scale data
     lbc_data_edit <- lbc_data
     
-    if (isTRUE(score_base)){
+    if (isTRUE(base_zero)){
       lbc_data_edit[lbc_items] <- sapply(lbc_items, function(x) lbc_data_edit[[x]] + 1, simplify = TRUE)
     }
     

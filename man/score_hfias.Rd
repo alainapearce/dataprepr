@@ -4,12 +4,12 @@
 \alias{score_hfias}
 \title{score_hfias: Scored data from the Household Food Insecurity Access Scale}
 \usage{
-score_hfias(hfias_data, score_base = TRUE, id)
+score_hfias(hfias_data, base_zero = TRUE, id)
 }
 \arguments{
 \item{hfias_data}{a data.frame all items for the Pictorial Personality Traits Questionnaire for Children  following the naming conventions described above}
 
-\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 }
@@ -24,7 +24,7 @@ To use this function, the data must be prepared according to the following crite
 1) The data must include all individual questionnaire items
 2) The  columns/variables must match the following naming convention 'hfias#' or 'hfias_#' for categorical questions and 'hfias#a' or 'hfias_#a' for frequency questions, where # is the question number (1-9)
 3) Categorical questions 1-9 must have the numeric value for the choices: 0 - no (skips frequency question), 1 - yes
-   Frequency Questions must have the numeric value for the choices: 0 - Rarely, 1 - Sometimes, 2 - Often (score_base = TRUE) or 1 - Rarely, 2 - Sometimes, 3 - Often (score_base = FALSE)
+   Frequency Questions must have the numeric value for the choices: 0 - Rarely, 1 - Sometimes, 2 - Often (base_zero = TRUE) or 1 - Rarely, 2 - Sometimes, 3 - Often (base_zero = FALSE)
 
 Note, as long as variable names match those listed, the dataset can include other variables
 }

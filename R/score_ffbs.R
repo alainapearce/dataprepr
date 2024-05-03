@@ -22,7 +22,7 @@
 #' @examples
 #'
 #' # scoring for the ffbs with IDs
-#' ffbs_score_data <- score_ffbs(ffbs_data, id = 'ID', score_base = TRUE)
+#' ffbs_score_data <- score_ffbs(ffbs_data, id = 'ID', base_zero = TRUE)
 #'
 #' \dontrun{
 #' }
@@ -30,7 +30,7 @@
 #'
 #' @export
 
-score_ffbs <- function(ffbs_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_ffbs <- function(ffbs_data, base_zero = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -76,7 +76,7 @@ score_ffbs <- function(ffbs_data, score_base = TRUE, id, extra_scale_cols = c())
     # re-scale data
     ffbs_data_edit <- ffbs_data
     
-    if (isFALSE(score_base)){
+    if (isFALSE(base_zero)){
       ffbs_data_edit[ffbs_items] <- sapply(ffbs_items, function(x) ffbs_data[[x]] - 1, simplify = TRUE)
     }
 

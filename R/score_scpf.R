@@ -5,8 +5,8 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
 #' 2) The  columns/variables must match the following naming convention: 'scpf#' or 'scpf_#' where # is the question number (1-34)
-#' 3) All questions must have the numeric value for the choice: 0 - Never, 1 - Rarely, 2 - Sometimes, 3 - Often, 4 - Always if score_base = TRUE or
-#'                                                              1 - Never, 2 - Rarely, 3 - Sometimes, 4 - Often, 5 - Always if score_base = FALSE
+#' 3) All questions must have the numeric value for the choice: 0 - Never, 1 - Rarely, 2 - Sometimes, 3 - Often, 4 - Always if base_zero = TRUE or
+#'                                                              1 - Never, 2 - Rarely, 3 - Sometimes, 4 - Often, 5 - Always if base_zero = FALSE
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
@@ -21,7 +21,7 @@
 #' @examples
 #'
 #' # scoring for the scpf with IDs
-#' scpf_score_data <- score_scpf(scpf_data, id = 'ID', score_base = TRUE)
+#' scpf_score_data <- score_scpf(scpf_data, id = 'ID', base_zero = TRUE)
 #'
 #' \dontrun{
 #' }
@@ -29,7 +29,7 @@
 #'
 #' @export
 
-score_scpf <- function(scpf_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_scpf <- function(scpf_data, base_zero = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -79,7 +79,7 @@ score_scpf <- function(scpf_data, score_base = TRUE, id, extra_scale_cols = c())
   # re-scale data
   scpf_data_edit <- scpf_data
 
-  if (isFALSE(score_base)){
+  if (isFALSE(base_zero)){
     scpf_data_edit[scpf_items] <- sapply(scpf_items, function(x) scpf_data[[x]] - 1, simplify = TRUE)
   }
 

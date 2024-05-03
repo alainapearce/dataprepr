@@ -30,7 +30,7 @@
 #'
 #' @export
 
-score_cfpq <- function(cfpq_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_cfpq <- function(cfpq_data, base_zero = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -85,7 +85,7 @@ score_cfpq <- function(cfpq_data, score_base = TRUE, id, extra_scale_cols = c())
   # re-scale data
   cfpq_data_edit <- cfpq_data
   
-  if (isTRUE(score_base)){
+  if (isTRUE(base_zero)){
     cfpq_data_edit[cfpq_items] <- sapply(cfpq_items, function(x) cfpq_data[[x]] + 1, simplify = TRUE)
   }
   

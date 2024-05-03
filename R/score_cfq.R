@@ -5,7 +5,7 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
 #' 2) The  columns/variables must match the following naming convention: 'cfq#' or 'cfq_#' where # is the question number (1-31). Question 13 be skipped for subscale - Perceived Child Weight due to age range.
-#' 3) All questions must have the numeric value for the choice with the base value being either 0 (score_base = TRUE) or 1 (score_base = FALSE)
+#' 3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE)
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
@@ -23,7 +23,7 @@
 #' @examples
 #'
 #' # scoring for the cfq with IDs
-#' cfq_score_data <- score_cfq(cfq_data, score_base = TRUE, id = 'ID')
+#' cfq_score_data <- score_cfq(cfq_data, base_zero = TRUE, id = 'ID')
 #'
 #' # scoring for the cfq with extra Restriction subscales
 #' cfq_score_data <- score_cfq(cfq_data, restriction_split = TRUE, id = 'ID')
@@ -34,7 +34,7 @@
 #'
 #' @export
 
-score_cfq <- function(cfq_data, score_base = TRUE, restriction_split = FALSE, id, extra_scale_cols = c()) {
+score_cfq <- function(cfq_data, base_zero = TRUE, restriction_split = FALSE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -103,7 +103,7 @@ score_cfq <- function(cfq_data, score_base = TRUE, restriction_split = FALSE, id
   # re-scale data
   cfq_data_edit <- cfq_data
   
-  if (isTRUE(score_base)){
+  if (isTRUE(base_zero)){
     cfq_data_edit[cfq_items] <- sapply(cfq_items, function(x) cfq_data_edit[[x]] + 1, simplify = TRUE)
   }
   

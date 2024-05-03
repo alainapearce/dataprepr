@@ -34,7 +34,7 @@
 #'
 #' @export
 
-score_pwlb <- function(pwlb_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_pwlb <- function(pwlb_data, base_zero = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -79,7 +79,7 @@ score_pwlb <- function(pwlb_data, score_base = TRUE, id, extra_scale_cols = c())
     # re-scale data
     pwlb_data_edit <- pwlb_data
     
-    if (isTRUE(score_base)){
+    if (isTRUE(base_zero)){
       pwlb_data_edit[pwlb_items] <- sapply(pwlb_items, function(x) pwlb_data[[x]] + 1, simplify = TRUE)
     }
     

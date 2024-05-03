@@ -4,12 +4,12 @@
 \alias{score_ffbs}
 \title{score_ffbs: Scored data from the Family Food Behavior Survey}
 \usage{
-score_ffbs(ffbs_data, score_base = TRUE, id, extra_scale_cols = c())
+score_ffbs(ffbs_data, base_zero = TRUE, id, extra_scale_cols = c())
 }
 \arguments{
 \item{ffbs_data}{a data.frame all items for the Family Food Behavior Survey following the naming conventions described above}
 
-\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 
@@ -32,7 +32,7 @@ Note, as long as variable names match those listed, the dataset can include othe
 \examples{
 
 # scoring for the ffbs with IDs
-ffbs_score_data <- score_ffbs(ffbs_data, id = 'ID', score_base = TRUE)
+ffbs_score_data <- score_ffbs(ffbs_data, id = 'ID', base_zero = TRUE)
 
 \dontrun{
 }

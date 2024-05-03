@@ -8,7 +8,7 @@ score_brief2(
   brief_data,
   age_var,
   sex_var,
-  score_base = TRUE,
+  base_zero = TRUE,
   male = 0,
   female = 1,
   id,
@@ -22,7 +22,7 @@ score_brief2(
 
 \item{sex_var}{a string with the name of the sex variable in brief_data}
 
-\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{male}{(optional) value for male. Default value is male = 0}
 
@@ -44,7 +44,7 @@ These data are scored using the brief2_scoretables data available in the datapre
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include sex, age in years, and all individual questionnaire items
 2) The questionnaire items must match the following naming convention: 'brief#' or 'brief_#' where # is the question number (1-63)
-3) All questions must have the numeric value for the choice with the base value being either 0 (score_base = TRUE) or 1 (score_base = FALSE)
+3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE)
 
 Note, as long as variable names match those listed, the dataset can include other variables
 }

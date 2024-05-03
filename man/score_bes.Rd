@@ -4,12 +4,12 @@
 \alias{score_bes}
 \title{score_bes: Scored data from the Binge Eating Scale}
 \usage{
-score_bes(bes_data, score_base = TRUE, pna = NA, id, extra_scale_cols = c())
+score_bes(bes_data, base_zero = TRUE, pna = NA, id, extra_scale_cols = c())
 }
 \arguments{
 \item{bes_data}{a data.frame all items for the Binge Eating Scale following the naming conventions described above}
 
-\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{pna}{value used when participant prefers not to answer/elects to skip}
 

@@ -5,7 +5,7 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
 #' 2) The  columns/variables must match the following naming convention: 'hfi_category_letter_type#' where 'letter' is the food item order and # type (where relevant)
-#' 3) All questions must have the numeric value for the choice with the base value being either 0 (score_base = TRUE) or 1 (score_base = FALSE)
+#' 3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE)
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
@@ -25,7 +25,7 @@
 #'
 #' @export
 
-score_hfi <- function(hfi_data, score_base = TRUE, id) {
+score_hfi <- function(hfi_data, base_zero = TRUE, id) {
 
     #### 1. Set up/initial checks #####
 
@@ -60,7 +60,7 @@ score_hfi <- function(hfi_data, score_base = TRUE, id) {
     # re-scale data
     hfi_data_edit <- hfi_data
     
-    if (isFALSE(score_base)){
+    if (isFALSE(base_zero)){
       hfi_data_edit[3:402] <- sapply(names(hfi_data_edit)[3:402], function(x) hfi_data_edit[[x]] - 1, simplify = TRUE)
     }
     

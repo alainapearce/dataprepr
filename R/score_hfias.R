@@ -6,7 +6,7 @@
 #' 1) The data must include all individual questionnaire items
 #' 2) The  columns/variables must match the following naming convention 'hfias#' or 'hfias_#' for categorical questions and 'hfias#a' or 'hfias_#a' for frequency questions, where # is the question number (1-9)
 #' 3) Categorical questions 1-9 must have the numeric value for the choices: 0 - no (skips frequency question), 1 - yes
-#'    Frequency Questions must have the numeric value for the choices: 0 - Rarely, 1 - Sometimes, 2 - Often (score_base = TRUE) or 1 - Rarely, 2 - Sometimes, 3 - Often (score_base = FALSE)
+#'    Frequency Questions must have the numeric value for the choices: 0 - Rarely, 1 - Sometimes, 2 - Often (base_zero = TRUE) or 1 - Rarely, 2 - Sometimes, 3 - Often (base_zero = FALSE)
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
@@ -29,7 +29,7 @@
 #'
 #' @export
 
-score_hfias <- function(hfias_data, score_base = TRUE, id) {
+score_hfias <- function(hfias_data, base_zero = TRUE, id) {
   
   #### 1. Set up/initial checks #####
   
@@ -77,7 +77,7 @@ score_hfias <- function(hfias_data, score_base = TRUE, id) {
   hfias_data_edit <- hfias_data
   
   # re-scale frequeny items
-  if (isTRUE(score_base)){
+  if (isTRUE(base_zero)){
     hfias_data_edit[hfias_frequency_qs] <- sapply(hfias_frequency_qs, function(x) hfias_data[[x]] + 1, simplify = TRUE)
   }
   
@@ -94,11 +94,11 @@ score_hfias <- function(hfias_data, score_base = TRUE, id) {
   
   ## Attempt to do the above this with a function and loop -- not working
   # # Define a function to 
-  # #   (1) re-scale frequency question if score_base = TRUE
+  # #   (1) re-scale frequency question if base_zero = TRUE
   # #   (2) set the value of frequency question if the corresponding categorical question == 0
   # 
   # set_frequency <- function(hfias_categorical_q, hfias_frequency_q, hfias_data_edit) {
-  #   if (isTRUE(score_base)){
+  #   if (isTRUE(base_zero)){
   #     hfias_data_edit[hfias_frequency_q] <- sapply(hfias_frequency_q, function(x) hfias_data[[x]] + 1, simplify = TRUE)
   #   }
   #   

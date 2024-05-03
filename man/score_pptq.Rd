@@ -4,20 +4,14 @@
 \alias{score_pptq}
 \title{score_pptq: Scored data from the Pictorial Personality Traits Questionnaire for Children}
 \usage{
-score_pptq(
-  pptq_data,
-  pptq_scale,
-  score_base = TRUE,
-  id,
-  extra_scale_cols = c()
-)
+score_pptq(pptq_data, pptq_scale, base_zero = TRUE, id, extra_scale_cols = c())
 }
 \arguments{
 \item{pptq_data}{a data.frame all items for the Pictorial Personality Traits Questionnaire for Children  following the naming conventions described above}
 
 \item{pptq_scale}{3 or 5: indicates if data was collected with a 3-point or 5-point likert scale}
 
-\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 

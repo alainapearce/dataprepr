@@ -7,7 +7,7 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include sex, age in years, and all individual questionnaire items
 #' 2) The questionnaire items must match the following naming convention: 'brief#' or 'brief_#' where # is the question number (1-63)
-#' 3) All questions must have the numeric value for the choice with the base value being either 0 (score_base = TRUE) or 1 (score_base = FALSE)
+#' 3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE)
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
@@ -52,7 +52,7 @@
 #'
 #' @export
 
-score_brief2 <- function(brief_data, age_var, sex_var, score_base = TRUE, male = 0, female = 1, id, extra_scale_cols = c()) {
+score_brief2 <- function(brief_data, age_var, sex_var, base_zero = TRUE, male = 0, female = 1, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -160,7 +160,7 @@ score_brief2 <- function(brief_data, age_var, sex_var, score_base = TRUE, male =
 
     
     # re-scale data
-    if (isTRUE(score_base)){
+    if (isTRUE(base_zero)){
       brief_data_edit[brief_items] <- sapply(brief_items, function(x) brief_data_edit[[x]] + 1, simplify = TRUE)
     }
     

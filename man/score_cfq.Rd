@@ -6,7 +6,7 @@
 \usage{
 score_cfq(
   cfq_data,
-  score_base = TRUE,
+  base_zero = TRUE,
   restriction_split = FALSE,
   id,
   extra_scale_cols = c()
@@ -15,7 +15,7 @@ score_cfq(
 \arguments{
 \item{cfq_data}{a data.frame all items for the Child Feeding Questionnaire following the naming conventions described above}
 
-\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{restriction_split}{a boolean incating if the Restriction subscale should be split to remove food as reward items. Default = FALSE. The standard Restriction subscale will always be available. If restriction_split = TRUE, then two adtional scales will be computed: 1) cfq_rest_noreward: questions 17-20, 23-24 and 1) cfq_foodreward: questions 21-22}
 
@@ -33,14 +33,14 @@ This function scores the Child Feeding Questionnaire and provides subscale score
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
 2) The  columns/variables must match the following naming convention: 'cfq#' or 'cfq_#' where # is the question number (1-31). Question 13 be skipped for subscale - Perceived Child Weight due to age range.
-3) All questions must have the numeric value for the choice with the base value being either 0 (score_base = TRUE) or 1 (score_base = FALSE)
+3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE)
 
 Note, as long as variable names match those listed, the dataset can include other variables
 }
 \examples{
 
 # scoring for the cfq with IDs
-cfq_score_data <- score_cfq(cfq_data, score_base = TRUE, id = 'ID')
+cfq_score_data <- score_cfq(cfq_data, base_zero = TRUE, id = 'ID')
 
 # scoring for the cfq with extra Restriction subscales
 cfq_score_data <- score_cfq(cfq_data, restriction_split = TRUE, id = 'ID')

@@ -4,14 +4,14 @@
 \alias{score_pds}
 \title{score_pds: Scored data from Parent- or Self-Report Pubertal Development Scale}
 \usage{
-score_pds(pds_data, respondent, score_base = TRUE, male = 0, female = 1, id)
+score_pds(pds_data, respondent, base_zero = TRUE, male = 0, female = 1, id)
 }
 \arguments{
 \item{pds_data}{a data.frame with child sex and all questions from the Pubertal Development Scale. The required data to score the Pubertal Development Scale include sex, questions 1-3, and male/female specific questions 4-5. These questions must have the following names in the dataset: 'sex', 'pds_1', 'pds_2', 'pds_3', 'pds_4m', 'pds_5m', 'pds_4f', 'pds_5fa'. Note, as long as variable names match those listed, pds_data can include only data from male and/or female version scales.}
 
 \item{respondent}{string to indicate if parent or child completed the Pubertal Development Scale. Must enter either 'parent' or 'child'}
 
-\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{male}{(optional) value for male. Default value is male = 0}
 

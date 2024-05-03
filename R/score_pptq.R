@@ -32,7 +32,7 @@
 #'
 #' @export
 
-score_pptq <- function(pptq_data, pptq_scale, score_base = TRUE, id, extra_scale_cols = c()) {
+score_pptq <- function(pptq_data, pptq_scale, base_zero = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -93,7 +93,7 @@ score_pptq <- function(pptq_data, pptq_scale, score_base = TRUE, id, extra_scale
   # re-scale data
   pptq_data_edit <- pptq_data
   
-  if (isTRUE(score_base)){
+  if (isTRUE(base_zero)){
     pptq_data_edit[pptq_items] <- sapply(pptq_items, function(x) pptq_data[[x]] + 1, simplify = TRUE)
   }
   

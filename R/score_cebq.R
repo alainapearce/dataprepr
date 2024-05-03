@@ -7,7 +7,7 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
 #' 2) The  columns/variables must match the following naming convention: 'cebq#' or 'cebq_#' where # is the question number (1-35)
-#' 3) All questions must have the numeric value for the ranging from 0-4 (score_base = TRUE) or 1-5 (score_base = FALSE)
+#' 3) All questions must have the numeric value for the ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE)
 #' 4) This script will apply reverse scoring so all levels must be true to the scale described above
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
@@ -27,12 +27,12 @@
 #' @examples
 #'
 #' # scoring for the CEBQ with IDs
-#' cebq_score_data <- score_cebq(cebq_data, score_base, id = 'ID')
+#' cebq_score_data <- score_cebq(cebq_data, base_zero, id = 'ID')
 #' 
 #' 
 #' @export
 
-score_cebq <- function(cebq_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_cebq <- function(cebq_data, base_zero = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -78,26 +78,26 @@ score_cebq <- function(cebq_data, score_base = TRUE, id, extra_scale_cols = c())
     min <- min(cebq_data[c(cebq_items)], na.rm = TRUE)
     max <- max(cebq_data[c(cebq_items)], na.rm = TRUE)
     
-    if (isTRUE(score_base)){
+    if (isTRUE(base_zero)){
       if (min < 0) {
-        print("warning: minimum value in CEBQ data below expected min value given score_base = TRUE")
+        print("warning: minimum value in CEBQ data below expected min value given base_zero = TRUE")
       } 
       if (max > 4) {
-        print("warning: maximum value in CEBQ data exceeds expected max value for score_base = TRUE")
+        print("warning: maximum value in CEBQ data exceeds expected max value for base_zero = TRUE")
       } 
     } else {
       if (min < 1) {
-        print("warning: minimum value in CEBQ data below min expected value given score_base = FALSE")
+        print("warning: minimum value in CEBQ data below min expected value given base_zero = FALSE")
       } 
       if (max > 5) {
-        print("warning: maximum value in CEBQ data exceeds expected value for score_base = FALSE")
+        print("warning: maximum value in CEBQ data exceeds expected value for base_zero = FALSE")
       } 
     }
 
     # re-scale data
     cebq_data_edit <- cebq_data
     
-    if (isTRUE(score_base)){
+    if (isTRUE(base_zero)){
       cebq_data_edit[cebq_items] <- sapply(cebq_items, function(x) cebq_data_edit[[x]] + 1, simplify = TRUE)
     }
     

@@ -32,7 +32,7 @@
 #'
 #' @export
 
-score_tfeq18 <- function(tfeq_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_tfeq18 <- function(tfeq_data, base_zero = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -76,7 +76,7 @@ score_tfeq18 <- function(tfeq_data, score_base = TRUE, id, extra_scale_cols = c(
   # re-scale data
   tfeq_data_edit <- tfeq_data
   
-  if (isTRUE(score_base)){
+  if (isTRUE(base_zero)){
     tfeq_data_edit[tfeq_items] <- sapply(tfeq_items, function(x) tfeq_data[[x]] + 1, simplify = TRUE)
   }
   

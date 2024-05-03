@@ -29,7 +29,7 @@
 #'
 #' @export
 
-score_cbq <- function(cbq_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_cbq <- function(cbq_data, base_zero = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -75,7 +75,7 @@ score_cbq <- function(cbq_data, score_base = TRUE, id, extra_scale_cols = c()) {
     # re-scale data
     cbq_data_edit <- cbq_data
     
-    if (isTRUE(score_base)){
+    if (isTRUE(base_zero)){
       cbq_data_edit[cbq_items] <- sapply(cbq_items, function(x) cbq_data[[x]] + 1, simplify = TRUE)
     }
     

@@ -35,7 +35,7 @@
 #'
 #' @export
 
-score_bisbas <- function(bisbas_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_bisbas <- function(bisbas_data, base_zero = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -80,7 +80,7 @@ score_bisbas <- function(bisbas_data, score_base = TRUE, id, extra_scale_cols = 
   # re-scale data
   bisbas_data_edit <- bisbas_data
   
-  if (isTRUE(score_base)){
+  if (isTRUE(base_zero)){
     bisbas_data_edit[bisbas_items] <- sapply(bisbas_items, function(x) bisbas_data[[x]] + 1, simplify = TRUE)
   }
   

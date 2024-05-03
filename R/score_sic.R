@@ -5,7 +5,7 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
 #' 2) The  columns/variables must match the following naming convention: 'sic#' or 'sic_#' where # is the question number (1-21)
-#' 3) If score_base = FALSE, all questions must have the numeric value for the choice: 1 - Never, 2 - Sometimes, 3 - Often, 4 - Very Often; If score_base = TRUE, all questions must have the numeric value for the choice: 0 - Never, 1 - Sometimes, 2 - Often, 3 - Very Often
+#' 3) If base_zero = FALSE, all questions must have the numeric value for the choice: 1 - Never, 2 - Sometimes, 3 - Often, 4 - Very Often; If base_zero = TRUE, all questions must have the numeric value for the choice: 0 - Never, 1 - Sometimes, 2 - Often, 3 - Very Often
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables. Up to 2 missing responses are allowed
 #'
@@ -27,7 +27,7 @@
 #'
 #' @export
 
-score_sic <- function(sic_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_sic <- function(sic_data, base_zero = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -73,7 +73,7 @@ score_sic <- function(sic_data, score_base = TRUE, id, extra_scale_cols = c()) {
     # re-scale data to use base 1
     sic_data_edit <- sic_data
 
-    if (isTRUE(score_base)){
+    if (isTRUE(base_zero)){
       sic_data_edit[sic_items] <- sapply(sic_items, function(x) sic_data[[x]] + 1, simplify = TRUE)
     }
 

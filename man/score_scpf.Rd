@@ -4,12 +4,12 @@
 \alias{score_scpf}
 \title{score_scpf: Scored data from the Structure and Control in Parent Feeding questionnaire}
 \usage{
-score_scpf(scpf_data, score_base = TRUE, id, extra_scale_cols = c())
+score_scpf(scpf_data, base_zero = TRUE, id, extra_scale_cols = c())
 }
 \arguments{
 \item{scpf_data}{a data.frame all items for the Structure and Control in Parent Feeding questionnaire following the naming conventions described above}
 
-\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 
@@ -25,15 +25,15 @@ This function scores the Structure and Control in Parent Feeding questionnaire a
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
 2) The  columns/variables must match the following naming convention: 'scpf#' or 'scpf_#' where # is the question number (1-34)
-3) All questions must have the numeric value for the choice: 0 - Never, 1 - Rarely, 2 - Sometimes, 3 - Often, 4 - Always if score_base = TRUE or
-                                                             1 - Never, 2 - Rarely, 3 - Sometimes, 4 - Often, 5 - Always if score_base = FALSE
+3) All questions must have the numeric value for the choice: 0 - Never, 1 - Rarely, 2 - Sometimes, 3 - Often, 4 - Always if base_zero = TRUE or
+                                                             1 - Never, 2 - Rarely, 3 - Sometimes, 4 - Often, 5 - Always if base_zero = FALSE
 
 Note, as long as variable names match those listed, the dataset can include other variables
 }
 \examples{
 
 # scoring for the scpf with IDs
-scpf_score_data <- score_scpf(scpf_data, id = 'ID', score_base = TRUE)
+scpf_score_data <- score_scpf(scpf_data, id = 'ID', base_zero = TRUE)
 
 \dontrun{
 }

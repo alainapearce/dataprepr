@@ -34,7 +34,7 @@
 #'
 #' @export
 
-score_pss <- function(pss_data, score_base = TRUE, id, extra_scale_cols = c()) {
+score_pss <- function(pss_data, base_zero = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -78,7 +78,7 @@ score_pss <- function(pss_data, score_base = TRUE, id, extra_scale_cols = c()) {
   # re-scale data
   pss_data_edit <- pss_data
   
-  if (!isTRUE(score_base)){
+  if (!isTRUE(base_zero)){
     pss_data_edit[pss_items] <- sapply(pss_items, function(x) pss_data[[x]] - 1, simplify = TRUE)
   }
   

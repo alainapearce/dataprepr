@@ -4,12 +4,12 @@
 \alias{score_sic}
 \title{score_sic: INCOMPLETE FUNCTION Scored data from the Stress in Children Questionnaire}
 \usage{
-score_sic(sic_data, score_base = TRUE, id, extra_scale_cols = c())
+score_sic(sic_data, base_zero = TRUE, id, extra_scale_cols = c())
 }
 \arguments{
 \item{sic_data}{a data.frame all items for the Child Behavior Questionnaire following the naming conventions described above}
 
-\item{score_base}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 
@@ -25,7 +25,7 @@ This function scores the Stress in Children Questionnaire and provides subscale 
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
 2) The  columns/variables must match the following naming convention: 'sic#' or 'sic_#' where # is the question number (1-21)
-3) If score_base = FALSE, all questions must have the numeric value for the choice: 1 - Never, 2 - Sometimes, 3 - Often, 4 - Very Often; If score_base = TRUE, all questions must have the numeric value for the choice: 0 - Never, 1 - Sometimes, 2 - Often, 3 - Very Often
+3) If base_zero = FALSE, all questions must have the numeric value for the choice: 1 - Never, 2 - Sometimes, 3 - Often, 4 - Very Often; If base_zero = TRUE, all questions must have the numeric value for the choice: 0 - Never, 1 - Sometimes, 2 - Often, 3 - Very Often
 
 Note, as long as variable names match those listed, the dataset can include other variables. Up to 2 missing responses are allowed
 }
