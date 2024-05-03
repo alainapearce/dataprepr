@@ -11,13 +11,13 @@ score_pds(pds_data, respondent, base_zero = TRUE, male = 0, female = 1, id)
 
 \item{respondent}{string to indicate if parent or child completed the Pubertal Development Scale. Must enter either 'parent' or 'child'}
 
-\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 
 \item{male}{(optional) value for male. Default value is male = 0}
 
 \item{female}{(optional) value for female. Default value is female = 1}
 
-\item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+\item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 }
 \value{
 A dataset with a Pubertal Development Score and the Tanner Stage equivalents.

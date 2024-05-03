@@ -4,12 +4,16 @@
 #' 
 #' Recent analyses by Manzano et al., (2021) indicate a better-fitting 3 factor solution for school-age children, therefore, the following subscales are also reported: reward-based eating, picky eating, and emotional eating
 #'
-#' To use this function, the data must be prepared according to the following criteria:
-#' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'cebq#' or 'cebq_#' where # is the question number (1-35)
-#' 3) All questions must have the numeric value for the ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE)
-#' 4) This script will apply reverse scoring so all levels must be true to the scale described above
-#'
+#' To use this function, the data must be prepared according to the following criteria: \cr
+#' \cr
+#' 1) The data must include all individual questionnaire items \cr
+#' \cr
+#' 2) The  columns/variables must match the following naming convention: 'cebq#' or 'cebq_#' where # is the question number (1-35) \cr
+#' \cr
+#' 3) All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) \cr
+#' \cr
+#' 4) This script will apply reverse scoring so all levels must be true to the scale described above \cr
+#' \cr
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
 #' @references
@@ -54,7 +58,11 @@ score_cebq <- function(cebq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
         }
     }
 
-
+    # check base_zero is logical
+    if (!is.logical(base_zero)) {
+      stop("base_zero arg must be logical (TRUE/FALSE)")
+    }
+    
     #### 2. Set Up Data #####
 
     # set up database for results create empty matrix

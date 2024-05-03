@@ -9,9 +9,9 @@ score_cshq(cshq_data, base_zero = TRUE, id, reverse_score = FALSE)
 \arguments{
 \item{cshq_data}{a data.frame all items for the Children Sleep Habits Questionnaire following the naming conventions described above}
 
-\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 
-\item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+\item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 
 \item{reverse_score}{is data already reversed scored (default = FALSE)}
 }

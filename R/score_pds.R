@@ -64,12 +64,13 @@ score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female =
     stop('pds_dat must set to the data.frame with all responses to the Pubertal Development Scale')
   }
   
-  # make a working dataset to preserve original data
-  pds_data_edits <- pds_data
+  # check if id exists
+  ID_arg <- methods::hasArg(id)
   
-  if(class(pds_data_edits['sex'])[1] == 'haven_labelled'){
-    haven::labelled(pds_data_edits[['sex']], labels = NULL)
-    haven::labelled(pds_data_edits[['sex']], label = NULL)
+  if (isTRUE(ID_arg)){
+    if (!(id %in% names(pds_data))) {
+      stop('variable name entered as id is not in pds_data')
+    }
   }
   
   # check that respondent exist and is a string
@@ -83,6 +84,21 @@ score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female =
     }
   } else if (isFALSE(resp_arg)) {
     stop('respondent must be entered as a string and can either be \'parent\' or \'child\'')
+  }
+  
+  # check base_zero is logical
+  if (!is.logical(base_zero)) {
+    stop("base_zero arg must be logical (TRUE/FALSE)")
+  }
+  
+  #### 2. Set Up Data #####
+  
+  # make a working dataset to preserve original data
+  pds_data_edits <- pds_data
+  
+  if(class(pds_data_edits['sex'])[1] == 'haven_labelled'){
+    haven::labelled(pds_data_edits[['sex']], labels = NULL)
+    haven::labelled(pds_data_edits[['sex']], label = NULL)
   }
   
   # check varaible 'sex' exists and for male and female arguments
@@ -120,15 +136,6 @@ score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female =
   }
   
 
-  # check if id exists
-  ID_arg <- methods::hasArg(id)
-  
-  if (isTRUE(ID_arg)){
-    if (!(id %in% names(pds_data))) {
-      stop('variable name entered as id is not in pds_data')
-    }
-  }
-  
   # check variables in pds_data
   
   ## standard variable names

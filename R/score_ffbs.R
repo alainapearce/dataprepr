@@ -51,6 +51,11 @@ score_ffbs <- function(ffbs_data, base_zero = TRUE, id, extra_scale_cols = c()) 
             stop("variable name entered as id is not in ffbs_data")
         }
     }
+    
+    # check base_zero is logical
+    if (!is.logical(base_zero)) {
+      stop("base_zero arg must be logical (TRUE/FALSE)")
+    }
 
     #### 2. Set Up Data #####
 

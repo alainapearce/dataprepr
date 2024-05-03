@@ -15,7 +15,7 @@
 #' Musher-Eizenman, D., Holub. S., Comprehensive Feeding Practices Questionnaire: Validation of a New Measure of Parental Feeding Practices, Journal of Pediatric Psychology, 32, 8, September 2007, Pages 960–972, https://doi.org/10.1093/jpepsy/jsm037
 #'
 #' @param cfpq_data a data.frame all items for the Comprehensive Feeding Practices Questionnaire following the naming conventions described above
-#' @param extra_scale_cols a vector of character strings that begin with 'cfpq' but are not scale items. Any columns in bes_data that begin with 'cfpq' but are not scale items must be included here. Default is empty vector.
+#' @param extra_scale_cols a vector of character strings that begin with 'cfpq' but are not scale items. Any columns in cfpq_data that begin with 'cfpq' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Comprehensive Feeding Practices Questionnaire 
@@ -50,6 +50,11 @@ score_cfpq <- function(cfpq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
     if (!(id %in% names(cfpq_data))) {
       stop("variable name entered as id is not in cfpq_data")
     }
+  }
+  
+  # check base_zero is logical
+  if (!is.logical(base_zero)) {
+    stop("base_zero arg must be logical (TRUE/FALSE)")
   }
   
   #### 2. Set Up Data #####

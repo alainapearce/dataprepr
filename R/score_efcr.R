@@ -2,11 +2,14 @@
 #'
 #' This function scores the External Food Cue Responsiveness Scale
 #'
-#' To use this function, the data must be prepared according to the following criteria:
-#' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'efcr#' or 'efcr_#' where # is the question number (1-9)
-#' 3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE)
-#'
+#' To use this function, the data must be prepared according to the following criteria: \cr
+#' \cr
+#' 1) The data must include all individual questionnaire items \cr
+#' \cr
+#' 2) The  columns/variables must match the following naming convention: 'efcr#' or 'efcr_#' where # is the question number (1-9) \cr
+#' \cr
+#' 3) All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) \cr
+#' \cr
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
 #' @references
@@ -50,6 +53,11 @@ score_efcr <- function(efcr_data, base_zero = TRUE, id, extra_scale_cols = c()) 
         }
     }
 
+    # check base_zero is logical
+    if (!is.logical(base_zero)) {
+      stop("base_zero arg must be logical (TRUE/FALSE)")
+    }
+    
     #### 2. Set Up Data #####
 
     # set up database for results create empty matrix

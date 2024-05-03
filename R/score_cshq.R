@@ -58,6 +58,11 @@ score_cshq <- function(cshq_data, base_zero = TRUE, id, reverse_score = FALSE) {
     }
   }
   
+  # check base_zero is logical
+  if (!is.logical(base_zero)) {
+    stop("base_zero arg must be logical (TRUE/FALSE)")
+  }
+  
   #### 2. Set Up Data #####
   
   # set up database for results

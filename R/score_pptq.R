@@ -56,12 +56,17 @@ score_pptq <- function(pptq_data, pptq_scale, base_zero = TRUE, id, extra_scale_
   
   if (isTRUE(pptq_scale)) {
     if (!is.numeric(pptq_scale)) {
-      stop("pptq_scale must be be numeric: enter 3 or 5")
+      stop("pptq_scale argument must be be numeric: enter 3 or 5")
     } else if (pptq_scale != 3 | pptq_scale != 5) {
-      stop("pptq_scale 3 or 5")
+      stop("pptq_scale argument must be 3 or 5")
     }
   } else if (isFALSE(pptq_scale)) {
-    stop("pptq_scale must be entered as a number")
+    stop("pptq_scale argument must be indicated. options are 3 and 5.")
+  }
+  
+  # check base_zero is logical
+  if (!is.logical(base_zero)) {
+    stop("base_zero arg must be logical (TRUE/FALSE)")
   }
   
   #### 2. Set Up Data #####

@@ -2,11 +2,14 @@
 #'
 #' This function scores the Binge Eating Scale
 #'
-#' To use this function, the data must be prepared according to the following criteria:
-#' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'bes#' or 'bes_#' where # is the question number (1-16)
-#' 3) This script will apply specific scoring transformations that are specific to each question. For example, the first 2 statements are reset to 0 for question 1 but not for question 2.
-#'
+#' To use this function, the data must be prepared according to the following criteria: \cr
+#' \cr
+#' 1) The data must include all individual questionnaire items \cr
+#' \cr
+#' 2) The  columns/variables must match the following naming convention: 'bes#' or 'bes_#' where # is the question number (1-16) \cr
+#' \cr
+#' 3) This script will apply specific scoring transformations that are specific to each question. For example, the first 2 statements are reset to 0 for question 1 but not for question 2. \cr
+#' \cr
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
 #' @references
@@ -16,8 +19,8 @@
 #'
 #' @param bes_data a data.frame all items for the Binge Eating Scale following the naming conventions described above
 #' @param pna value used when participant prefers not to answer/elects to skip
-#' @param base_zero the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.
-#' @param id (optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)
+#' @param base_zero (logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.
+#' @param id (optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)
 #' @param extra_scale_cols a vector of character strings that begin with 'bes' but are not scale items. Any columns in bes_data that begin with 'bes' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with total score for the Binge Eating Scale
 #' @examples
@@ -51,6 +54,11 @@ score_bes <- function(bes_data, base_zero = TRUE, pna = NA, id, extra_scale_cols
     if (!(id %in% names(bes_data))) {
       stop('variable name entered as id is not in bes_data')
     }
+  }
+  
+  # check base_zero is logical
+  if (!is.logical(base_zero)) {
+    stop("base_zero arg must be logical (TRUE/FALSE)")
   }
   
   #### 2. Set Up Data #####

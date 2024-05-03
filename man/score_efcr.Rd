@@ -9,9 +9,9 @@ score_efcr(efcr_data, base_zero = TRUE, id, extra_scale_cols = c())
 \arguments{
 \item{efcr_data}{a data.frame all items for the External Food Cue Responsiveness Scale following the naming conventions described above}
 
-\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 
-\item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+\item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 
 \item{extra_scale_cols}{a vector of character strings that begin with 'efcr' but are not scale items. Any columns in efcr_data that begin with 'efcr' but are not scale items must be included here. Default is empty vector.}
 }
@@ -22,11 +22,14 @@ A dataset with subscale scores for the External Food Cue Responsiveness Scale
 This function scores the External Food Cue Responsiveness Scale
 }
 \details{
-To use this function, the data must be prepared according to the following criteria:
-1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'efcr#' or 'efcr_#' where # is the question number (1-9)
-3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE)
-
+To use this function, the data must be prepared according to the following criteria: \cr
+\cr
+1) The data must include all individual questionnaire items \cr
+\cr
+2) The  columns/variables must match the following naming convention: 'efcr#' or 'efcr_#' where # is the question number (1-9) \cr
+\cr
+3) All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) \cr
+\cr
 Note, as long as variable names match those listed, the dataset can include other variables
 }
 \examples{

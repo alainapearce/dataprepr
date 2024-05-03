@@ -3,10 +3,13 @@
 #' This function scores the Lifestyle Behavior Checklist and provides subscale scores for the following behaviors: Food-Related Misbehavior, Overeating, Emotions Related to Overweight, and Physical Activity.
 #'
 #' To use this function, the data must be prepared according to the following criteria:
-#' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'lbc#' or 'lbc_#' where # is the question number (1-25)
-#' 3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE)
-#'
+#' \cr
+#' 1) The data must include all individual questionnaire items \cr
+#' \cr
+#' 2) The  columns/variables must match the following naming convention: 'lbc#' or 'lbc_#' where # is the question number (1-25) \cr
+#' \cr
+#' 3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE) \cr
+#' \cr
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
 #' @references
@@ -50,6 +53,11 @@ score_lbc <- function(lbc_data, base_zero = TRUE, id, extra_scale_cols = c()) {
         }
     }
 
+    # check base_zero is logical
+    if (!is.logical(base_zero)) {
+      stop("base_zero arg must be logical (TRUE/FALSE)")
+    }
+    
     #### 2. Set Up Data #####
 
     # set up database for results create empty matrix

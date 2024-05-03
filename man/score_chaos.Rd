@@ -2,16 +2,16 @@
 % Please edit documentation in R/score_chaos.R
 \name{score_chaos}
 \alias{score_chaos}
-\title{score_chaos: INCOMPLETE FUNCTION -- Scored data from the 15-item Confusion, Hubbub, and Order Scale}
+\title{score_chaos: Scored data from the 15-item Confusion, Hubbub, and Order Scale administered with 4-point likert scale}
 \usage{
-score_chaos(chaos_data, base_zero = TRUE, id, extra_scale_cols = c())
+score_chaos(chaos_data, base_zero = FALSE, id, extra_scale_cols = c())
 }
 \arguments{
-\item{chaos_data}{a data.frame all items for the Confusion, Hubbub, and Order Scale following the naming conventions described above}
+\item{chaos_data}{a data.frame all items for the Confusion, Hubbub, and Order Scale following the naming conventions described in Details}
 
-\item{base_zero}{the smallest value assigned to a choice is 0 (i.e., range 0-3). Default = TRUE.}
+\item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 
-\item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+\item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 
 \item{extra_scale_cols}{a vector of character strings that begin with 'chaos' but are not scale items. Any columns in chaos_data that begin with 'chaos' but are not scale items must be included here. Default is empty vector.}
 }
@@ -19,15 +19,22 @@ score_chaos(chaos_data, base_zero = TRUE, id, extra_scale_cols = c())
 A dataset with subscale scores for the Confusion, Hubbub, and Order Scale
 }
 \description{
-This function scores the Confusion, Hubbub, and Order Scale and provides XXX
+This function scores the 15-item Confusion, Hubbub, and Order Scale and provides a total score. Note, this function will only provide accurate scores if a 4-point likert scale was used during data collection.
 }
 \details{
-To use this function, the data must be prepared according to the following criteria:
-1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'chaos#' or 'chaos_#' where # is the question number (1-15).
-3) Questions must have the numeric value for the choices: 1 - Very much like your own home, 2 - Somewhat like your own home, 3 - A little bit like your own home, 4 - Not at all like your own home
-
-Note, as long as variable names match those listed, the dataset can include other variables
+To use this function, the data must be prepared according to the following criteria: \cr
+\cr
+1) The data must include all individual questionnaire items \cr
+\cr
+2) The  columns/variables must match the following naming convention: 'chaos#' or 'chaos_#' where # is the question number (1-15). \cr
+\cr
+3) Item values must adhere to 1 of the following options: \cr
+\itemize{
+ \item a) If base_zero = TRUE, questions must have the numeric value for the choices: 0 - Very much like your own home, 1 - Somewhat like your own home, 2 - A little bit like your own home, 3 - Not at all like your own home \cr
+ \item b) If base_zero = FALSE, questions must have the numeric value for the choices: 1 - Very much like your own home, 2 - Somewhat like your own home, 3 - A little bit like your own home, 4 - Not at all like your own home \cr
+} 
+\cr
+Note, as long as variable names match those listed, the dataset can include other variables. See extra_scale_cols argument
 }
 \examples{
 

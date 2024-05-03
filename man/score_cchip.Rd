@@ -9,7 +9,7 @@ score_cchip(cchip_data, id, extra_scale_cols = c())
 \arguments{
 \item{cchip_data}{a data.frame all items for the Community Childhood Hunger Identification Project following the naming conventions described above}
 
-\item{id}{(optional) name of participant ID column in bes_data. If included the output dataset will be matched by id, if not included the output dataset will be in the order of bes_data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+\item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 
 \item{extra_scale_cols}{a vector of character strings that begin with 'cchip' but are not scale items. Any columns in cchip_data that begin with 'cchip' but are not scale items must be included here. Default is empty vector.}
 }

@@ -51,6 +51,11 @@ score_scpf <- function(scpf_data, base_zero = TRUE, id, extra_scale_cols = c()) 
     }
   }
   
+  # check base_zero is logical
+  if (!is.logical(base_zero)) {
+    stop("base_zero arg must be logical (TRUE/FALSE)")
+  }
+  
   #### 2. Set Up Data #####
   
   # set up database for results create empty matrix
