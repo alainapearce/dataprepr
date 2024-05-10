@@ -16,7 +16,7 @@
 #' 
 #' @param hfias_data a data.frame all items for the Pictorial Personality Traits Questionnaire for Children  following the naming conventions described above
 #' @inheritParams score_bes
-#'
+#' @param extra_scale_cols a vector of character strings that begin with 'hfias' but are not scale items. Any columns in sic_data that begin with 'hfias' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with subscale scores for the Pictorial Personality Traits Questionnaire for Children 
 #' @examples
 #'
@@ -29,7 +29,7 @@
 #'
 #' @export
 
-score_hfias <- function(hfias_data, base_zero = TRUE, id) {
+score_hfias <- function(hfias_data, base_zero = TRUE, id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -65,13 +65,19 @@ score_hfias <- function(hfias_data, base_zero = TRUE, id) {
     names(hfias_score_dat)[1] <- id
   }
   
+  
+  # assign hfias scale items to hfias_items, excluding columns in extra_scale_cols
+  hfias_items <- grep("^hfias", names(hfias_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  
+  # remove underscore in column names for hfias_items
+  names(hfias_data)[names(hfias_data) %in% hfias_items] <- gsub('hfias_', 'hfias', names(hfias_data)[names(hfias_data) %in% hfias_items])
+  
+  # remove underscores in hfias_items
+  hfias_items <- gsub("hfias_", "hfias", hfias_items)
+  
   # get primary questions to score
   hfias_categorical_qs <- c("hfias1", "hfias2", "hfias3", "hfias4", "hfias5", "hfias6", "hfias7", "hfias8", "hfias9")
   hfias_frequency_qs <- c("hfias1a", "hfias2a", "hfias3a", "hfias4a", "hfias5a", "hfias6a", "hfias7a", "hfias8a", "hfias9a")
-  
-  # remove underscore in categorical and frequency column names
-  names(hfias_data)[names(hfias_data) %in% hfias_categorical_qs] <- gsub('hfias_', 'hfias', names(hfias_data)[names(hfias_data) %in% hfias_categorical_qs])
-  names(hfias_data)[names(hfias_data) %in% hfias_frequency_qs] <- gsub('hfias_', 'hfias', names(hfias_data)[names(hfias_data) %in% hfias_frequency_qs])
   
   # make copy of dataset
   hfias_data_edit <- hfias_data
@@ -91,28 +97,6 @@ score_hfias <- function(hfias_data, base_zero = TRUE, id) {
   hfias_data_edit$hfias7a[hfias_data_edit$hfias7 == 0] <- 0
   hfias_data_edit$hfias8a[hfias_data_edit$hfias8 == 0] <- 0
   hfias_data_edit$hfias9a[hfias_data_edit$hfias9 == 0] <- 0
-  
-  ## Attempt to do the above this with a function and loop -- not working
-  # # Define a function to 
-  # #   (1) re-scale frequency question if base_zero = TRUE
-  # #   (2) set the value of frequency question if the corresponding categorical question == 0
-  # 
-  # set_frequency <- function(hfias_categorical_q, hfias_frequency_q, hfias_data_edit) {
-  #   if (isTRUE(base_zero)){
-  #     hfias_data_edit[hfias_frequency_q] <- sapply(hfias_frequency_q, function(x) hfias_data[[x]] + 1, simplify = TRUE)
-  #   }
-  #   
-  #   hfias_data_edit[[hfias_frequency_q]][hfias_data_edit[[hfias_categorical_q]] == 0] <- 0
-  # 
-  #   # Return the updated hfias_data_edit
-  #   return(hfias_data_edit)
-  # }
-  # 
-  # # apply set_frequency to re-scale frequency data
-  # for (i in 1:9) {
-  #   hfias_data_edit <- set_frequency(hfias_categorical_qs[[i]], hfias_frequency_qs[[i]], hfias_data_edit)
-  # }
-  # 
   
   ## Score Subscale
   
