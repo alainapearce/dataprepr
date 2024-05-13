@@ -28,9 +28,6 @@
 #' \dontrun{
 #' }
 #'
-#' @seealso Raw data from Qualtrics was processed using the following script: \code{\link{util_fbs_parent_v5dat}}
-#'
-#'
 #' @export
 
 score_audit <- function(audit_data, id) {

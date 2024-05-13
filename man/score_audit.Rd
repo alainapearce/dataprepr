@@ -41,6 +41,3 @@ audit_score_data <- score_audit(audit_data, id = 'ID')
 \references{
 Saunders JB, Aasland OG, Babor TF, De La Fuente JR, Grant M. Development of the Alcohol Use Disorders Identification Test (AUDIT): WHO Collaborative Project on Early Detection of Persons with Harmful Alcohol Consumption-II. Addiction. 1993;88(6):791-804. doi:10.1111/j.1360-0443.1993.tb02093.x (\href{https://pubmed.ncbi.nlm.nih.gov/8329970/}{PubMed})
 }
-\seealso{
-Raw data from Qualtrics was processed using the following script: \code{\link{util_fbs_parent_v5dat}}
-}
