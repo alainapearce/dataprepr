@@ -4,7 +4,7 @@
 \alias{score_hfssm}
 \title{score_hfssm: Scored data from the U.S. Household Food Security Survey Module}
 \usage{
-score_hfssm(hfssm_data, base_zero = TRUE, id)
+score_hfssm(hfssm_data, base_zero = FALSE, id)
 }
 \arguments{
 \item{hfssm_data}{a data.frame all items for the U.S. Household Food Security Survey Module following the naming conventions described above}
@@ -20,13 +20,24 @@ A dataset with subscale scores for the U.S. Household Food Security Survey Modul
 This function scores the U.S. Household Food Security Survey Module and provides scores for: U.S. Household Food Security Scale, U.S. Adult Food Security Scale, 6-item Food Security Scale, U.S. Children’s Food Security Scale
 }
 \details{
-To use this function, the data must be prepared according to the following criteria:
+To use this function, the data must be prepared according to the following criteria: \cr
+\cr
 1) The data must include all individual questionnaire items, excluding hh1, which is not used for scoring food security scales
+\cr
 2) The  columns/variables must match the following naming conventions: 'hfssm_hh#', 'hfssm_ad#', or 'hfssm_ch#', where # is the question number and hh/ad/ch refers to the questionnaire stage (household, adult, child)
-3) Questions [hh2, hh3, hh4, ch1, ch2, ch3] must have the numeric value for the choices: 1 - Often True, 2 - Sometimes True, 3 - Never True, 4 - DK or Refused
-   Questions [ad1, ad2, ad3, ad4, ad5, ch4, ch5, ch6, ch7] must have the numeric value for the choices: 1 - yes, 2 - no, 3 - DK
-   Questions [ad1a, ad5a, ch5a] must have the numeric value for the choices: 1 - almost every month, 2 - Some months but not every month, 3 - Only 1 or 2 months, 4 - DK
-
+\cr
+3a) If base_zero = FALSE (default), questions must have the numeric value for the choices: \cr
+\itemize{
+ \item{Questions [hh2, hh3, hh4, ch1, ch2, ch3]: 1 - Often True, 2 - Sometimes True, 3 - Never True, 4 - DK or Refused}
+ \item{Questions [ad1, ad2, ad3, ad4, ad5, ch4, ch5, ch6, ch7]: 1 - yes, 2 - no, 3 - DK}
+ \item{Questions [ad1a, ad5a, ch5a]: 1 - almost every month, 2 - Some months but not every month, 3 - Only 1 or 2 months, 4 - DK}
+}
+3b) If base_zero = TRUE, questions must have the numeric value for the choices: \cr
+\itemize{
+ \item{Questions [hh2, hh3, hh4, ch1, ch2, ch3]: 0 - Often True, 1 - Sometimes True, 2 - Never True, 3 - DK or Refused}
+ \item{Questions [ad1, ad2, ad3, ad4, ad5, ch4, ch5, ch6, ch7]: 0 - yes, 1 - no, 2 - DK}
+ \item{Questions [ad1a, ad5a, ch5a]: 0 - almost every month, 1 - Some months but not every month, 2 - Only 1 or 2 months, 3 - DK}
+}
 
 Note, as long as variable names match those listed, the dataset can include other variables
 }
