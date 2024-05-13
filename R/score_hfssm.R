@@ -216,7 +216,8 @@ score_hfssm <- function(hfssm_data, base_zero = FALSE, id) {
   # U.S. Adult Food Security Scale
   
   # isolate questions HH2 through AD5a
-  ad_scale_vars <- hfssm_items[1:9]
+  ad_scale_vars <- c("hfssm_hh2",  "hfssm_hh3", "hfssm_hh4", 
+                     "hfssm_ad1", "hfssm_ad1a", "hfssm_ad2", "hfssm_ad3", "hfssm_ad4", "hfssm_ad5", "hfssm_ad5a")
   
   # calculate hfssm_adult_rawscore if no missing responses to administered questions (adult_scale_admin_nas == FALSE)
   hfssm_score_dat$hfssm_adult_rawscore <- ifelse(affirmative_df$adult_scale_admin_nas == FALSE, rowSums(affirmative_df[ad_scale_vars], na.rm = TRUE), NA)
@@ -227,7 +228,7 @@ score_hfssm <- function(hfssm_data, base_zero = FALSE, id) {
                                                         ifelse(hfssm_score_dat$hfssm_adult_rawscore <= 5, "low", "very low"))))    
   # 6-item Food Security Scale
   # isolate questions HH3 through AD3
-  short_scale_vars <- hfssm_items[2:7]
+  short_scale_vars <- c("hfssm_hh3",  "hfssm_hh4",  "hfssm_ad1",  "hfssm_ad1a", "hfssm_ad2",  "hfssm_ad3" )
   
   # calculate hfssm_short_rawscore if no missing responses to administered questions (short_scale_admin_nas == FALSE)
   hfssm_score_dat$hfssm_short_rawscore <- ifelse(affirmative_df$short_scale_admin_nas == FALSE, rowSums(affirmative_df[short_scale_vars], na.rm = TRUE), NA)
@@ -238,7 +239,7 @@ score_hfssm <- function(hfssm_data, base_zero = FALSE, id) {
   
   # U.S. Children’s Food Security Scale
   # isolate questions CH1 through CH7 
-  child_scale_vars <- hfssm_items[11:18]
+  child_scale_vars <-c("hfssm_ch1",  "hfssm_ch2",  "hfssm_ch3",  "hfssm_ch4", "hfssm_ch5", "hfssm_ch5a", "hfssm_ch6", "hfssm_ch7")
   
   # calculate hfssm_short_rawscore if no missing responses to administered questions (child_scale_admin_nas == FALSE)
   hfssm_score_dat$hfssm_children_rawscore <- ifelse(affirmative_df$child_scale_admin_nas == FALSE, rowSums(affirmative_df[child_scale_vars], na.rm = TRUE), NA)
