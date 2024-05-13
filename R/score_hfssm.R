@@ -120,7 +120,7 @@ score_hfssm <- function(hfssm_data, base_zero = FALSE, id) {
     hfssm_ch1 = ifelse(is.na(hfssm_ch1), NA, ifelse(hfssm_ch1 %in% c(1,2), 1, 0)),
     hfssm_ch2 = ifelse(is.na(hfssm_ch2), NA, ifelse(hfssm_ch2 %in% c(1,2), 1, 0)),
     hfssm_ch3 = ifelse(is.na(hfssm_ch3), NA, ifelse(hfssm_ch3 %in% c(1,2), 1, 0)),
-    hfssm_ch4 = ifelse(is.na(hfssm_ch4), NA, ifelse(hfssm_ch4 %in% c(1,2), 1, 0)),
+    hfssm_ch4 = ifelse(is.na(hfssm_ch4), NA, ifelse(hfssm_ch4 == 1, 1, 0)),
     hfssm_ch5 = ifelse(is.na(hfssm_ch5), NA, ifelse(hfssm_ch5 == 1, 1, 0)),
     hfssm_ch5a = ifelse(is.na(hfssm_ch5a), NA, ifelse(hfssm_ch5a %in% c(1,2), 1, 0)),
     hfssm_ch6 = ifelse(is.na(hfssm_ch6), NA, ifelse(hfssm_ch6 == 1, 1, 0)),
