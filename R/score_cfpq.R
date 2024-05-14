@@ -123,7 +123,8 @@ score_cfpq <- function(cfpq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
     var_name <- reverse_qs[var]
     reverse_name <- paste0(var_name, "_rev")
     
-    cfpq_data_edit[[reverse_name]] <- ifelse(is.na(cfpq_data_edit[[var_name]]), NA, ifelse(cfpq_data_edit[[var_name]] == 1, 5, ifelse(cfpq_data_edit[[var_name]] == 2, 4, 3)))
+    cfpq_data_edit[[reverse_name]] <- ifelse(cfpq_data_edit[[var_name]] == 1, 5, ifelse(cfpq_data_edit[[var_name]] == 2, 4, ifelse(cfpq_data_edit[[var_name]] == 3, 3, ifelse(cfpq_data_edit[[var_name]] == 4, 2, ifelse(cfpq_data_edit[[var_name]] == 5, 1, NA)))))
+    
   }
   
   ## Score Subscales
