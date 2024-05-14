@@ -8,8 +8,8 @@
 #'  \item{The columns/variables must match the following naming convention: 'cbq#' or 'cbq_#' where # is the question number (1-94)}
 #'  \item{All questionnaire responses must be a numeric value ranging from 0-6 (base_zero = TRUE) or 1-7 (base_zero = FALSE) where: }
 #'  \itemize{
-#'     \item{For base_zero = TRUE: 0 = Extremely Untrue; 1 = Quite Untrue; 2 = Sightly Untrue; 3 = Neither True nor False; 4 = Slightly True; 5 - Quite True; 6 - Extremely True, NA = does not apply }
-#'     \item{For base_zero = FALSE: 1 = Extremely Untrue; 2 = Quite Untrue; 3 = Sightly Untrue; 4 = Neither True nor False; 5 = Slightly True; 6 - Quite True; 7 - Extremely True, NA = does not apply }
+#'     \item{For base_zero = TRUE: 0 = Extremely Untrue; 1 = Quite Untrue; 2 = Sightly Untrue; 3 = Neither True nor False; 4 = Slightly True; 5 - Quite True; 6 - Extremely True, does_not_apply_value (param) = does not apply }
+#'     \item{For base_zero = FALSE: 1 = Extremely Untrue; 2 = Quite Untrue; 3 = Sightly Untrue; 4 = Neither True nor False; 5 = Slightly True; 6 - Quite True; 7 - Extremely True, does_not_apply_value (param) = does not apply }
 #'   }
 #'  \item{Missing values must be coded as NA}
 #'  \item{Values must not be reversed scored. This script will apply reverse scoring so all levels must be true to the scale described above}
@@ -24,20 +24,24 @@
 #'
 #' @param cbq_data a data.frame all items for the Child Behavior Questionnaire following the naming conventions described above
 #' @param extra_scale_cols a vector of character strings that begin with 'cbq' but are not scale items. Any columns in cbq_data that begin with 'cbq' but are not scale items must be included here. Default is empty vector.
+#' @param does_not_apply_value value used to code a cbq response of "does not apply"
 #' @inheritParams score_bes
 #' @return A dataset with subscale scores for the Child Behavior Questionnaire
 #' @examples
 #'
-#' # scoring for the cbq with IDs
-#' cbq_score_data <- score_cbq(cbq_data, id = 'ID')
-#'
+#' # scoring for the cbq with IDs, when cbq values range from 0-6, and "not_applicable" responses are scored as 8
+#' cbq_score_data <- score_cbq(cbq_data, base_zero = TRUE, id = 'ID', does_not_apply_value = 8)
+#' 
+#' # scoring for the cbq with IDs, when cbq values range from 1-7, and "not_applicable" responses are scored as NA
+#' cbq_score_data <- score_cbq(cbq_data, base_zero = FALSE, id = 'ID', does_not_apply_value = NA)
+#' 
 #' \dontrun{
 #' }
 #'
 #'
 #' @export
 
-score_cbq <- function(cbq_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_cbq <- function(cbq_data, base_zero = TRUE, id, does_not_apply_value, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -80,12 +84,25 @@ score_cbq <- function(cbq_data, base_zero = TRUE, id, extra_scale_cols = c()) {
     # remove underscore in cbq_items
     cbq_items <- gsub("cbq_", "cbq", cbq_items)
     
-    # re-scale data
+    # make copy of data
     cbq_data_edit <- cbq_data
     
     # set "does not apply" values to NA
-    # set 99 to NA
-    cbq_data_edit[cbq_items] <- sapply(cbq_items, function (x) ifelse(cbq_data_edit[[x]] == 99, NA, cbq_data_edit[[x]]), simplify = TRUE)
+    cbq_data_edit[cbq_items] <- sapply(cbq_items, function (x) ifelse(cbq_data_edit[[x]] == does_not_apply_value, NA, cbq_data_edit[[x]]), simplify = TRUE)
+    
+    # check range of data and print warnings
+    min <- min(cbq_data_edit[c(cbq_items)], na.rm = TRUE)
+    max <- max(cbq_data_edit[c(cbq_items)], na.rm = TRUE)
+    
+    if (isTRUE(base_zero)){
+      if (min < 0 | max > 6) {
+        warning("range in CBQ data is outside expected range given base_zero = TRUE (expected range: 0-6). Scoring may be incorrect")
+      } 
+    } else {
+      if (min < 1 | max > 7) {
+        warning("range in CBQ data is outside expected range given base_zero = FALSE (expected range: 1-7). Scoring may be incorrect")
+      } 
+    }
     
     # scale to base 1
     if (isTRUE(base_zero)){
