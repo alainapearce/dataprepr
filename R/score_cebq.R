@@ -91,14 +91,14 @@ score_cebq <- function(cebq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
         warning("minimum value in CEBQ data below expected min value given base_zero = TRUE. Scoring may be incorrect")
       } 
       if (max > 4) {
-        warning("maximum value in CEBQ data exceeds expected max value for base_zero = TRUE. Scoring may be incorrect")
+        warning("maximum value in CEBQ data exceeds expected max value given base_zero = TRUE. Scoring may be incorrect")
       } 
     } else {
       if (min < 1) {
         warning("minimum value in CEBQ data below min expected value given base_zero = FALSE. Scoring may be incorrect")
       } 
       if (max > 5) {
-        warning("maximum value in CEBQ data exceeds expected value for base_zero = FALS. Scoring may be incorrect")
+        warning("maximum value in CEBQ data exceeds expected value given base_zero = FALSE. Scoring may be incorrect")
       } 
     }
 
@@ -117,7 +117,8 @@ score_cebq <- function(cebq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
         var_name <- reverse_qs[var]
         reverse_name <- paste0(var_name, '_rev')
 
-        cebq_data_edit[[reverse_name]] <- ifelse(is.na(cebq_data_edit[[var_name]]), NA, ifelse(cebq_data_edit[[var_name]] == 1, 5, ifelse(cebq_data_edit[[var_name]] == 2, 4, ifelse(cebq_data_edit[[var_name]] == 4, 2, ifelse(cebq_data_edit[[var_name]] == 5, 1, 3)))))
+        cebq_data_edit[[reverse_name]] <- ifelse(cebq_data_edit[[var_name]] == 1, 5, ifelse(cebq_data_edit[[var_name]] == 2, 4, ifelse(cebq_data_edit[[var_name]] == 4, 2, ifelse(cebq_data_edit[[var_name]] == 5, 1, ifelse(cebq_data_edit[[var_name]] == 3, 3, NA)))))
+        
     }
 
     ## Score Subscales
