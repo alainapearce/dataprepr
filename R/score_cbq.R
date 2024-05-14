@@ -115,8 +115,8 @@ score_cbq <- function(cbq_data, base_zero = TRUE, id, does_not_apply_value, extr
         "cbq54", "cbq56", "cbq60", "cbq61", "cbq68", "cbq74", "cbq75", "cbq78",
         "cbq80", "cbq82", "cbq83", "cbq84", "cbq90", "cbq91", "cbq92", "cbq93")
 
-    cbq_data_edit[reverse_qs] <- sapply(reverse_qs, function (x) ifelse(is.na(cbq_data_edit[[x]]), NA, ifelse(cbq_data_edit[[x]] == 1, 7, ifelse(cbq_data_edit[[x]] == 2, 6, ifelse(cbq_data_edit[[x]] == 3, 5, ifelse(cbq_data_edit[[x]] == 5, 3, ifelse(cbq_data_edit[[x]] ==  6, 2, ifelse(cbq_data_edit[[x]] == 7, 1, 4))))))), simplify = TRUE)
-
+    cbq_data_edit[reverse_qs] <- sapply(reverse_qs, function (x) ifelse(cbq_data_edit[[x]] == 1, 7, ifelse(cbq_data_edit[[x]] == 2, 6, ifelse(cbq_data_edit[[x]] == 3, 5, ifelse(cbq_data_edit[[x]] == 5, 3, ifelse(cbq_data_edit[[x]] ==  6, 2, ifelse(cbq_data_edit[[x]] == 7, 1, ifelse(cbq_data_edit[[x]] ==  4, 4, NA))))))), simplify = TRUE)
+    
     ## Score Subscales
 
     # Activity Level
