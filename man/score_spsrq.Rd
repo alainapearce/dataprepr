@@ -22,11 +22,17 @@ A dataset with subscale scores for the Sensitivity to Punishment and Sensitivity
 This function scores the Sensitivity to Punishment and Sensitivity to Reward Questionnaire and provides subscale scores for the following behaviors (2011;  item subscales): Fear/Shyness, Anxiety, Conflict Avoidance, Sensory Reward, Drive, Responsiveness to Social Approval, Impulsivity/Fun Seeking. The original 4 subcales (2004; 34 item subscales): Sensitivity to Punishment, Impulsivity/Fun Seeking, Drive, and Reward Responsiveness.
 }
 \details{
-To use this function, the data must be prepared according to the following criteria:
-1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'spsrq#' or 'spsrq_#' where # is the question number (1-)
-3) Questions must have the numeric value for the choices: 1 - Strongly Disagree, 2 - Disagree, 3 - Neither Agree nor Disagree, 4 - Agree, 5 - Strongly Agree.
-
+For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+\itemize{
+ \item{The data must include all individual questionnaire items}
+ \item{The  columns/variables must match the following naming convention: 'spsrq#' or 'spsrq_#' where # is the question number (1-48)}
+ \item{All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) where: }
+ \itemize{
+    \item{For base_zero = TRUE: 0 = Strongly Disagree; 1 = Disagree; 2 = Neither Agree nor Disagree; 3 = Agree; 4 = Strongly Agree}
+    \item{For base_zero = FALSE: 1 = Strongly Disagree; 2 = Disagree; 3 = Neither Agree nor Disagree; 4 = Agree; 5 = Strongly Agree}
+  }
+ \item{Missing values must be coded as NA}
+}
 Note, as long as variable names match those listed, the dataset can include other variables
 }
 \examples{

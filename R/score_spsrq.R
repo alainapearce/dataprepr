@@ -2,11 +2,17 @@
 #'
 #' This function scores the Sensitivity to Punishment and Sensitivity to Reward Questionnaire and provides subscale scores for the following behaviors (2011;  item subscales): Fear/Shyness, Anxiety, Conflict Avoidance, Sensory Reward, Drive, Responsiveness to Social Approval, Impulsivity/Fun Seeking. The original 4 subcales (2004; 34 item subscales): Sensitivity to Punishment, Impulsivity/Fun Seeking, Drive, and Reward Responsiveness.
 #'
-#' To use this function, the data must be prepared according to the following criteria:
-#' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'spsrq#' or 'spsrq_#' where # is the question number (1-)
-#' 3) Questions must have the numeric value for the choices: 1 - Strongly Disagree, 2 - Disagree, 3 - Neither Agree nor Disagree, 4 - Agree, 5 - Strongly Agree.
-#'
+#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+#' \itemize{
+#'  \item{The data must include all individual questionnaire items}
+#'  \item{The  columns/variables must match the following naming convention: 'spsrq#' or 'spsrq_#' where # is the question number (1-48)}
+#'  \item{All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) where: }
+#'  \itemize{
+#'     \item{For base_zero = TRUE: 0 = Strongly Disagree; 1 = Disagree; 2 = Neither Agree nor Disagree; 3 = Agree; 4 = Strongly Agree}
+#'     \item{For base_zero = FALSE: 1 = Strongly Disagree; 2 = Disagree; 3 = Neither Agree nor Disagree; 4 = Agree; 5 = Strongly Agree}
+#'   }
+#'  \item{Missing values must be coded as NA}
+#' }
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
 #' @references
@@ -81,7 +87,21 @@ score_spsrq <- function(spsrq_data, base_zero = TRUE, id, extra_scale_cols = c()
     # remove underscore in spsrq_items
     spsrq_items <- gsub("spsrq_", "spsrq", spsrq_items)
     
-    # re-scale data
+    # check range of data and print warnings
+    min <- min(spsrq_data[c(spsrq_items)], na.rm = TRUE)
+    max <- max(spsrq_data[c(spsrq_items)], na.rm = TRUE)
+    
+    if (isTRUE(base_zero)){
+      if (min < 0 | max > 4) {
+        warning("range in SPSRQ data is outside expected range given base_zero = TRUE (expected range: 0-4). Scoring may be incorrect")
+      } 
+    } else {
+      if (min < 1 | max > 5) {
+        warning("range in SPSRQ data is outside expected range given base_zero = FALSE (expected range: 1-5). Scoring may be incorrect")
+      } 
+    }
+    
+    # re-scale data to base 1
     spsrq_data_edit <- spsrq_data
     
     if (isTRUE(base_zero)){

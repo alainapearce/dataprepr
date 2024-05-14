@@ -22,12 +22,18 @@ A dataset with subscale scores for the Structure and Control in Parent Feeding q
 This function scores the Structure and Control in Parent Feeding questionnaire and provides subscale scores for: Limit Exposure, Consistent feeding routines, Restriction, Pressure to eat
 }
 \details{
-To use this function, the data must be prepared according to the following criteria:
-1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'scpf#' or 'scpf_#' where # is the question number (1-34)
-3) All questions must have the numeric value for the choice: 0 - Never, 1 - Rarely, 2 - Sometimes, 3 - Often, 4 - Always if base_zero = TRUE or
-                                                             1 - Never, 2 - Rarely, 3 - Sometimes, 4 - Often, 5 - Always if base_zero = FALSE
-
+For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+\itemize{
+ \item{The data must include all individual questionnaire items}
+ \item{The columns/variables must match the following naming convention: 'scpf#' or 'scpf_#' where # is the question number (1-34)}
+ \item{All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) where: }
+ \itemize{
+    \item{For base_zero = TRUE: 0 = Never; 1 = Rarely; 2 = Sometimes; 3 = Often; 4 = Always}
+    \item{For base_zero = FALSE: 1 = Never; 2 = Rarely; 3 = Sometimes; 4 = Often; 5 = Always}
+  }
+ \item{Missing values must be coded as NA}
+ \item{Values must not be reversed scored. This script will apply reverse scoring so all levels must be true to the scale described above}
+}
 Note, as long as variable names match those listed, the dataset can include other variables
 }
 \examples{

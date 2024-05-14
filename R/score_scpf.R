@@ -2,12 +2,18 @@
 #'
 #' This function scores the Structure and Control in Parent Feeding questionnaire and provides subscale scores for: Limit Exposure, Consistent feeding routines, Restriction, Pressure to eat
 #'
-#' To use this function, the data must be prepared according to the following criteria:
-#' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'scpf#' or 'scpf_#' where # is the question number (1-34)
-#' 3) All questions must have the numeric value for the choice: 0 - Never, 1 - Rarely, 2 - Sometimes, 3 - Often, 4 - Always if base_zero = TRUE or
-#'                                                              1 - Never, 2 - Rarely, 3 - Sometimes, 4 - Often, 5 - Always if base_zero = FALSE
-#'
+#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+#' \itemize{
+#'  \item{The data must include all individual questionnaire items}
+#'  \item{The columns/variables must match the following naming convention: 'scpf#' or 'scpf_#' where # is the question number (1-34)}
+#'  \item{All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) where: }
+#'  \itemize{
+#'     \item{For base_zero = TRUE: 0 = Never; 1 = Rarely; 2 = Sometimes; 3 = Often; 4 = Always}
+#'     \item{For base_zero = FALSE: 1 = Never; 2 = Rarely; 3 = Sometimes; 4 = Often; 5 = Always}
+#'   }
+#'  \item{Missing values must be coded as NA}
+#'  \item{Values must not be reversed scored. This script will apply reverse scoring so all levels must be true to the scale described above}
+#' }
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
 #' @references
@@ -81,7 +87,21 @@ score_scpf <- function(scpf_data, base_zero = TRUE, id, extra_scale_cols = c()) 
   # remove underscore in scpf_items
   scpf_items <- gsub("scpf_", "scpf", scpf_items)
   
-  # re-scale data
+  # check range of data and print warnings
+  min <- min(scpf_data[c(scpf_items)], na.rm = TRUE)
+  max <- max(scpf_data[c(scpf_items)], na.rm = TRUE)
+  
+  if (isTRUE(base_zero)){
+    if (min < 0 | max > 4) {
+      warning("range in SCPF data is outside expected range given base_zero = TRUE (expected range: 0-4). Scoring may be incorrect")
+    } 
+  } else {
+    if (min < 1 | max > 5) {
+      warning("range in SCPF data is outside expected range given base_zero = FALSE (expected range: 1-5). Scoring may be incorrect")
+    } 
+  }
+  
+  # re-scale data to base 0
   scpf_data_edit <- scpf_data
 
   if (isFALSE(base_zero)){
