@@ -5,7 +5,7 @@
 #' To use this function, the data must be prepared according to the following criteria:
 #' 1) The data must include all individual questionnaire items
 #' 2) The  columns/variables must match the following naming convention: 'cfq#' or 'cfq_#' where # is the question number (1-31). Question 13 be skipped for subscale - Perceived Child Weight due to age range.
-#' 3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE)
+#' 3) All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) where:
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
@@ -75,6 +75,11 @@ score_cfq <- function(cfq_data, base_zero = TRUE, restriction_split = FALSE, id,
     }
   }
   
+  # check base_zero is logical
+  if (!is.logical(base_zero)) {
+    stop("base_zero arg must be logical (TRUE/FALSE)")
+  }
+  
   #### 2. Set Up Data #####
   
   # set up database for results
@@ -100,7 +105,21 @@ score_cfq <- function(cfq_data, base_zero = TRUE, restriction_split = FALSE, id,
   # remove underscore in cfq_items
   cfq_items <- gsub("cfq_", "cfq", cfq_items)
   
-  # re-scale data
+  # check range of data and print warnings
+  min <- min(cfq_data[c(cfq_data)], na.rm = TRUE)
+  max <- max(cfq_data[c(cfq_data)], na.rm = TRUE)
+  
+  if (isTRUE(base_zero)){
+    if (min < 0 | max > 4) {
+      warning("range in CFQ data is outside expected range given base_zero = TRUE (expected range: 0-4). Scoring may be incorrect")
+    } 
+  } else {
+    if (min < 1 | max > 5) {
+      warning("range in CFQ data is outside expected range given base_zero = FALSE (expected range: 1-5). Scoring may be incorrect")
+    } 
+  }
+  
+  # re-scale data to base 1
   cfq_data_edit <- cfq_data
   
   if (isTRUE(base_zero)){
