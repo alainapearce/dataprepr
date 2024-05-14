@@ -22,7 +22,7 @@ A dataset with subscale scores for the Perceived Stress Scale
 This function scores the 10-item Perceived Stress Scale and provides a total PSS score and subscale scores for: Perceived Helplessness and Perceived Self-efficacy
 }
 \details{
-#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+For data to be scored correctly, the data must be prepared according to the following criteria: \cr
 \itemize{
  \item{The data must include all individual questionnaire items}
  \item{The columns/variables must match the following naming convention: 'pss#' or 'pss_#' where # is the question number (1-10)}
