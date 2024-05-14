@@ -77,6 +77,20 @@ score_efcr <- function(efcr_data, base_zero = TRUE, id, extra_scale_cols = c()) 
     # remove underscore in efcr_items
     efcr_items <- gsub("efcr_", "efcr", efcr_items)
     
+    # check range of data and print warnings
+    min <- min(efcr_data[c(efcr_data)], na.rm = TRUE)
+    max <- max(efcr_data[c(efcr_data)], na.rm = TRUE)
+    
+    if (isTRUE(base_zero)){
+      if (min < 0 | max > 4) {
+        warning("range in ECFR data is outside expected range given base_zero = TRUE (expected range: 0-4). Scoring may be incorrect")
+      } 
+    } else {
+      if (min < 1 | max > 5) {
+        warning("range in ECFR data is outside expected range given base_zero = FALSE (expected range: 1-5). Scoring may be incorrect")
+      } 
+    }
+    
     # re-scale data
     efcr_data_edit <- efcr_data
     
