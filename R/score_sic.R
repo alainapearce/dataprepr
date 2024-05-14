@@ -2,11 +2,18 @@
 #'
 #' This function scores the Stress in Children Questionnaire and provides subscale scores for the following behaviors: Well Being, Distress, Social Support, and the Global Mean Score.
 #'
-#' To use this function, the data must be prepared according to the following criteria:
-#' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'sic#' or 'sic_#' where # is the question number (1-21)
-#' 3) If base_zero = FALSE, all questions must have the numeric value for the choice: 1 - Never, 2 - Sometimes, 3 - Often, 4 - Very Often; If base_zero = TRUE, all questions must have the numeric value for the choice: 0 - Never, 1 - Sometimes, 2 - Often, 3 - Very Often
-#'
+#'#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+#' \itemize{
+#'  \item{The data must include all individual questionnaire items}
+#'  \item{The  columns/variables must match the following naming convention: 'sic#' or 'sic_#' where # is the question number (1-21)}
+#'  \item{All questionnaire responses must be a numeric value ranging from 0-3 (base_zero = TRUE) or 1-4 (base_zero = FALSE) where: }
+#'  \itemize{
+#'     \item{For base_zero = TRUE: 0 = Never; 1 = Sometimes; 2 = Often; 3 = Very Often}
+#'     \item{For base_zero = FALSE: 1 = Never; 2 = Sometimes; 3 = Often; 4 = Very Often}
+#'   }
+#'  \item{Missing values must be coded as NA}
+#' }
+#' \cr
 #' Note, as long as variable names match those listed, the dataset can include other variables. Up to 2 missing responses are allowed
 #'
 #' @references
@@ -66,7 +73,7 @@ score_sic <- function(sic_data, base_zero = TRUE, id, extra_scale_cols = c()) {
         names(sic_score_dat)[1] <- id
     }
 
-    # assign bes scale items to bes_items, excluding columns in extra_scale_cols
+    # assign sic scale items to sic_items, excluding columns in extra_scale_cols
     sic_items <- grep("^sic", names(sic_data), value = TRUE) %>% setdiff(extra_scale_cols)
     
     # remove underscore in column names for sic_items
@@ -74,6 +81,20 @@ score_sic <- function(sic_data, base_zero = TRUE, id, extra_scale_cols = c()) {
     
     # remove underscore in sic_items
     sic_items <- gsub("sic_", "sic", sic_items)
+    
+    # check range of data and print warnings
+    min <- min(sic_data[c(sic_items)], na.rm = TRUE)
+    max <- max(sic_data[c(sic_items)], na.rm = TRUE)
+    
+    if (isTRUE(base_zero)){
+      if (min < 0 | max > 3) {
+        warning("range in SIC data is outside expected range given base_zero = TRUE (expected range: 0-3). Scoring may be incorrect")
+      } 
+    } else {
+      if (min < 1 | max > 4) {
+        warning("range in SIC data is outside expected range given base_zero = FALSE (expected range: 1-4). Scoring may be incorrect")
+      } 
+    }
     
     # re-scale data to use base 1
     sic_data_edit <- sic_data

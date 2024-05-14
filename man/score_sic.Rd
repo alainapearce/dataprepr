@@ -22,11 +22,18 @@ A dataset with subscale scores for the Stress in Children Questionnaire
 This function scores the Stress in Children Questionnaire and provides subscale scores for the following behaviors: Well Being, Distress, Social Support, and the Global Mean Score.
 }
 \details{
-To use this function, the data must be prepared according to the following criteria:
-1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'sic#' or 'sic_#' where # is the question number (1-21)
-3) If base_zero = FALSE, all questions must have the numeric value for the choice: 1 - Never, 2 - Sometimes, 3 - Often, 4 - Very Often; If base_zero = TRUE, all questions must have the numeric value for the choice: 0 - Never, 1 - Sometimes, 2 - Often, 3 - Very Often
-
+#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+\itemize{
+ \item{The data must include all individual questionnaire items}
+ \item{The  columns/variables must match the following naming convention: 'sic#' or 'sic_#' where # is the question number (1-21)}
+ \item{All questionnaire responses must be a numeric value ranging from 0-3 (base_zero = TRUE) or 1-4 (base_zero = FALSE) where: }
+ \itemize{
+    \item{For base_zero = TRUE: 0 = Never; 1 = Sometimes; 2 = Often; 3 = Very Often}
+    \item{For base_zero = FALSE: 1 = Never; 2 = Sometimes; 3 = Often; 4 = Very Often}
+  }
+ \item{Missing values must be coded as NA}
+}
+\cr
 Note, as long as variable names match those listed, the dataset can include other variables. Up to 2 missing responses are allowed
 }
 \examples{
