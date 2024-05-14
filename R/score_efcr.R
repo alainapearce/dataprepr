@@ -81,8 +81,8 @@ score_efcr <- function(efcr_data, base_zero = TRUE, id, extra_scale_cols = c()) 
     efcr_items <- gsub("efcr_", "efcr", efcr_items)
     
     # check range of data and print warnings
-    min <- min(efcr_data[c(efcr_data)], na.rm = TRUE)
-    max <- max(efcr_data[c(efcr_data)], na.rm = TRUE)
+    min <- min(efcr_data[c(efcr_items)], na.rm = TRUE)
+    max <- max(efcr_data[c(efcr_items)], na.rm = TRUE)
     
     if (isTRUE(base_zero)){
       if (min < 0 | max > 4) {
