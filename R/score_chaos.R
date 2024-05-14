@@ -84,6 +84,20 @@ score_chaos <- function(chaos_data, base_zero = FALSE, id, extra_scale_cols = c(
   # remove underscore in chaos_items
   chaos_items <- gsub("chaos_", "chaos", chaos_items)
   
+  # check range of data and print warnings
+  min <- min(chaos_data[c(chaos_items)], na.rm = TRUE)
+  max <- max(chaos_data[c(chaos_items)], na.rm = TRUE)
+  
+  if (isTRUE(base_zero)){
+    if (min < 0 | max > 3) {
+      warning("range in CHAOS data is outside expected range given base_zero = TRUE (expected range: 0-3). Scoring may be incorrect")
+    } 
+  } else {
+    if (min < 1 | max > 4) {
+      warning("range in CHAOS data is outside expected range given base_zero = FALSE (expected range: 1-4). Scoring may be incorrect")
+    } 
+  }
+  
   # re-scale data
   chaos_data_edit <- chaos_data
   
