@@ -24,7 +24,7 @@ This function scores the week-long sleep log used for study BRAKE during the wee
 \details{
 To use this function, the data must be prepared according to the following criteria:
 1) The data must include all individual questionnaire items
-2) The columns/variables must match the following naming convention: 'var_day' where var is the variable measured (e.g., bedtime, date, etc) and day is the abbreviation for day of the week
+2) The columns/variables must match the following naming convention: 'var_day' where var is the variable measured (e.g., bedtime, date, etc) and day is the abbreviation for day of the week (mon, tu, wed, th, fri, sat, sun)
 
 Note, as long as variable names match those listed in this script, the dataset can include other variables
 }
