@@ -22,11 +22,19 @@ A dataset with subscale scores for the Perceived Stress Scale
 This function scores the 10-item Perceived Stress Scale and provides a total PSS score and subscale scores for: Perceived Helplessness and Perceived Self-efficacy
 }
 \details{
-To use this function, the data must be prepared according to the following criteria:
-1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'pss#' or 'pss_#' where # is the question number (1-10)
-3) Questions 1-10 must have the numeric value for the choices: 0 - Never, 1 - Almost, 2 - Sometimes, 3 - Fairly Often, 4 - Very Often
-
+#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+\itemize{
+ \item{The data must include all individual questionnaire items}
+ \item{The columns/variables must match the following naming convention: 'pss#' or 'pss_#' where # is the question number (1-10)}
+ \item{All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) where: }
+ \itemize{
+    \item{For base_zero = TRUE: 0 = Never; 1 = Almost Never; 2 = Sometimes; 3 = Fairly Often; 4 = Very Often}
+    \item{For base_zero = FALSE: 1 = Never; 2 = Almost Never; 3 = Sometimes; 4 = Fairly Often; 5 = Very Often}
+  }
+ \item{Missing values must be coded as NA}
+ \item{Values must not be reversed scored. This script will apply reverse scoring so all levels must be true to the scale described above}
+}
+\cr
 Note, as long as variable names match those listed, the dataset can include other variables
 }
 \examples{
