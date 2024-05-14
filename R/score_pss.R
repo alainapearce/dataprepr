@@ -2,7 +2,7 @@
 #'
 #' This function scores the 10-item Perceived Stress Scale and provides a total PSS score and subscale scores for: Perceived Helplessness and Perceived Self-efficacy
 #'
-#'#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
 #' \itemize{
 #'  \item{The data must include all individual questionnaire items}
 #'  \item{The columns/variables must match the following naming convention: 'pss#' or 'pss_#' where # is the question number (1-10)}
@@ -117,11 +117,11 @@ score_pss <- function(pss_data, base_zero = TRUE, id, extra_scale_cols = c()) {
     var_name <- reverse_qs[var]
     reverse_name <- paste0(var_name, "_rev")
     
-    pss_data_edit[[reverse_name]] <- ifelse(is.na(pss_data_edit[[var_name]]), NA, 
-                                             ifelse(pss_data_edit[[var_name]] == 0, 4, 
+    pss_data_edit[[reverse_name]] <- ifelse(pss_data_edit[[var_name]] == 0, 4, 
                                                     ifelse(pss_data_edit[[var_name]] == 1, 3, 
                                                            ifelse(pss_data_edit[[var_name]] == 2, 2,
-                                                                  ifelse(pss_data_edit[[var_name]] == 3, 1, 0)))))
+                                                                  ifelse(pss_data_edit[[var_name]] == 3, 1, 
+                                                                         ifelse(pss_data_edit[[var_name]] == 4, 0, NA)))))
   }
   
   ## Total Score
