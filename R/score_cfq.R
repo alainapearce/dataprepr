@@ -113,8 +113,8 @@ score_cfq <- function(cfq_data, base_zero = TRUE, restriction_split = FALSE, id,
   cfq_items <- gsub("cfq_", "cfq", cfq_items)
   
   # check range of data and print warnings
-  min <- min(cfq_data[c(cfq_data)], na.rm = TRUE)
-  max <- max(cfq_data[c(cfq_data)], na.rm = TRUE)
+  min <- min(cfq_data[c(cfq_items)], na.rm = TRUE)
+  max <- max(cfq_data[c(cfq_items)], na.rm = TRUE)
   
   if (isTRUE(base_zero)){
     if (min < 0 | max > 4) {
