@@ -4,15 +4,18 @@
 #' 
 #' Recent analyses by Manzano et al., (2021) indicate a better-fitting 3 factor solution for school-age children, therefore, the following subscales are also reported: reward-based eating, picky eating, and emotional eating
 #'
-#' To use this function, the data must be prepared according to the following criteria: \cr
-#' \cr
-#' 1) The data must include all individual questionnaire items \cr
-#' \cr
-#' 2) The  columns/variables must match the following naming convention: 'cebq#' or 'cebq_#' where # is the question number (1-35) \cr
-#' \cr
-#' 3) All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) \cr
-#' \cr
-#' 4) This script will apply reverse scoring so all levels must be true to the scale described above \cr
+#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+#' \itemize{
+#'  \item{The data must include all individual questionnaire items}
+#'  \item{The columns/variables must match the following naming convention: 'cebq#' or 'cebq_#' where # is the question number (1-35)}
+#'  \item{All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) where: }
+#'  \itemize{
+#'     \item{For base_zero = TRUE: 0 = Never; 1 = Rarely; 2 = Sometimes; 3 = Often; 4 = Always}
+#'     \item{For base_zero = FALSE: 1 = Never; 2 = Rarely; 3 = Sometimes; 4 = Often; 5 = Always}
+#'   }
+#'  \item{Missing values must be coded as NA}
+#'  \item{Values must not be reversed scored. This script will apply reverse scoring so all levels must be true to the scale described above}
+#' }
 #' \cr
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
@@ -23,18 +26,22 @@
 #' Alternative 3-factor scoring:
 #' Manzano MA, Strong DR, Kang Sim DE, Rhee KE, Boutelle KN. Psychometric properties of the Child Eating Behavior Questionnaire (CEBQ) in school age children with overweight and obesity: A proposed three‐factor structure. Pediatric Obesity. 2021;16(10):e12795. doi:10.1111/ijpo.12795 (\href{https://pubmed.ncbi.nlm.nih.gov/33945226/}{PubMed})'
 #'
-#' @param cebq_data a data.frame all items for the Children's Eating Behavior Questionnaire following the naming conventions described above
+#' @param cebq_data a data.frame all items for the Children's Eating Behavior Questionnaire following the naming conventions described in Details
 #' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'cebq' but are not scale items. Any columns in cebq_data that begin with 'cebq' but are not scale items must be included here. Default is empty vector.
 #'
-#' @return A dataset with subscale scores for the Children's Eating Behavior Questionnaire
+#' @return If 'id' argument is used, returns a list with 2 dataframes: (1) bids_phenotype (contains input cebq_data [values identical to input, underscores removed from cebq items col names, if they existed] and cebq subscale scores) and (2) score_dat (contains cebq subscale scores only). If 'id' argument is not used, returns a list with score_dat dataframe only.
+#' @export
 #' @examples
 #'
-#' # scoring for the CEBQ with IDs
-#' cebq_score_data <- score_cebq(cebq_data, base_zero, id = 'ID')
+#' # scoring for the CEBQ with IDs, when values range from 0-4
+#' data(cebq_base0) # load example data included with dataprepr
+#' cebq_score_data <- score_cebq(cebq_data = cebq_base0, base_zero = TRUE, id = 'ID')
 #' 
+#' # scoring for the CEBQ with IDs, when values range from 1-5
+#' data(cebq_base1) # load example data included with dataprepr
+#' cebq_score_data <- score_cebq(cebq_data = cebq_base1, base_zero = FALSE, id = 'ID')
 #' 
-#' @export
 
 score_cebq <- function(cebq_data, base_zero = TRUE, id, extra_scale_cols = c()) {
 

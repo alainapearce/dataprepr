@@ -22,11 +22,19 @@ A dataset with subscale scores for the Child Behavior Questionnaire
 This function scores the Child Behavior Questionnaire and provides subscale scores for the following behaviors: Activity Level, Anger/Frustration, Approach/Positive Anticipation, Attentional Focusing, Discomfort, Falling Reactivity/Soothability, Fear, High Intesity Pleasure, Impulsivity, Inhibitory Control, Low Intensity Pleasure, Perceptual Sensitivity, Sadness, Shyness, Smiling and Laughter. We can also get the Big 3 subcales: Surgency, Negative Affect, and Effortful Control.
 }
 \details{
-To use this function, the data must be prepared according to the following criteria:
-1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'cbq#' or 'cbq_#' where # is the question number (1-94)
-3) All questions must have the numeric value for the choice: 1 - Extremely Untrue, 2 - Quite Untrue, 3 - Sightly Untrue, 4 - Neither True nor False, 5 - Slightly True, 6 - Quite True, 7 - Extremely True, NA - NA
-
+For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+\itemize{
+ \item{The data must include all individual questionnaire items}
+ \item{The columns/variables must match the following naming convention: 'cbq#' or 'cbq_#' where # is the question number (1-94)}
+ \item{All questionnaire responses must be a numeric value ranging from 0-6 (base_zero = TRUE) or 1-7 (base_zero = FALSE) where: }
+ \itemize{
+    \item{For base_zero = TRUE: 0 = Extremely Untrue; 1 = Quite Untrue; 2 = Sightly Untrue; 3 = Neither True nor False; 4 = Slightly True; 5 - Quite True; 6 - Extremely True, NA = does not apply }
+    \item{For base_zero = FALSE: 1 = Extremely Untrue; 2 = Quite Untrue; 3 = Sightly Untrue; 4 = Neither True nor False; 5 = Slightly True; 6 - Quite True; 7 - Extremely True, NA = does not apply }
+  }
+ \item{Missing values must be coded as NA}
+ \item{Values must not be reversed scored. This script will apply reverse scoring so all levels must be true to the scale described above}
+}
+\cr
 Note, as long as variable names match those listed, the dataset can include other variables
 }
 \examples{

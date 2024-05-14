@@ -1,18 +1,26 @@
 #' score_cbq: Scored data from the Child Behavior Questionnaire
 #'
 #' This function scores the Child Behavior Questionnaire and provides subscale scores for the following behaviors: Activity Level, Anger/Frustration, Approach/Positive Anticipation, Attentional Focusing, Discomfort, Falling Reactivity/Soothability, Fear, High Intesity Pleasure, Impulsivity, Inhibitory Control, Low Intensity Pleasure, Perceptual Sensitivity, Sadness, Shyness, Smiling and Laughter. We can also get the Big 3 subcales: Surgency, Negative Affect, and Effortful Control.
-#'
-#' To use this function, the data must be prepared according to the following criteria:
-#' 1) The data must include all individual questionnaire items
-#' 2) The  columns/variables must match the following naming convention: 'cbq#' or 'cbq_#' where # is the question number (1-94)
-#' 3) All questions must have the numeric value for the choice: 1 - Extremely Untrue, 2 - Quite Untrue, 3 - Sightly Untrue, 4 - Neither True nor False, 5 - Slightly True, 6 - Quite True, 7 - Extremely True, NA - NA
-#'
+#' 
+#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+#' \itemize{
+#'  \item{The data must include all individual questionnaire items}
+#'  \item{The columns/variables must match the following naming convention: 'cbq#' or 'cbq_#' where # is the question number (1-94)}
+#'  \item{All questionnaire responses must be a numeric value ranging from 0-6 (base_zero = TRUE) or 1-7 (base_zero = FALSE) where: }
+#'  \itemize{
+#'     \item{For base_zero = TRUE: 0 = Extremely Untrue; 1 = Quite Untrue; 2 = Sightly Untrue; 3 = Neither True nor False; 4 = Slightly True; 5 - Quite True; 6 - Extremely True, NA = does not apply }
+#'     \item{For base_zero = FALSE: 1 = Extremely Untrue; 2 = Quite Untrue; 3 = Sightly Untrue; 4 = Neither True nor False; 5 = Slightly True; 6 - Quite True; 7 - Extremely True, NA = does not apply }
+#'   }
+#'  \item{Missing values must be coded as NA}
+#'  \item{Values must not be reversed scored. This script will apply reverse scoring so all levels must be true to the scale described above}
+#' }
+#' \cr
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
 #' @references
 #' Putnam SP, Rothbart MK. Development of Short and Very Short Forms of the Children’s Behavior Questionnaire. Journal of Personality Assessment. 2006;87(1):102-112. doi:10.1207/s15327752jpa8701_09 (\href{https://pubmed.ncbi.nlm.nih.gov/16856791/}{PubMed})
 #'
-#'Rothbart MΚ, Ahadi SA, Hershey KL. Temperament and Social Behavior in Childhood. Merrill-Palmer Quarterly. 1994;40(1):21-39 (\href{https://www.jstor.org/stable/23087906}{jstore})
+#' Rothbart MΚ, Ahadi SA, Hershey KL. Temperament and Social Behavior in Childhood. Merrill-Palmer Quarterly. 1994;40(1):21-39 (\href{https://www.jstor.org/stable/23087906}{jstore})
 #'
 #' @param cbq_data a data.frame all items for the Child Behavior Questionnaire following the naming conventions described above
 #' @param extra_scale_cols a vector of character strings that begin with 'cbq' but are not scale items. Any columns in cbq_data that begin with 'cbq' but are not scale items must be included here. Default is empty vector.
@@ -75,12 +83,14 @@ score_cbq <- function(cbq_data, base_zero = TRUE, id, extra_scale_cols = c()) {
     # re-scale data
     cbq_data_edit <- cbq_data
     
+    # set "does not apply" values to NA
+    # set 99 to NA
+    cbq_data_edit[cbq_items] <- sapply(cbq_items, function (x) ifelse(cbq_data_edit[[x]] == 99, NA, cbq_data_edit[[x]]), simplify = TRUE)
+    
+    # scale to base 1
     if (isTRUE(base_zero)){
       cbq_data_edit[cbq_items] <- sapply(cbq_items, function(x) cbq_data[[x]] + 1, simplify = TRUE)
     }
-    
-    # set 99 to NA
-    cbq_data_edit[cbq_items] <- sapply(cbq_items, function (x) ifelse(cbq_data_edit[[x]] == 99, NA, cbq_data_edit[[x]]), simplify = TRUE)
     
     # calculate reversed scores
     reverse_qs <- c("cbq3", "cbq11", "cbq16", "cbq18", "cbq19", "cbq21", "cbq25",
