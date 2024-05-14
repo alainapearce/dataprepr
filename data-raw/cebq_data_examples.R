@@ -29,5 +29,5 @@ cebq_base1[, 1] <- cebq_base0[, 1]
 cebq_base1[, 2:36] <- cebq_base0[, 2:36] + 1
 
 #### Save dataframes to package
-usethis::use_data(cebq_base0, overwrite = TRUE)
-usethis::use_data(cebq_base1, overwrite = TRUE)
+usethis::use_data(cebq_base0, overwrite = FALSE)
+usethis::use_data(cebq_base1, overwrite = FALSE)
