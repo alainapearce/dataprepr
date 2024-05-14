@@ -1,18 +1,19 @@
 #' score_chaos: Scored data from the 15-item Confusion, Hubbub, and Order Scale administered with 4-point likert scale 
 #'
 #' This function scores the 15-item Confusion, Hubbub, and Order Scale and provides a total score. Note, this function will only provide accurate scores if a 4-point likert scale was used during data collection.
-#'
-#' To use this function, the data must be prepared according to the following criteria: \cr
-#' \cr
-#' 1) The data must include all individual questionnaire items \cr
-#' \cr
-#' 2) The  columns/variables must match the following naming convention: 'chaos#' or 'chaos_#' where # is the question number (1-15). \cr
-#' \cr
-#' 3) Item values must adhere to 1 of the following options: \cr
+#' 
+#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
 #' \itemize{
-#'  \item a) If base_zero = TRUE, questions must have the numeric value for the choices: 0 - Very much like your own home, 1 - Somewhat like your own home, 2 - A little bit like your own home, 3 - Not at all like your own home \cr
-#'  \item b) If base_zero = FALSE, questions must have the numeric value for the choices: 1 - Very much like your own home, 2 - Somewhat like your own home, 3 - A little bit like your own home, 4 - Not at all like your own home \cr
-#' } 
+#'  \item{The data must include all individual questionnaire items}
+#'  \item{The  columns/variables must match the following naming convention: 'chaos#' or 'chaos_#' where # is the question number (1-15)}
+#'  \item{All questionnaire responses must be a numeric value ranging from 0-3 (base_zero = TRUE) or 1-4 (base_zero = FALSE) where: }
+#'  \itemize{
+#'     \item{For base_zero = TRUE: 0 = Very much like your own home; 1 = Somewhat like your own home; 2 = A little bit like your own home; 3 = Not at all like your own home}
+#'     \item{For base_zero = FALSE: 1 = Very much like your own home; 2 = Somewhat like your own home; 3 = A little bit like your own home; 4 = Not at all like your own home}
+#'   }
+#'  \item{Missing values must be coded as NA}
+#'  \item{Values must not be reversed scored. This script will apply reverse scoring so all levels must be true to the scale described above}
+#' }
 #' \cr
 #' Note, as long as variable names match those listed, the dataset can include other variables. See extra_scale_cols argument
 #'
