@@ -83,6 +83,20 @@ score_debq <- function(debq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
   # remove underscore in debq_items
   debq_items <- gsub("debq_", "debq", debq_items)
   
+  # check range of data and print warnings
+  min <- min(debq_data[c(debq_data)], na.rm = TRUE)
+  max <- max(debq_data[c(debq_data)], na.rm = TRUE)
+  
+  if (isTRUE(base_zero)){
+    if (min < 0 | max > 4) {
+      warning("range in DEBQ data is outside expected range given base_zero = TRUE (expected range: 0-4). Scoring may be incorrect")
+    } 
+  } else {
+    if (min < 1 | max > 5) {
+      warning("range in DEBQ data is outside expected range given base_zero = FALSE (expected range: 1-5). Scoring may be incorrect")
+    } 
+  }
+  
   # re-scale data
   debq_data_edit <- debq_data
   
