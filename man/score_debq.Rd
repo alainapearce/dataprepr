@@ -2,7 +2,7 @@
 % Please edit documentation in R/score_debq.R
 \name{score_debq}
 \alias{score_debq}
-\title{score_debq: INCOMPLETE FUNCTION. Scored data from the Dutch Eating Behavior Questionnaire}
+\title{score_debq: Scored data from the Dutch Eating Behavior Questionnaire}
 \usage{
 score_debq(debq_data, base_zero = TRUE, id, extra_scale_cols = c())
 }
@@ -19,14 +19,20 @@ score_debq(debq_data, base_zero = TRUE, id, extra_scale_cols = c())
 A dataset with subscale scores for the Dutch Eating Behavior Questionnaire
 }
 \description{
-This function scores the Dutch Eating Behavior Questionnaire and provides subscale scores for the following behaviors:
+This function scores the Dutch Eating Behavior Questionnaire and provides subscale scores for: Emotional Eating, External Eating, Restrained Eating
 }
 \details{
-To use this function, the data must be prepared according to the following criteria:
-1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'debq#' or 'debq_#' where # is the question number (1-24).
-3) Questions must have the numeric value for the choices: 1=Never, 2=Rarely/Seldom, 3=Sometimes, 4=Often, 5=Very Often if base_zero = FALSE or 0=Never, 1=Rarely/Seldom, 2=Sometimes, 3=Often, 4=Very Often if base_zero = TRUE
-
+For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+\itemize{
+ \item{The data must include all individual questionnaire items}
+ \item{The columns/variables must match the following naming convention: 'debq#' or 'debq_#' where # is the question number (1-24).}
+ \item{All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) where: }
+ \itemize{
+    \item{For base_zero = TRUE: 0 = Never; 1 = Rarely/Seldom; 2 = Sometimes; 3 = Often; 4 = Very Often}
+    \item{For base_zero = FALSE: 1 = Never; 2 = Rarely/Seldom; 3 = Sometimes; 4 = Often; 5 = Very Often}
+  }
+ \item{Missing values must be coded as NA}
+}
 Note, as long as variable names match those listed, the dataset can include other variables
 
 Unlike the original Dutch version of the DEBQ (van Strien et al., 1986), the English version (Wardle, 1987) does not require reverse scoring of item 21. This function scores based on Wardle, 1987

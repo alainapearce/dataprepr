@@ -16,19 +16,23 @@ score_efcr(efcr_data, base_zero = TRUE, id, extra_scale_cols = c())
 \item{extra_scale_cols}{a vector of character strings that begin with 'efcr' but are not scale items. Any columns in efcr_data that begin with 'efcr' but are not scale items must be included here. Default is empty vector.}
 }
 \value{
-A dataset with subscale scores for the External Food Cue Responsiveness Scale
+If 'id' argument is used, returns a list with 2 dataframes: (1) bids_phenotype (contains input efcr_data [values identical to input, underscores removed from efcr items col names, if they existed] and External Food Cue Responsiveness Scale score) and (2) score_dat (contains efcr subscale scores only). If 'id' argument is not used, returns a list with score_dat dataframe only.
 }
 \description{
 This function scores the External Food Cue Responsiveness Scale
 }
 \details{
-To use this function, the data must be prepared according to the following criteria: \cr
-\cr
-1) The data must include all individual questionnaire items \cr
-\cr
-2) The  columns/variables must match the following naming convention: 'efcr#' or 'efcr_#' where # is the question number (1-9) \cr
-\cr
-3) All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) \cr
+For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+\itemize{
+ \item{The data must include all individual questionnaire items}
+ \item{The columns/variables must match the following naming convention: 'efcr#' or 'efcr_#' where # is the question number (1-9)}
+ \item{All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) where: }
+ \itemize{
+    \item{For base_zero = TRUE: 0 = Never; 1 = Rarely; 2 = Sometimes; 3 = Often; 4 = Always}
+    \item{For base_zero = FALSE: 1 = Never; 2 = Rarely; 3 = Sometimes; 4 = Often; 5 = Always}
+  }
+ \item{Missing values must be coded as NA}
+}
 \cr
 Note, as long as variable names match those listed, the dataset can include other variables
 }
