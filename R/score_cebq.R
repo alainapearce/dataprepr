@@ -88,17 +88,17 @@ score_cebq <- function(cebq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
     
     if (isTRUE(base_zero)){
       if (min < 0) {
-        print("warning: minimum value in CEBQ data below expected min value given base_zero = TRUE")
+        warning("minimum value in CEBQ data below expected min value given base_zero = TRUE. Scoring may be incorrect")
       } 
       if (max > 4) {
-        print("warning: maximum value in CEBQ data exceeds expected max value for base_zero = TRUE")
+        warning("maximum value in CEBQ data exceeds expected max value for base_zero = TRUE. Scoring may be incorrect")
       } 
     } else {
       if (min < 1) {
-        print("warning: minimum value in CEBQ data below min expected value given base_zero = FALSE")
+        warning("minimum value in CEBQ data below min expected value given base_zero = FALSE. Scoring may be incorrect")
       } 
       if (max > 5) {
-        print("warning: maximum value in CEBQ data exceeds expected value for base_zero = FALSE")
+        warning("maximum value in CEBQ data exceeds expected value for base_zero = FALS. Scoring may be incorrect")
       } 
     }
 
