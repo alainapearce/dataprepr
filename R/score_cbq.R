@@ -24,15 +24,15 @@
 #'
 #' @param cbq_data a data.frame all items for the Child Behavior Questionnaire following the naming conventions described above
 #' @param extra_scale_cols a vector of character strings that begin with 'cbq' but are not scale items. Any columns in cbq_data that begin with 'cbq' but are not scale items must be included here. Default is empty vector.
-#' @param does_not_apply_value value used to code a cbq response of "does not apply"
+#' @param does_not_apply_value value used to code a cbq response of "does not apply". Default is NA
 #' @inheritParams score_bes
 #' @return A dataset with subscale scores for the Child Behavior Questionnaire
 #' @examples
 #'
-#' # scoring for the cbq with IDs, when cbq values range from 0-6, and "not_applicable" responses are scored as 8
-#' cbq_score_data <- score_cbq(cbq_data, base_zero = TRUE, id = 'ID', does_not_apply_value = 8)
+#' # scoring for the cbq with IDs, when cbq values range from 0-6, and "does not apply" responses are scored as 7
+#' cbq_score_data <- score_cbq(cbq_data, base_zero = TRUE, id = 'ID', does_not_apply_value = 7)
 #' 
-#' # scoring for the cbq with IDs, when cbq values range from 1-7, and "not_applicable" responses are scored as NA
+#' # scoring for the cbq with IDs, when cbq values range from 1-7, and "does not apply" responses are scored as NA
 #' cbq_score_data <- score_cbq(cbq_data, base_zero = FALSE, id = 'ID', does_not_apply_value = NA)
 #' 
 #' \dontrun{
@@ -41,7 +41,7 @@
 #'
 #' @export
 
-score_cbq <- function(cbq_data, base_zero = TRUE, id, does_not_apply_value, extra_scale_cols = c()) {
+score_cbq <- function(cbq_data, base_zero = TRUE, id, does_not_apply_value = NA, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -87,20 +87,22 @@ score_cbq <- function(cbq_data, base_zero = TRUE, id, does_not_apply_value, extr
     # make copy of data
     cbq_data_edit <- cbq_data
     
-    # set "does not apply" values to NA
-    cbq_data_edit[cbq_items] <- sapply(cbq_items, function (x) ifelse(cbq_data_edit[[x]] == does_not_apply_value, NA, cbq_data_edit[[x]]), simplify = TRUE)
-    
+    # set "does not apply" values to NA (unless does_not_apply_value is NA)
+    if (!is.na(does_not_apply_value)) {
+      cbq_data_edit[cbq_items] <- sapply(cbq_items, function (x) ifelse(cbq_data_edit[[x]] == does_not_apply_value, NA, cbq_data_edit[[x]]), simplify = TRUE)
+    }
+
     # check range of data and print warnings
     min <- min(cbq_data_edit[c(cbq_items)], na.rm = TRUE)
     max <- max(cbq_data_edit[c(cbq_items)], na.rm = TRUE)
     
     if (isTRUE(base_zero)){
       if (min < 0 | max > 6) {
-        warning("range in CBQ data is outside expected range given base_zero = TRUE (expected range: 0-6). Scoring may be incorrect")
+        warning("range in CBQ data (excluding does_not_apply_value) is outside expected range given base_zero = TRUE (expected range: 0-6). Scoring may be incorrect")
       } 
     } else {
       if (min < 1 | max > 7) {
-        warning("range in CBQ data is outside expected range given base_zero = FALSE (expected range: 1-7). Scoring may be incorrect")
+        warning("range in CBQ data (excluding does_not_apply_value) is outside expected range given base_zero = FALSE (expected range: 1-7). Scoring may be incorrect")
       } 
     }
     
