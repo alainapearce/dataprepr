@@ -118,7 +118,8 @@ score_bisbas <- function(bisbas_data, base_zero = TRUE, id, extra_scale_cols = c
     var_name <- reverse_qs[var]
     reverse_name <- paste0(var_name, "_rev")
     
-    bisbas_data_edit[[reverse_name]] <- ifelse(is.na(bisbas_data_edit[[var_name]]), NA, ifelse(bisbas_data_edit[[var_name]] == 1, 4, ifelse(bisbas_data_edit[[var_name]] == 2, 3,  ifelse(bisbas_data_edit[[var_name]] == 3, 2, 1))))
+    bisbas_data_edit[[reverse_name]] <- ifelse(bisbas_data_edit[[var_name]] == 1, 4, ifelse(bisbas_data_edit[[var_name]] == 2, 3,  ifelse(bisbas_data_edit[[var_name]] == 3, 2,  ifelse(bisbas_data_edit[[var_name]] == 4, 1, NA))))
+    
   }
   
   ## Score Subscales
