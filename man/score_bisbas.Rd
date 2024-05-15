@@ -22,11 +22,19 @@ A dataset with subscale scores for the Behavioral Inhibition Scale/Behavioral Ac
 This function scores the Behavioral Inhibition System (BIS)/Behavioral Activation System (BAS) and provides subscale scores for the following behaviors: BIS, BAS Fun Seeking, BAS Drive, and BAS Reward Responsiveness. Note, this script is used to score the 24-item version, which contains 4 filler questions that are not used for scoring. While the scored questions match the 20-item version exactly, the question numbers differ so this script cannot be sued to score the 20-item version at this time. If this functionality is desired, contact the kellertools package developers.
 }
 \details{
-To use this function, the data must be prepared according to the following criteria:
-1) The data must include all individual questionnaire items
-2) The  columns/variables must match the following naming convention: 'bisbas#' or 'bisbas_#' where # is the question number (1-24).
-3) Questions must have the numeric value for the choices: 1 - Very True for Me, 2 - Somewhat True for Me, 3 - Somewhat False for Me, 4 - Very False for Me
-
+#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+\itemize{
+ \item{The data must include all individual questionnaire items}
+ \item{The columns/variables must match the following naming convention: 'bisbas#' or 'bisbas_#' where # is the question number (1-24)}
+ \item{All questionnaire responses must be a numeric value ranging from 0-3 (base_zero = TRUE) or 1-4 (base_zero = FALSE) where: }
+ \itemize{
+    \item{For base_zero = TRUE: 0 = Very True for Me; 1 = Somewhat True for Me; 2 = Somewhat False for Me; 3 = Very False for Me}
+    \item{For base_zero = FALSE: 1 = Very True for Me; 2 = Somewhat True for Me; 3 = Somewhat False for Me; 4 = Very False for Me}
+  }
+ \item{Missing values must be coded as NA}
+ \item{Values must not be reversed scored. This script will apply reverse scoring so all levels must be true to the scale described above}
+}
+\cr
 Note, as long as variable names match those listed, the dataset can include other variables
 }
 \examples{
