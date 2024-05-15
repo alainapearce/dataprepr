@@ -149,7 +149,7 @@ score_cebq <- function(cebq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
     cebq_score_dat[['cebq_se']] <- rowMeans(cebq_data_edit[SE_vars])
 
     # Emotional Under Eating
-    EUE_vars <- c('cebq9', 'cebq11', 'cebq23', 'cebq35')
+    EUE_vars <- c('cebq9', 'cebq11', 'cebq23', 'cebq25')
     cebq_score_dat[['cebq_eue']] <- rowMeans(cebq_data_edit[EUE_vars])
 
     # Food Fussiness
