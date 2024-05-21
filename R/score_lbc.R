@@ -12,7 +12,7 @@
 #'     \item{For base_zero = FALSE: 1 = Not at all; 4 = Somewhat; 7 = Very much}
 #'   }
 #'  \item{Missing values must be coded as NA}
-#'  \item{Items that assess confidence (i.e., "How confident are you in dealing with it?") must be included in extra_scale_cols. These items are not used in scoring.}
+#'  \item{Items that assess confidence (i.e., "How confident are you in dealing with it?") should be included in extra_scale_cols, as these items are not used in scoring. Failure to add these to extra_scale_cols will not impact scoring, but will lead to a warning regarding the range of values.}
 #' }
 #' \cr
 #' Note, as long as variable names match those listed, the dataset can include other variables
@@ -81,6 +81,20 @@ score_lbc <- function(lbc_data, base_zero = TRUE, id, extra_scale_cols = c()) {
     
     # remove underscore in lbc_items
     lbc_items <- gsub("lbc_", "lbc", lbc_items)
+    
+    # check range of data and print warnings
+    min <- min(lbc_data[c(lbc_items)], na.rm = TRUE)
+    max <- max(lbc_data[c(lbc_items)], na.rm = TRUE)
+    
+    if (isTRUE(base_zero)){
+      if (min < 0 | max > 6) {
+        warning("range in LBC data is outside expected range given base_zero = TRUE (expected range: 0-6). Scoring may be incorrect")
+      } 
+    } else {
+      if (min < 1 | max > 7) {
+        warning("range in LBC data is outside expected range given base_zero = FALSE (expected range: 1-7). Scoring may be incorrect")
+      } 
+    }
     
     # re-scale data
     lbc_data_edit <- lbc_data

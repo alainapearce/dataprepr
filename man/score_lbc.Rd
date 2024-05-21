@@ -32,7 +32,7 @@ This function scores the Lifestyle Behavior Checklist and provides subscale scor
     \item{For base_zero = FALSE: 1 = Not at all; 4 = Somewhat; 7 = Very much}
   }
  \item{Missing values must be coded as NA}
- \item{Items that assess confidence (i.e., "How confident are you in dealing with it?") must be included in extra_scale_cols. These items are not used in scoring.}
+ \item{Items that assess confidence (i.e., "How confident are you in dealing with it?") should be included in extra_scale_cols, as these items are not used in scoring. Failure to add these to extra_scale_cols will not impact scoring, but will lead to a warning regarding the range of values.}
 }
 \cr
 Note, as long as variable names match those listed, the dataset can include other variables
