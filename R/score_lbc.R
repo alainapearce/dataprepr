@@ -2,9 +2,9 @@
 #'
 #' This function scores the Lifestyle Behavior Checklist and provides subscale scores for the following behaviors: Food-Related Misbehavior, Overeating, Emotions Related to Overweight, and Physical Activity.
 #'
-#'#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
 #' \itemize{
-#'  \item{The data must include all individual questionnaire items}
+#'  \item{The data must include all individual questionnaire items. Items that assess confidence (i.e., "How confident are you in dealing with it?") are not used in scoring and do not have to be included.}
 #'  \item{The columns/variables must match the following naming convention: 'lbc#' or 'lbc_#' where # is the question number (1-25)}
 #'  \item{All questionnaire responses must be a numeric value ranging from 0-6 (base_zero = TRUE) or 1-7 (base_zero = FALSE) where: }
 #'  \itemize{
