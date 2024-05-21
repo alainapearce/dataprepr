@@ -41,11 +41,18 @@ This function scores the Behavioral Rating Inventory of Executive Function-2 and
 \details{
 These data are scored using the brief2_scoretables data available in the dataprepr package to look up age- and sex-normed t-scores and percentiles.
 
-To use this function, the data must be prepared according to the following criteria:
-1) The data must include sex, age in years, and all individual questionnaire items
-2) The questionnaire items must match the following naming convention: 'brief#' or 'brief_#' where # is the question number (1-63)
-3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE)
-
+For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+\itemize{
+ \item{The data must include sex, age in years, and all individual questionnaire items}
+ \item{The questionnaire items must match the following naming convention: 'brief#' or 'brief_#' where # is the question number (1-63)}
+ \item{All questionnaire responses must be a numeric value ranging from 0-2 (base_zero = TRUE) or 1-3 (base_zero = FALSE) where: }
+ \itemize{
+    \item{For base_zero = TRUE: 0 = Never; 1 = Sometimes; 2 = Often}
+    \item{For base_zero = FALSE: 1 = Never; 2 = Sometimes; 3 = Often}
+  }
+ \item{Missing values must be coded as NA}
+}
+\cr
 Note, as long as variable names match those listed, the dataset can include other variables
 }
 \examples{
