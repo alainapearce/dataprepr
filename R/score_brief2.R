@@ -135,6 +135,20 @@ score_brief2 <- function(brief_data, age_var, sex_var, base_zero = TRUE, male = 
     # remove underscore in brief_items
     brief_items <- gsub("brief_", "brief", brief_items)
     
+    # check range of data and print warnings
+    min <- min(brief_data[c(brief_items)], na.rm = TRUE)
+    max <- max(brief_data[c(brief_items)], na.rm = TRUE)
+    
+    if (isTRUE(base_zero)){
+      if (min < 0 | max > 2) {
+        warning("range in BRIEF2 data is outside expected range given base_zero = TRUE (expected range: 0-2). Scoring may be incorrect")
+      } 
+    } else {
+      if (min < 1 | max > 3) {
+        warning("range in BRIEF2 data is outside expected range given base_zero = FALSE (expected range: 1-3). Scoring may be incorrect")
+      } 
+    }
+    
     #make copy of data
     brief_data_edit <- brief_data
     
