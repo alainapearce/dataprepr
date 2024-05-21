@@ -86,6 +86,20 @@ score_bes <- function(bes_data, base_zero = TRUE, pna = NA, id, extra_scale_cols
   # set pna value to NA
   bes_data_edit[bes_items] <- sapply(bes_items, function(x) ifelse(bes_data_edit[[x]] == pna, NA, bes_data_edit[[x]]), simplify = TRUE)
   
+  # check range of data and print warnings
+  min <- min(bes_data_edit[c(bes_items)], na.rm = TRUE)
+  max <- max(bes_data_edit[c(bes_items)], na.rm = TRUE)
+  
+  if (isTRUE(base_zero)){
+    if (max > 3) {
+      warning("max BES value > 3. Expected max with base_zero = TRUE is 3. Scoring may be incorrect")
+    } 
+  } else {
+    if (min < 1) {
+      warning("min BES value < 1. Expected min with base_zero = FALSE is 1. Scoring may be incorrect")
+    } 
+  }
+  
   # re-scale data to base 0
   if (isFALSE(base_zero)){
     bes_data_edit[bes_items] <- sapply(bes_items, function(x) bes_data[[x]] - 1, simplify = TRUE)
