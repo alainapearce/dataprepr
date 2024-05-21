@@ -80,22 +80,18 @@ score_bes <- function(bes_data, base_zero = TRUE, pna = NA, id, extra_scale_cols
   # remove underscore in bes_items
   bes_items <- gsub("bes_", "bes", bes_items)
     
-  # re-scale data
+  # make copy of data
   bes_data_edit <- bes_data
   
+  # set pna value to NA
+  bes_data_edit[bes_items] <- sapply(bes_items, function(x) ifelse(bes_data_edit[[x]] == pna, NA, bes_data_edit[[x]]), simplify = TRUE)
+  
+  # re-scale data to base 0
   if (isFALSE(base_zero)){
     bes_data_edit[bes_items] <- sapply(bes_items, function(x) bes_data[[x]] - 1, simplify = TRUE)
-    
-    # update numeric pna to accomodate rescaling
-    if (is.numeric(pna)){
-      pna <- pna - 1
-    }
   }
   
   # calculate question - specific scoring values
-  
-  # reset pna value to NA
-  bes_data_edit[bes_items] <- sapply(bes_items, function(x) ifelse(bes_data[[x]] == pna, NA, bes_data[[x]]), simplify = TRUE)
   
   # custom scoring by question
   bes_data_edit[['bes1']] <- ifelse(is.na(bes_data_edit[['bes1']]), NA, ifelse(bes_data_edit[['bes1']] < 2, 0, ifelse(bes_data_edit[['bes1']] == 2, 1, 3)))
