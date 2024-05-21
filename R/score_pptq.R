@@ -95,6 +95,57 @@ score_pptq <- function(pptq_data, pptq_scale, base_zero = TRUE, id, extra_scale_
   # remove underscore in pptq_items
   pptq_items <- gsub("pptq_", "pptq", pptq_items)
   
+  # check range of data and print warnings
+  min <- min(pptq_data[c(pptq_items)], na.rm = TRUE)
+  max <- max(pptq_data[c(pptq_items)], na.rm = TRUE)
+  range <- (max - min)
+  
+  if (isTRUE(base_zero)) {
+    if (pptq_scale == 5) {
+      if (min < 0 | max > 4) {
+        warning(
+          "range in PPTQ data is outside expected range given base_zero = TRUE and pptq_scale = 5 (expected range: 0-4). Scoring may be incorrect"
+        )
+      }
+      
+      if (range < 5) {
+        warning(
+          "Range of PPTQ values is < 5. Confirm which pptq_scale (3 or 5) is the correct scale"
+        )
+      }
+      
+    } else {
+      if (min < 0 | max > 2) {
+        warning(
+          "range in PPTQ data is outside expected range given base_zero = TRUE and pptq_scale = 3 (expected range: 0-2). Scoring may be incorrect"
+        )
+      }
+      
+    }
+  } else {
+    if (pptq_scale == 5) {
+      if (min < 1 | max > 5) {
+        warning(
+          "range in PPTQ data is outside expected range given base_zero = TRUE and pptq_scale = 5 (expected range: 1-5). Scoring may be incorrect"
+        )
+      }
+      
+      if (range < 5) {
+        warning(
+          "Range of PPTQ values is < 5. Confirm which pptq_scale (3 or 5) is the correct scale"
+        )
+      }
+      
+    } else {
+      if (min < 1 | max > 3) {
+        warning(
+          "range in PPTQ data is outside expected range given base_zero = TRUE and pptq_scale = 3 (expected range: 1-3). Scoring may be incorrect"
+        )
+      }
+      
+    }
+  }
+  
   # re-scale data
   pptq_data_edit <- pptq_data
   
