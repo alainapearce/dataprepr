@@ -2,13 +2,18 @@
 #'
 #' This function scores the Lifestyle Behavior Checklist and provides subscale scores for the following behaviors: Food-Related Misbehavior, Overeating, Emotions Related to Overweight, and Physical Activity.
 #'
-#' To use this function, the data must be prepared according to the following criteria:
-#' \cr
-#' 1) The data must include all individual questionnaire items \cr
-#' \cr
-#' 2) The  columns/variables must match the following naming convention: 'lbc#' or 'lbc_#' where # is the question number (1-25) \cr
-#' \cr
-#' 3) All questions must have the numeric value for the choice with the base value being either 0 (base_zero = TRUE) or 1 (base_zero = FALSE) \cr
+#'#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+#' \itemize{
+#'  \item{The data must include all individual questionnaire items}
+#'  \item{The columns/variables must match the following naming convention: 'lbc#' or 'lbc_#' where # is the question number (1-25)}
+#'  \item{All questionnaire responses must be a numeric value ranging from 0-6 (base_zero = TRUE) or 1-7 (base_zero = FALSE) where: }
+#'  \itemize{
+#'     \item{For base_zero = TRUE: 0 = Not at all; 3 = Somewhat; 6 = Very much}
+#'     \item{For base_zero = FALSE: 1 = Not at all; 4 = Somewhat; 7 = Very much}
+#'   }
+#'  \item{Missing values must be coded as NA}
+#'  \item{Items that assess confidence (i.e., "How confident are you in dealing with it?") must be included in extra_scale_cols. These items are not used in scoring.}
+#' }
 #' \cr
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
