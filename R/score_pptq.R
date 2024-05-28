@@ -83,9 +83,6 @@ score_pptq <- function(pptq_data, pptq_scale, base_zero = TRUE, id, extra_scale_
     names(pptq_score_dat)[1] <- id
   }
   
-  # remove underscore if in column names
-  names(pptq_data) <- gsub('pptq_', 'pptq', names(pptq_data))
-  
   # assign pptq scale items to pptq_items, excluding columns in extra_scale_cols
   pptq_items <- grep("^pptq", names(pptq_data), value = TRUE) %>% setdiff(extra_scale_cols)
   
