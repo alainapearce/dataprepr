@@ -402,7 +402,7 @@ score_brief2 <- function(brief_data, age_var, sex_var, base_zero = TRUE, male = 
     #### 3. Clean Export/Scored Data #####
     ## merge raw responses with scored data
     if (isTRUE(ID_arg)){
-      brief_phenotype <- merge(brief_data, brief_score_dat, by = 'participant_id')
+      brief_phenotype <- merge(brief_data, brief_score_dat, by = id)
       
       return(list(score_dat = as.data.frame(brief_score_dat),
                   bids_phenotype = as.data.frame(brief_phenotype)))
