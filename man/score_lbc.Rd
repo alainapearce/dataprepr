@@ -19,20 +19,30 @@ score_lbc(lbc_data, base_zero = TRUE, id, extra_scale_cols = c())
 A dataset with subscale scores for the Lifestyle Behavior Checklist
 }
 \description{
-This function scores the Lifestyle Behavior Checklist and provides subscale scores for the following behaviors: Food-Related Misbehavior, Overeating, Emotions Related to Overweight, and Physical Activity.
+This function scores the 25-item or revised 24-item Lifestyle Behavior Checklist and provides scores for: Total Problem, Total Confidence and 4-factor subscales: Food-Related Misbehavior, Overeating, Emotions Related to Overweight, and Physical Activity
 }
 \details{
 For data to be scored correctly, the data must be prepared according to the following criteria: \cr
 \itemize{
- \item{The data must include all individual questionnaire items. Items that assess confidence (i.e., "How confident are you in dealing with it?") are not used in scoring and do not have to be included.}
- \item{The columns/variables must match the following naming convention: 'lbc#' or 'lbc_#' where # is the question number (1-25)}
- \item{All questionnaire responses must be a numeric value ranging from 0-6 (base_zero = TRUE) or 1-7 (base_zero = FALSE) where: }
+ \item{The data must include all individual Problem Scale items (i.e., "To what extent has this behavior been a problem for your child?") and Confidence Scale items (i.e., "How confident are you in dealing with it?").}
+ \item{The columns/variables must match the following naming conventions: }
+ \itemize{
+    \item{For Problem Scale items: 'lbc#' or 'lbc_#' where # is the question number (1-25 or 1-24)}
+    \item{For Confidence Scale items: 'lbc#_conf' or 'lbc_#_conf' where # is the question number (1-25 or 1-24)}
+    \item{Note: The LBC version (25-item or revised 24-item) will be infered based on the number of columns beginning with 'lbc' (excluding extra_scale_cols) }
+  }
+ \item{Problem Scale responses must be a numeric value ranging from 0-6 (base_zero = TRUE) or 1-7 (base_zero = FALSE) where: }
  \itemize{
     \item{For base_zero = TRUE: 0 = Not at all; 3 = Somewhat; 6 = Very much}
     \item{For base_zero = FALSE: 1 = Not at all; 4 = Somewhat; 7 = Very much}
   }
+ \item{Confidence Scale responses must be a numeric value ranging from 0-9 (base_zero = TRUE) or 1-10 (base_zero = FALSE) where: }
+ \itemize{
+    \item{For base_zero = TRUE: 0 = Certain I connot do it; 9 = Certain I can do it}
+    \item{For base_zero = FALSE: 1 = Certain I connot do it; 10 = Certain I can do it}
+  }
  \item{Missing values must be coded as NA}
- \item{Items that assess confidence (i.e., "How confident are you in dealing with it?") should be included in extra_scale_cols, as these items are not used in scoring. Failure to add these to extra_scale_cols will not impact scoring, but will lead to a warning regarding the range of values.}
+ \item{Any columns in lbc_data that begin with 'lbc' but are not scale items must listed in extra_scale_cols}
 }
 \cr
 Note, as long as variable names match those listed, the dataset can include other variables
@@ -47,6 +57,6 @@ lbc_score_data <- score_lbc(lbc_data, id = 'ID')
 \references{
 West F, Sanders MR. The Lifestyle Behaviour Checklist: A measure of weight-related problem behaviour in obese children. International Journal of Pediatric Obesity. 2009;4(4):266-273. doi:10.3109/17477160902811199
 
-Subscales:
+4-factor Subscales (based on the revised 24-item LBC):
 West F, Morawska A, Joughin K. The Lifestyle Behaviour Checklist: evaluation of the factor structure. Child: Care, Health and Development. 2010;36(4):508-515. doi:10.1111/j.1365-2214.2010.01074.x (\href{https://pubmed.ncbi.nlm.nih.gov/20337641/}{PubMed})
 }
