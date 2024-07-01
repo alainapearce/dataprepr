@@ -1,8 +1,8 @@
 #' score_bisbas: Scored data from the Behavioral Inhibition System/Behavioral Activation System
 #'
-#' This function scores the Behavioral Inhibition System (BIS)/Behavioral Activation System (BAS) and provides subscale scores for the following behaviors: BIS, BAS Fun Seeking, BAS Drive, and BAS Reward Responsiveness. Note, this script is used to score the 24-item version, which contains 4 filler questions that are not used for scoring. While the scored questions match the 20-item version exactly, the question numbers differ so this script cannot be sued to score the 20-item version at this time. If this functionality is desired, contact the kellertools package developers.
+#' This function scores the Behavioral Inhibition System (BIS)/Behavioral Activation System (BAS) and provides subscale scores for the following behaviors: BIS, BAS Fun Seeking, BAS Drive, and BAS Reward Responsiveness. Note, this script is used to score the 24-item version, which contains 4 filler questions that are not used for scoring. While the scored questions match the 20-item version exactly, the question numbers differ so this script cannot be sued to score the 20-item version at this time.
 #'
-#'#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
 #' \itemize{
 #'  \item{The data must include all individual questionnaire items}
 #'  \item{The columns/variables must match the following naming convention: 'bisbas#' or 'bisbas_#' where # is the question number (1-24)}
@@ -13,6 +13,9 @@
 #'   }
 #'  \item{Missing values must be coded as NA}
 #'  \item{Values must not be reversed scored. This script will apply reverse scoring so all levels must be true to the scale described above}
+#'  \itemize{
+#'     \item{All items except 2 and 22 will be reverse scored so that higher BIS scores = higher behavioral inhibition and higher BAS scores = higher behavioral approach}
+#'   }
 #' }
 #' \cr
 #' Note, as long as variable names match those listed, the dataset can include other variables
@@ -37,8 +40,6 @@
 #'
 #' \dontrun{
 #' }
-#'
-#' @seealso Raw data from Qualtrics was processed using the following script: \code{\link{util_fbs_parent_v3dat}}
 #'
 #'
 #' @export
@@ -112,7 +113,9 @@ score_bisbas <- function(bisbas_data, base_zero = TRUE, id, extra_scale_cols = c
   }
   
   # calculate reversed scores
-  reverse_qs <- c("bisbas2", "bisbas22")
+
+  # reverse all items except 2 and 22 
+  reverse_qs <- c("bisbas1", "bisbas3", "bisbas4", "bisbas5", "bisbas6", "bisbas7", "bisbas8", "bisbas9", "bisbas10", "bisbas11", "bisbas12", "bisbas13", "bisbas14", "bisbas15", "bisbas16", "bisbas17", "bisbas18", "bisbas19", "bisbas20", "bisbas21", "bisbas23", "bisbas24")
   
   for (var in 1:length(reverse_qs)) {
     var_name <- reverse_qs[var]
@@ -125,19 +128,19 @@ score_bisbas <- function(bisbas_data, base_zero = TRUE, id, extra_scale_cols = c
   ## Score Subscales
   
   # BIS
-  bis_vars <- c("bisbas16", "bisbas24", "bisbas8", "bisbas13", "bisbas2_rev", "bisbas19", "bisbas22_rev")
+  bis_vars <- c("bisbas16_rev", "bisbas24_rev", "bisbas8_rev", "bisbas13_rev", "bisbas2", "bisbas19_rev", "bisbas22")
   bisbas_score_dat[["bis"]] <- rowMeans(bisbas_data_edit[bis_vars])
   
   #  BAS Fun Seeking
-  funseek_vars <- c("bisbas10", "bisbas20", "bisbas5", "bisbas15")
+  funseek_vars <- c("bisbas10_rev", "bisbas20_rev", "bisbas5_rev", "bisbas15_rev")
   bisbas_score_dat[["bas_funseeking"]] <- rowMeans(bisbas_data_edit[funseek_vars])
   
   # BAS Drive
-  drive_vars <- c("bisbas9", "bisbas3", "bisbas12", "bisbas21")
+  drive_vars <- c("bisbas9_rev", "bisbas3_rev", "bisbas12_rev", "bisbas21_rev")
   bisbas_score_dat[["bas_drive"]] <- rowMeans(bisbas_data_edit[drive_vars])
   
   # BAS Reward Responsiveness
-  reward_vars <- c("bisbas7", "bisbas4", "bisbas18", "bisbas23", "bisbas14")
+  reward_vars <- c("bisbas7_rev", "bisbas4_rev", "bisbas18_rev", "bisbas23_rev", "bisbas14_rev")
   bisbas_score_dat[["bas_rewardresp"]] <- rowMeans(bisbas_data_edit[reward_vars])
   
   # BAS

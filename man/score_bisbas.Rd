@@ -19,10 +19,10 @@ score_bisbas(bisbas_data, base_zero = TRUE, id, extra_scale_cols = c())
 A dataset with subscale scores for the Behavioral Inhibition Scale/Behavioral Activation Scale
 }
 \description{
-This function scores the Behavioral Inhibition System (BIS)/Behavioral Activation System (BAS) and provides subscale scores for the following behaviors: BIS, BAS Fun Seeking, BAS Drive, and BAS Reward Responsiveness. Note, this script is used to score the 24-item version, which contains 4 filler questions that are not used for scoring. While the scored questions match the 20-item version exactly, the question numbers differ so this script cannot be sued to score the 20-item version at this time. If this functionality is desired, contact the kellertools package developers.
+This function scores the Behavioral Inhibition System (BIS)/Behavioral Activation System (BAS) and provides subscale scores for the following behaviors: BIS, BAS Fun Seeking, BAS Drive, and BAS Reward Responsiveness. Note, this script is used to score the 24-item version, which contains 4 filler questions that are not used for scoring. While the scored questions match the 20-item version exactly, the question numbers differ so this script cannot be sued to score the 20-item version at this time.
 }
 \details{
-#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+For data to be scored correctly, the data must be prepared according to the following criteria: \cr
 \itemize{
  \item{The data must include all individual questionnaire items}
  \item{The columns/variables must match the following naming convention: 'bisbas#' or 'bisbas_#' where # is the question number (1-24)}
@@ -33,6 +33,9 @@ This function scores the Behavioral Inhibition System (BIS)/Behavioral Activatio
   }
  \item{Missing values must be coded as NA}
  \item{Values must not be reversed scored. This script will apply reverse scoring so all levels must be true to the scale described above}
+ \itemize{
+    \item{All items except 2 and 22 will be reverse scored so that higher BIS scores = higher behavioral inhibition and higher BAS scores = higher behavioral approach}
+  }
 }
 \cr
 Note, as long as variable names match those listed, the dataset can include other variables
@@ -46,13 +49,11 @@ bisbas_score_data <- score_bisbas(bisbas_data, id = 'ID')
 \dontrun{
 }
 
+
 }
 \references{
 Primary References for the child version of the Behavioral Inhibition Scale/Behavioral Activation Scale and Scoring:
 Muris P, Meesters C, de Kanter E, Timmerman PE. Behavioural inhibition and behavioural activation system scales for children: relationships with Eysenck’s personality traits and psychopathological symptoms. Personality and Individual Differences. 2005;38(4):831-841. doi:10.1016/j.paid.2004.06.007
 
 Carver CS, White TL. Behavioral inhibition, behavioral activation, and affective responses to impending reward and punishment: The BIS/BAS Scales. Journal of Personality and Social Psychology. 1994;67(2):319-333. doi:http://dx.doi.org/10.1037/0022-3514.67.2.319.
-}
-\seealso{
-Raw data from Qualtrics was processed using the following script: \code{\link{util_fbs_parent_v3dat}}
 }
