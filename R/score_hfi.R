@@ -13,10 +13,10 @@
 #' Fulkerson JA, Nelson MC, Lytle LA, Moe S, Heitzler C, Pasch KE. The validation of a home food inventory. International Journal of Behavioral Nutrition and Physical Activity, 2008, 5;55 (\href{https://pubmed.ncbi.nlm.nih.gov/18983668/}{PubMed})
 #'
 #' @param hfi_data a data.frame all items for the Fulkerson Home Food Inventory following the naming conventions described above
+#' @param extra_scale_cols a vector of character strings that begin with 'hfi' but are not part of the original HFI scale. Any columns in hfi_data that begin with 'hfi' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
-#' @inheritParams score_bes
-#'
-#' @return A dataset with subscale scores for the ulkerson Home Food Inventory
+
+#' @return A dataset with subscale scores for the Fulkerson Home Food Inventory
 #' @examples
 #'
 #' # scoring for the hfi with IDs
@@ -25,7 +25,7 @@
 #'
 #' @export
 
-score_hfi <- function(hfi_data, base_zero = TRUE, id) {
+score_hfi <- function(hfi_data, base_zero = TRUE, id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -62,11 +62,15 @@ score_hfi <- function(hfi_data, base_zero = TRUE, id) {
         names(hfi_score_dat)[1] <- id
     }
     
-    # re-scale data
-    hfi_data_edit <- hfi_data
+    # assign hfi scale items to hfi_items, excluding columns in extra_scale_cols
+    hfi_items <- grep("^hfi", names(hfi_data), value = TRUE) %>% setdiff(extra_scale_cols)
     
+    # subset hfi items for scoring
+    hfi_data_edit <- hfi_data[c(hfi_items)]
+    
+    # re-scale data -- all columns in hfi_data_edit get rescaled 
     if (isFALSE(base_zero)){
-      hfi_data_edit[3:402] <- sapply(names(hfi_data_edit)[3:402], function(x) hfi_data_edit[[x]] - 1, simplify = TRUE)
+      hfi_data_edit <- sapply(names(hfi_data_edit), function(x) hfi_data_edit[[x]] - 1, simplify = TRUE)
     }
     
     ## Score Subscales
@@ -141,11 +145,11 @@ score_hfi <- function(hfi_data, base_zero = TRUE, id) {
     hfi_score_dat[['hfi_fridge_unhealthy']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('fridge_c|fridge_d|fridge_e|fridge_f|fridge_i|fridge_l', names(hfi_data_edit))])) == 6, NA, base::rowSums(hfi_data_edit[ , grepl('fridge_c|fridge_d|fridge_e|fridge_f|fridge_i|fridge_l', names(hfi_data_edit))], na.rm = TRUE))
     
     # kitchen accessible
-    hfi_score_dat[['hfi_kitchen_accessible']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('accesible', names(hfi_data_edit)) & !grepl('fridge', names(hfi_data_edit))])) == 12, NA, base::rowSums(hfi_data_edit[ , grepl('accesible', names(hfi_data_edit)) & !grepl('fridge', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_kitchen_accessible']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('accessible', names(hfi_data_edit)) & !grepl('fridge', names(hfi_data_edit))])) == 12, NA, base::rowSums(hfi_data_edit[ , grepl('accessible', names(hfi_data_edit)) & !grepl('fridge', names(hfi_data_edit))], na.rm = TRUE))
     
-    hfi_score_dat[['hfi_kitchen_healthy']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('accesible_a|accesible_b|accesible_c|accesible_e|accesible_i|accesible_l', names(hfi_data_edit))])) == 6, NA, base::rowSums(hfi_data_edit[ , grepl('accesible_a|accesible_b|accesible_c|accesible_e|accesible_i|accesible_l', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_kitchen_healthy']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('accessible_a|accessible_b|accessible_c|accessible_e|accessible_i|accessible_l', names(hfi_data_edit))])) == 6, NA, base::rowSums(hfi_data_edit[ , grepl('accessible_a|accessible_b|accessible_c|accessible_e|accessible_i|accessible_l', names(hfi_data_edit))], na.rm = TRUE))
     
-    hfi_score_dat[['hfi_kitchen_unhealthy']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('accesible_d|accesible_f|accesible_g|accesible_h|accesible_j|accesible_k', names(hfi_data_edit))])) == 6, NA, base::rowSums(hfi_data_edit[ , grepl('accesible_d|accesible_f|accesible_g|accesible_h|accesible_j|accesible_k', names(hfi_data_edit))], na.rm = TRUE))
+    hfi_score_dat[['hfi_kitchen_unhealthy']] <- ifelse(rowSums(is.na(hfi_data_edit[ , grepl('accessible_d|accessible_f|accessible_g|accessible_h|accessible_j|accessible_k', names(hfi_data_edit))])) == 6, NA, base::rowSums(hfi_data_edit[ , grepl('accessible_d|accessible_f|accessible_g|accessible_h|accessible_j|accessible_k', names(hfi_data_edit))], na.rm = TRUE))
     
     # obesogenic foods
     hfi_score_dat[['hfi_obesogenic_foods']] <- ifelse(rowSums(is.na(hfi_score_dat[ , grepl('hfi_dairy_highfat|hfi_meat_protein_processed|hfi_added_fat_reg|hfi_frozen_dessert_highfat|hfi_prepared_dessert_highfat|hfi_savory_snacks_highfat|hfi_candy|hfi_bev_highsugar|hfi_microwave_quickfood|hfi_fridge_unhealthy|hfi_kitchen_unhealthy', names(hfi_score_dat))])) == 12, NA, base::rowSums(hfi_score_dat[ , grepl('hfi_dairy_highfat|hfi_meat_protein_processed|hfi_added_fat_reg|hfi_frozen_dessert_highfat|hfi_prepared_dessert_highfat|hfi_savory_snacks_highfat|hfi_candy|hfi_bev_highsugar|hfi_microwave_quickfood|hfi_fridge_unhealthy|hfi_kitchen_unhealthy', names(hfi_score_dat))], na.rm = TRUE))
