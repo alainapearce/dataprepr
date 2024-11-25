@@ -68,8 +68,28 @@ score_cbq <- function(cbq_data, base_zero = TRUE, id, does_not_apply_value = NA,
     # set up database for results
 
     ## create empty matrix
-    cbq_score_dat <- data.frame(cbq_activity = rep(NA, nrow(cbq_data)), cbq_anger = rep(NA, nrow(cbq_data)), cbq_approach = rep(NA, nrow(cbq_data)), cbq_attention = rep(NA, nrow(cbq_data)), cbq_discomfort = rep(NA, nrow(cbq_data)), cbq_soothability = rep(NA, nrow(cbq_data)), cbq_fear = rep(NA, nrow(cbq_data)), cbq_highintensity_pleasure = rep(NA, nrow(cbq_data)), cbq_impulsivity = rep(NA, nrow(cbq_data)), cbq_inhibitory_cont = rep(NA, nrow(cbq_data)), cbq_lowintensity_pleasure = rep(NA, nrow(cbq_data)), cbq_perceptual_sensitivity = rep(NA, nrow(cbq_data)), cbq_sadness = rep(NA, nrow(cbq_data)), cbq_shyness = rep(NA, nrow(cbq_data)), cbq_smile_laughter = rep(NA,  nrow(cbq_data)), cbq_surgency = rep(NA, nrow(cbq_data)), cbq_neg_affect = rep(NA, nrow(cbq_data)), cbq_effortful_cont = rep(NA, nrow(cbq_data)))
-
+    cbq_score_dat <-
+      data.frame(
+        cbq_activity = rep(NA, nrow(cbq_data)),
+        cbq_anger = rep(NA, nrow(cbq_data)),
+        cbq_approach = rep(NA, nrow(cbq_data)),
+        cbq_attention = rep(NA, nrow(cbq_data)),
+        cbq_discomfort = rep(NA, nrow(cbq_data)),
+        cbq_soothability = rep(NA, nrow(cbq_data)),
+        cbq_fear = rep(NA, nrow(cbq_data)),
+        cbq_highintensity_pleasure = rep(NA, nrow(cbq_data)),
+        cbq_impulsivity = rep(NA, nrow(cbq_data)),
+        cbq_inhibitory_cont = rep(NA, nrow(cbq_data)),
+        cbq_lowintensity_pleasure = rep(NA, nrow(cbq_data)),
+        cbq_perceptual_sensitivity = rep(NA, nrow(cbq_data)),
+        cbq_sadness = rep(NA, nrow(cbq_data)),
+        cbq_shyness = rep(NA, nrow(cbq_data)),
+        cbq_smile_laughter = rep(NA,  nrow(cbq_data)),
+        cbq_surgency = rep(NA, nrow(cbq_data)),
+        cbq_neg_affect = rep(NA, nrow(cbq_data)),
+        cbq_effortful_cont = rep(NA, nrow(cbq_data))
+      )
+    
     if (isTRUE(ID_arg)) {
         cbq_score_dat <- data.frame(cbq_data[[id]], cbq_score_dat)
         names(cbq_score_dat)[1] <- id
