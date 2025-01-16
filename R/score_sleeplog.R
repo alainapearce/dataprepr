@@ -241,17 +241,29 @@ score_sleeplog <- function(sleep_data, id, summer_start, summer_end) {
   ### Sleep hours - total
   
   ## deal with awake time
-  sleep_data_edit[, grepl('waso', names(sleep_data_edit))] <- sapply(sleep_data_edit[, grepl('waso', names(sleep_data_edit))], function(x) ifelse(grepl('minute|min|mins|minutes|m', x), sub('minute|min|mins|minutes|m', '', x), x))
+  if (sum(grepl('minute|min|mins|minutes|m', sleep_data_edit[, grepl('waso', names(sleep_data_edit))])) > 0){
+    sleep_data_edit[, grepl('waso', names(sleep_data_edit))] <- sapply(sleep_data_edit[, grepl('waso', names(sleep_data_edit))], function(x) ifelse(grepl('minute|min|mins|minutes|m', x), sub('minute|min|mins|minutes|m', '', x), x))
+  }
   
-  sleep_data_edit[, grepl('waso', names(sleep_data_edit))] <- sapply(sleep_data_edit[, grepl('waso', names(sleep_data_edit))], function(x) ifelse(grepl(' |  ', x), sub(' |  |   ', '', x), x))
+  if (sum(grepl(' |  ', sleep_data_edit[, grepl('waso', names(sleep_data_edit))])) > 0){
+    sleep_data_edit[, grepl('waso', names(sleep_data_edit))] <- sapply(sleep_data_edit[, grepl('waso', names(sleep_data_edit))], function(x) ifelse(grepl(' |  ', x), sub(' |  |   ', '', x), x))
+  }
   
-  sleep_data_edit[, grepl('waso', names(sleep_data_edit))] <- sapply(sleep_data_edit[, grepl('waso', names(sleep_data_edit))], function(x) ifelse(grepl('Na|<', x), sub('Na|<', '', x), x))
+  if (sum(grepl('Na|<', sleep_data_edit[, grepl('waso', names(sleep_data_edit))])) > 0){
+    sleep_data_edit[, grepl('waso', names(sleep_data_edit))] <- sapply(sleep_data_edit[, grepl('waso', names(sleep_data_edit))], function(x) ifelse(grepl('Na|<', x), sub('Na|<', '', x), x))
+  }
   
-  sleep_data_edit[, grepl('waso', names(sleep_data_edit))] <- sapply(sleep_data_edit[, grepl('waso', names(sleep_data_edit))], function(x) ifelse(x == '', NA, x))
+  if (sum(grepl('', sleep_data_edit[, grepl('waso', names(sleep_data_edit))])) > 0){
+    sleep_data_edit[, grepl('waso', names(sleep_data_edit))] <- sapply(sleep_data_edit[, grepl('waso', names(sleep_data_edit))], function(x) ifelse(x == '', NA, x))
+  }
   
-  sleep_data_edit[, grepl('waso', names(sleep_data_edit))] <- sapply(sleep_data_edit[, grepl('waso', names(sleep_data_edit))], function(x) ifelse(grepl('hours|hr|hrs', x), as.numeric(sub('hours|hr|hrs', '', x))*60, x))
+  if (sum(grepl('hours|hr|hrs', sleep_data_edit[, grepl('waso', names(sleep_data_edit))])) > 0){
+    sleep_data_edit[, grepl('waso', names(sleep_data_edit))] <- sapply(sleep_data_edit[, grepl('waso', names(sleep_data_edit))], function(x) ifelse(grepl('hours|hr|hrs', x), as.numeric(sub('hours|hr|hrs', '', x))*60, x))
+  }
   
-  sleep_data_edit[, grepl('waso', names(sleep_data_edit))] <- sapply(sleep_data_edit[, grepl('waso', names(sleep_data_edit))], function(x) ifelse(grepl(':00|:', x), as.numeric(sub(':00|:', '', x)), x))
+  if (sum(grepl(':00|:', sleep_data_edit[, grepl('waso', names(sleep_data_edit))])) > 0){
+    sleep_data_edit[, grepl('waso', names(sleep_data_edit))] <- sapply(sleep_data_edit[, grepl('waso', names(sleep_data_edit))], function(x) ifelse(grepl(':00|:', x), as.numeric(sub(':00|:', '', x)), x))
+  }
   
   
   ## replace '' with NA so will still compute numeric values when na.rm = TRUE
