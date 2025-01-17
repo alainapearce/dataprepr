@@ -85,7 +85,7 @@ score_pwlb <- function(pwlb_data, base_zero = TRUE, id, extra_scale_cols = c()) 
     pwlb_data_edit <- pwlb_data
     
     if (isTRUE(base_zero)){
-      pwlb_data_edit[pwlb_items] <- sapply(pwlb_items, function(x) pwlb_data[[x]] + 1, simplify = TRUE)
+      pwlb_data_edit[pwlb_items[!grepl('pwlb24a', pwlb_items)]] <- sapply(pwlb_items[!grepl('pwlb24a', pwlb_items)], function(x) pwlb_data[[x]] + 1, simplify = TRUE)
     }
     
     ## Score Subscales

@@ -74,11 +74,14 @@ score_ffq_helix <- function(ffq_data, base_zero = TRUE, id) {
     names(ffq_score_dat)[1] <- id
   }
   
+  # key variable names
+  ffq_var_names <- c('ffq_dairy1', 'ffq_dairy2', 'ffq_dairy3', 'ffq_dairy4', 'ffq_egg1', 'ffq_meat1', 'ffq_meat2', 'ffq_meat3', 'ffq_meat4', 'ffq_fish1', 'ffq_fish2', 'ffq_fish3', 'ffq_fish4', 'ffq_dairy5', 'ffq_veg1', 'ffq_veg2', 'ffq_potato1', 'ffq_legume1', 'ffq_potato2', 'ffq_fruit1', 'ffq_fruit2', 'ffq_nuts1', 'ffq_fruit3', 'ffq_fruit4', 'ffq_cereal1', 'ffq_cereal2', 'ffq_cereal3', 'ffq_cereal4', 'ffq_cereal5', 'ffq_cereal6', 'ffq_bakery1', 'ffq_bakery2', 'ffq_sweet1', 'ffq_sweet2', 'ffq_sweet3', 'ffq_bev1', 'ffq_bev2', 'ffq_fats1', 'ffq_fats2', 'ffq_fats3', 'ffq_fats4', 'ffq_dressing1', 'ffq_saltysnack1')
+  
   # re-scale data
   ffq_data_edit <- ffq_data
   
   if (isTRUE(base_zero)){
-    ffq_data_edit[2:44] <- sapply(names(ffq_data_edit)[2:44], function(x) ffq_data_edit[[x]] + 1, simplify = TRUE)
+    ffq_data_edit[, names(ffq_data_edit) %in% ffq_var_names] <- sapply(ffq_var_names, function(x) ffq_data_edit[[x]] + 1, simplify = TRUE)
   }
   
   # convert to servings per week
@@ -96,7 +99,7 @@ score_ffq_helix <- function(ffq_data, base_zero = TRUE, id) {
     return(var_quant)
   }
   
-  ffq_data_edit[2:44] <- sapply(names(ffq_data_edit)[2:44], function(x) servings_wk(ffq_data_edit[[x]]), simplify = TRUE)
+  ffq_data_edit[, names(ffq_data_edit) %in% ffq_var_names] <- sapply(ffq_var_names, function(x) servings_wk(ffq_data_edit[[x]]), simplify = TRUE)
   
   ## Score - used sum to get total servings per week
   
@@ -182,7 +185,9 @@ score_ffq_helix <- function(ffq_data, base_zero = TRUE, id) {
     ffq_phenotype <- merge(ffq_data, ffq_score_dat, by = 'participant_id')
     
     ## re-order to make more sense (supplements at end)
-    ffq_phenotype <- ffq_phenotype[c(1:44, 68:88, 45:67)]
+    ffq_sup_vars <- c('ffq_suplements', 'ffq_multivit', 'ffq_multivit_brand', 'ffq_multivit_brandname', 'ffq_multivit_current', 'ffq_multivit_freq', 'ffq_minerals', 'ffq_mineral_brand', 'ffq_mineral_brandname', 'ffq_mineral_current', 'ffq_mineral_freq', 'ffq_vitd', 'ffq_vitd_brand', 'ffq_vitd_brandname', 'ffq_vitd_current', 'ffq_vitd_freq', 'ffq_omega3', 'ffq_omega3_brand', 'ffq_omega3_brandname', 'ffq_omega3_current', 'ffq_omega3_freq', 'ffq_sup_other', 'ffq_sup_other_list')
+
+    ffq_phenotype <- ffq_phenotype[c(id, ffq_var_names, names(ffq_score_dat)[2:ncol(ffq_score_dat)], ffq_sup_vars)]
     
     return(list(score_dat = as.data.frame(ffq_score_dat),
                 bids_phenotype = as.data.frame(ffq_phenotype)))
