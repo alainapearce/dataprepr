@@ -18,6 +18,9 @@
 #'
 #' @param tfeq_data a data.frame all items for the Three Factor Eating Questionnaire following the naming conventions described above
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'tfeq' but are not scale items. Any columns in tfeq_data that begin with 'tfeq' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with subscale scores for the Three Factor Eating Questionnaire
 #' @examples
@@ -34,7 +37,7 @@
 #'
 #' @export
 
-score_tfeq <- function(tfeq_data, id) {
+score_tfeq <- function(tfeq_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -56,6 +59,15 @@ score_tfeq <- function(tfeq_data, id) {
         }
     }
 
+    # check if session_id exists
+    sessionID_arg <- methods::hasArg(session_id)
+    
+    if (isTRUE(sessionID_arg)){
+      if (!(id %in% names(tfeq_data))) {
+        stop("variable name entered as session_id is not in tfeq_data")
+      }
+    }
+    
     #### 2. Set Up Data #####
 
     # set up database for results create empty matrix
@@ -63,8 +75,13 @@ score_tfeq <- function(tfeq_data, id) {
         nrow(tfeq_data)), tfeq_hunger = rep(NA, nrow(tfeq_data)))
 
     if (isTRUE(ID_arg)) {
+      if (isTRUE(sessionID_arg)) {
+        tfeq_score_dat <- data.frame(tfeq_data[[id]], tfeq_data[[session_id]], tfeq_score_dat)
+        names(tfeq_score_dat)[1:2] <- c(id, session_id)
+      } else {
         tfeq_score_dat <- data.frame(tfeq_data[[id]], tfeq_score_dat)
         names(tfeq_score_dat)[1] <- id
+      }
     }
 
     # set up labels for tfeq_score_dat
@@ -126,14 +143,17 @@ score_tfeq <- function(tfeq_data, id) {
     #### 3. Clean Export/Scored Data #####
     ## round data
     if (isTRUE(ID_arg)){
+      if (isTRUE(sessionID_arg)) {
+        tfeq_phenotype <- merge(tfeq_data, tfeq_score_dat, by = c(id, session_id))
+        tfeq_score_dat[3:ncol(tfeq_score_dat)] <- round(tfeq_score_dat[3:ncol(tfeq_score_dat)], digits = 3)
+      } else {
+        tfeq_phenotype <- merge(tfeq_data, tfeq_score_dat, by = id)
         tfeq_score_dat[2:ncol(tfeq_score_dat)] <- round(tfeq_score_dat[2:ncol(tfeq_score_dat)], digits = 3)
+      }
     } else {
         tfeq_score_dat <- round(tfeq_score_dat, digits = 3)
     }
 
-    ## make sure the variable labels match in the dataset
-    tfeq_score_dat = sjlabelled::set_label(tfeq_score_dat, label = matrix(unlist(tfeq_score_dat_labels,
-        use.names = FALSE)))
 
     return(tfeq_score_dat)
 }

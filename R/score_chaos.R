@@ -21,8 +21,10 @@
 #' Matheny, A. P., Jr., Wachs, T. D., Ludwig, J. L., Phillips, K. (1995). Bringing order out of chaos: Psychometric characteristics of the confusion, hubbub, and order scale. Journal of Applied Developmental Psychology, 16(3), 429–444. https://doi.org/10.1016/0193-3973(95)90028-4
 #'
 #' @param chaos_data a data.frame all items for the Confusion, Hubbub, and Order Scale following the naming conventions described in Details
-#' @param extra_scale_cols a vector of character strings that begin with 'chaos' but are not scale items. Any columns in chaos_data that begin with 'chaos' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'chaos' but are not scale items. Any columns in chaos_data that begin with 'chaos' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with subscale scores for the Confusion, Hubbub, and Order Scale 
 #' @examples
@@ -38,7 +40,7 @@
 #'
 #' @export
 
-score_chaos <- function(chaos_data, base_zero = FALSE, id, extra_scale_cols = c()) {
+score_chaos <- function(chaos_data, base_zero = FALSE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -60,6 +62,15 @@ score_chaos <- function(chaos_data, base_zero = FALSE, id, extra_scale_cols = c(
     }
   }
   
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(id %in% names(chaos_data))) {
+      stop("variable name entered as session_id is not in chaos_data")
+    }
+  }
+  
   # check base_zero is logical
   if (!is.logical(base_zero)) {
     stop("base_zero arg must be logical (TRUE/FALSE)")
@@ -71,8 +82,13 @@ score_chaos <- function(chaos_data, base_zero = FALSE, id, extra_scale_cols = c(
   chaos_score_dat <- data.frame(chaos_total = rep(NA, nrow(chaos_data)))
   
   if (isTRUE(ID_arg)) {
-    chaos_score_dat <- data.frame(chaos_data[[id]], chaos_score_dat)
-    names(chaos_score_dat)[1] <- id
+    if (isTRUE(sessionID_arg)) {
+      chaos_score_dat <- data.frame(chaos_data[[id]], chaos_data[[session_id]], chaos_score_dat)
+      names(chaos_score_dat)[1:2] <- c(id, session_id)
+    } else {
+      chaos_score_dat <- data.frame(chaos_data[[id]], chaos_score_dat)
+      names(chaos_score_dat)[1] <- id
+    }
   }
   
   # assign chaos scale items to chaos_items, excluding columns in extra_scale_cols
@@ -126,7 +142,11 @@ score_chaos <- function(chaos_data, base_zero = FALSE, id, extra_scale_cols = c(
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    chaos_phenotype <- merge(chaos_data, chaos_score_dat, by = id)
+    if (isTRUE(sessionID_arg)) {
+      chaos_phenotype <- merge(chaos_data, chaos_score_dat, by = c(id, session_id))
+    } else {
+      chaos_phenotype <- merge(chaos_data, chaos_score_dat, by = id)
+    }
     
     return(list(score_dat = as.data.frame(chaos_score_dat),
                 bids_phenotype = as.data.frame(chaos_phenotype)))

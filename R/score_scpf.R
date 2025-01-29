@@ -20,8 +20,11 @@
 #' Savage, J.S., Rollins, B.Y., Kugler, K.C. et al. Development of a theory-based questionnaire to assess structure and control in parent feeding (SCPF). Int J Behav Nutr Phys Act 14, 9 (2017). https://doi.org/10.1186/s12966-017-0466-2
 #' 
 #' @param scpf_data a data.frame all items for the Structure and Control in Parent Feeding questionnaire following the naming conventions described above
-#' @param extra_scale_cols a vector of character strings that begin with 'scpf' but are not scale items. Any columns in scpf_data that begin with 'scpf' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'scpf' but are not scale items. Any columns in scpf_data that begin with 'scpf' but are not scale items must be included here. Default is empty vector.
+#' 
 #'
 #' @return A dataset with subscale scores for the Structure and Control in Parent Feeding questionnaire
 #' @examples
@@ -35,7 +38,7 @@
 #'
 #' @export
 
-score_scpf <- function(scpf_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_scpf <- function(scpf_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -57,6 +60,15 @@ score_scpf <- function(scpf_data, base_zero = TRUE, id, extra_scale_cols = c()) 
     }
   }
   
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(id %in% names(scpf_data))) {
+      stop("variable name entered as session_id is not in scpf_data")
+    }
+  }
+  
   # check base_zero is logical
   if (!is.logical(base_zero)) {
     stop("base_zero arg must be logical (TRUE/FALSE)")
@@ -74,8 +86,13 @@ score_scpf <- function(scpf_data, base_zero = TRUE, id, extra_scale_cols = c()) 
     )
   
   if (isTRUE(ID_arg)) {
-    scpf_score_dat <- data.frame(scpf_data[[id]], scpf_score_dat)
-    names(scpf_score_dat)[1] <- id
+    if (isTRUE(sessionID_arg)) {
+      scpf_score_dat <- data.frame(scpf_data[[id]], scpf_data[[session_id]], scpf_score_dat)
+      names(scpf_score_dat)[1:2] <- c(id, session_id)
+    } else {
+      scpf_score_dat <- data.frame(scpf_data[[id]], scpf_score_dat)
+      names(scpf_score_dat)[1] <- id
+    }
   }
   
   # assign scpf scale items to scpf_items, excluding columns in extra_scale_cols
@@ -145,7 +162,11 @@ score_scpf <- function(scpf_data, base_zero = TRUE, id, extra_scale_cols = c()) 
   #### 3. Clean Export/Scored Data #####
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    scpf_phenotype <- merge(scpf_data, scpf_score_dat, by = id)
+    if (isTRUE(sessionID_arg)) {
+      scpf_phenotype <- merge(scpf_data, scpf_score_dat, by = c(id, session_id))
+    } else {
+      scpf_phenotype <- merge(scpf_data, scpf_score_dat, by = id)
+    }
     
     return(list(score_dat = as.data.frame(scpf_score_dat),
                 bids_phenotype = as.data.frame(scpf_phenotype)))

@@ -20,8 +20,11 @@
 #' Domoff SE, Harrison K, Gearhardt AN, Gentile DA, Lumeng JC, Miller AL. Development and Validation of the Problematic Media Use Measure: A Parent Report Measure of Screen Media "Addiction" in Children. Psychol Pop Media Cult. 2019 Jan;8(1):2-11. doi: 10.1037/ppm0000163. Epub 2017 Nov 16. PMID: 30873299; PMCID: PMC6411079.
 #'
 #' @param pmum_data a data.frame all items for the Problematic Media Use Measure following the naming conventions described above
-#' @param extra_scale_cols a vector of character strings that begin with 'pmum' but are not scale items. Any columns in pmum_data that begin with 'pmum' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'pmum' but are not scale items. Any columns in pmum_data that begin with 'pmum' but are not scale items must be included here. Default is empty vector.
+#' 
 #'
 #' @return A dataset with total score for the Problematic Media Use Measure
 #' @examples
@@ -36,7 +39,7 @@
 #'
 #' @export
 
-score_pmum <- function(pmum_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_pmum <- function(pmum_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -55,6 +58,15 @@ score_pmum <- function(pmum_data, base_zero = TRUE, id, extra_scale_cols = c()) 
   if (isTRUE(ID_arg)){
     if (!(id %in% names(pmum_data))) {
       stop("variable name entered as id is not in pmum_data")
+    }
+  }
+  
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(id %in% names(pmum_data))) {
+      stop("variable name entered as session_id is not in pmum_data")
     }
   }
   
@@ -114,7 +126,11 @@ score_pmum <- function(pmum_data, base_zero = TRUE, id, extra_scale_cols = c()) 
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    pmum_phenotype <- merge(pmum_data, pmum_score_dat, by = id)
+    if (isTRUE(sessionID_arg)) {
+      pmum_phenotype <- merge(pmum_data, pmum_score_dat, by = c(id, session_id))
+    } else {
+      pmum_phenotype <- merge(pmum_data, pmum_score_dat, by = id)
+    }
     
     return(list(score_dat = as.data.frame(pmum_score_dat),
                 bids_phenotype = as.data.frame(pmum_phenotype)))

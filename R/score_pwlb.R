@@ -17,8 +17,11 @@
 #' French SA, Perry CL, Leon GR, Fulkerson JA. Dieting behaviors and weight change history in female adolescents. Health Psychology. 1995;14(6):548-555. doi:http://dx.doi.org/10.1037/0278-6133.14.6.548 (\href{https://pubmed.ncbi.nlm.nih.gov/8565929/}{PubMed})
 #'
 #' @param pwlb_data a data.frame all items for the Parent Weight-Loss Behavior Questionnaire following the naming conventions described above
-#' @param extra_scale_cols a vector of character strings that begin with 'pwlb' but are not scale items. Any columns in pwlb_data that begin with 'pwlb' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'pwlb' but are not scale items. Any columns in pwlb_data that begin with 'pwlb' but are not scale items must be included here. Default is empty vector.
+
 #'
 #' @return A dataset with subscale scores for the Parent Weight-Loss Behavior Questionnaire
 #' @examples
@@ -34,7 +37,7 @@
 #'
 #' @export
 
-score_pwlb <- function(pwlb_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_pwlb <- function(pwlb_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -55,6 +58,15 @@ score_pwlb <- function(pwlb_data, base_zero = TRUE, id, extra_scale_cols = c()) 
             stop("variable name entered as id is not in pwlb_data")
         }
     }
+    
+    # check if session_id exists
+    sessionID_arg <- methods::hasArg(session_id)
+    
+    if (isTRUE(sessionID_arg)){
+      if (!(id %in% names(pwlb_data))) {
+        stop("variable name entered as session_id is not in pwlb_data")
+      }
+    }
 
     # check base_zero is logical
     if (!is.logical(base_zero)) {
@@ -68,8 +80,13 @@ score_pwlb <- function(pwlb_data, base_zero = TRUE, id, extra_scale_cols = c()) 
         nrow(pwlb_data)), pwlb_total = rep(NA, nrow(pwlb_data)))
 
     if (isTRUE(ID_arg)) {
+      if (isTRUE(sessionID_arg)) {
+        pwlb_score_dat <- data.frame(pwlb_data[[id]], pwlb_data[[session_id]], pwlb_score_dat)
+        names(pwlb_score_dat)[1:2] <- c(id, session_id)
+      } else {
         pwlb_score_dat <- data.frame(pwlb_data[[id]], pwlb_score_dat)
         names(pwlb_score_dat)[1] <- id
+      }
     }
 
     # assign pwlb scale items to pwlb_items, excluding columns in extra_scale_cols
@@ -106,7 +123,11 @@ score_pwlb <- function(pwlb_data, base_zero = TRUE, id, extra_scale_cols = c()) 
 
     ## merge raw responses with scored data
     if (isTRUE(ID_arg)){
-      pwlb_phenotype <- merge(pwlb_data, pwlb_score_dat, by = id)
+      if (isTRUE(sessionID_arg)) {
+        pwlb_phenotype <- merge(pwlb_data, pwlb_score_dat, by = c(id, session_id))
+      } else {
+        pwlb_phenotype <- merge(pwlb_data, pwlb_score_dat, by = id)
+      }
       
       return(list(score_dat = as.data.frame(pwlb_score_dat),
                   bids_phenotype = as.data.frame(pwlb_phenotype)))

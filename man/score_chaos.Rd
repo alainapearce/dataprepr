@@ -4,7 +4,13 @@
 \alias{score_chaos}
 \title{score_chaos: Scored data from the 15-item Confusion, Hubbub, and Order Scale administered with 4-point likert scale}
 \usage{
-score_chaos(chaos_data, base_zero = FALSE, id, extra_scale_cols = c())
+score_chaos(
+  chaos_data,
+  base_zero = FALSE,
+  id,
+  session_id,
+  extra_scale_cols = c()
+)
 }
 \arguments{
 \item{chaos_data}{a data.frame all items for the Confusion, Hubbub, and Order Scale following the naming conventions described in Details}
@@ -12,6 +18,8 @@ score_chaos(chaos_data, base_zero = FALSE, id, extra_scale_cols = c())
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+
+\item{session_id}{(optional) name of session ID column in input data if there are multiple observations per participant. If included, the output dataset will be matched by id and session id, if not included the output dataset will be in the order of the input data. Required to get the phenotype dataset if have multiple sessions (raw data merged with scores.)}
 
 \item{extra_scale_cols}{a vector of character strings that begin with 'chaos' but are not scale items. Any columns in chaos_data that begin with 'chaos' but are not scale items must be included here. Default is empty vector.}
 }

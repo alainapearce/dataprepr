@@ -21,8 +21,10 @@
 #' Musher-Eizenman, D., Holub. S., Comprehensive Feeding Practices Questionnaire: Validation of a New Measure of Parental Feeding Practices, Journal of Pediatric Psychology, 32, 8, September 2007, Pages 960–972, https://doi.org/10.1093/jpepsy/jsm037
 #'
 #' @param cfpq_data a data.frame all items for the Comprehensive Feeding Practices Questionnaire following the naming conventions described above
-#' @param extra_scale_cols a vector of character strings that begin with 'cfpq' but are not scale items. Any columns in cfpq_data that begin with 'cfpq' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'cfpq' but are not scale items. Any columns in cfpq_data that begin with 'cfpq' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with subscale scores for the Comprehensive Feeding Practices Questionnaire 
 #' @examples
@@ -38,7 +40,7 @@
 #'
 #' @export
 
-score_cfpq <- function(cfpq_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_cfpq <- function(cfpq_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -57,6 +59,15 @@ score_cfpq <- function(cfpq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
   if (isTRUE(ID_arg)){
     if (!(id %in% names(cfpq_data))) {
       stop("variable name entered as id is not in cfpq_data")
+    }
+  }
+  
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(id %in% names(cfpq_data))) {
+      stop("variable name entered as session_id is not in cfpq_data")
     }
   }
   
@@ -82,8 +93,13 @@ score_cfpq <- function(cfpq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
                                cfpq_teach = rep(NA, nrow(cfpq_data)))
   
   if (isTRUE(ID_arg)) {
-    cfpq_score_dat <- data.frame(cfpq_data[[id]], cfpq_score_dat)
-    names(cfpq_score_dat)[1] <- id
+    if (isTRUE(sessionID_arg)) {
+      cfpq_score_dat <- data.frame(cfpq_data[[id]], cfpq_data[[session_id]], cfpq_score_dat)
+      names(cfpq_score_dat)[1:2] <- c(id, session_id)
+    } else {
+      cfpq_score_dat <- data.frame(cfpq_data[[id]], cfpq_score_dat)
+      names(cfpq_score_dat)[1] <- id
+    }
   }
   
   # assign cfpq scale items to cfpq_items, excluding columns in extra_scale_cols
@@ -182,7 +198,11 @@ score_cfpq <- function(cfpq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    cfpq_phenotype <- merge(cfpq_data, cfpq_score_dat, by = id)
+    if (isTRUE(sessionID_arg)) {
+      cfpq_phenotype <- merge(cfpq_data, cfpq_score_dat, by = c(id, session_id))
+    } else {
+      cfpq_phenotype <- merge(cfpq_data, cfpq_score_dat, by = id)
+    }
     
     return(list(score_dat = as.data.frame(cfpq_score_dat),
                 bids_phenotype = as.data.frame(cfpq_phenotype)))

@@ -4,7 +4,13 @@
 \alias{score_tfeq18}
 \title{score_tfeq18: Scored data from the Three-Factor Eating Questionnaire-R18}
 \usage{
-score_tfeq18(tfeq_data, base_zero = TRUE, id, extra_scale_cols = c())
+score_tfeq18(
+  tfeq_data,
+  base_zero = TRUE,
+  id,
+  session_id,
+  extra_scale_cols = c()
+)
 }
 \arguments{
 \item{tfeq_data}{a data.frame all items for the Three-Factor Eating Questionnaire-R18 following the naming conventions described above}
@@ -12,6 +18,8 @@ score_tfeq18(tfeq_data, base_zero = TRUE, id, extra_scale_cols = c())
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+
+\item{session_id}{(optional) name of session ID column in input data if there are multiple observations per participant. If included, the output dataset will be matched by id and session id, if not included the output dataset will be in the order of the input data. Required to get the phenotype dataset if have multiple sessions (raw data merged with scores.)}
 
 \item{extra_scale_cols}{a vector of character strings that begin with 'tfeq' but are not scale items. Any columns in tfeq_data that begin with 'tfeq' but are not scale items must be included here. Default is empty vector.}
 }

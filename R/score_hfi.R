@@ -13,7 +13,8 @@
 #' Fulkerson JA, Nelson MC, Lytle LA, Moe S, Heitzler C, Pasch KE. The validation of a home food inventory. International Journal of Behavioral Nutrition and Physical Activity, 2008, 5;55 (\href{https://pubmed.ncbi.nlm.nih.gov/18983668/}{PubMed})
 #'
 #' @param hfi_data a data.frame all items for the Fulkerson Home Food Inventory following the naming conventions described above
-#' @param extra_scale_cols a vector of character strings that begin with 'hfi' but are not part of the original HFI scale. Any columns in hfi_data that begin with 'hfi' but are not scale items must be included here. Default is empty vector.
+#' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @inheritParams score_bes
 
 #' @return A dataset with subscale scores for the Fulkerson Home Food Inventory
@@ -25,7 +26,7 @@
 #'
 #' @export
 
-score_hfi <- function(hfi_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_hfi <- function(hfi_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -46,6 +47,16 @@ score_hfi <- function(hfi_data, base_zero = TRUE, id, extra_scale_cols = c()) {
             stop('variable name entered as id is not in hfi_data')
         }
     }
+    
+    # check if id exists
+    sessionID_arg <- methods::hasArg(session_id)
+    
+    if (isTRUE(sessionID_arg)){
+      if (!(session_id %in% names(hfi_data))) {
+        stop('variable name entered as session_id is not in hfi_data')
+      }
+    }
+    
 
     # check base_zero is logical
     if (!is.logical(base_zero)) {
@@ -58,8 +69,13 @@ score_hfi <- function(hfi_data, base_zero = TRUE, id, extra_scale_cols = c()) {
     hfi_score_dat <- data.frame(hfi_dairy = rep(NA, nrow(hfi_data)), hfi_dairy_highfat = rep(NA, nrow(hfi_data)), hfi_vegetables = rep(NA, nrow(hfi_data)), hfi_veg_nopotato = rep(NA, nrow(hfi_data)), hfi_fruit = rep(NA, nrow(hfi_data)), hfi_meat_protein = rep(NA, nrow(hfi_data)), hfi_meat_protein_processed = rep(NA, nrow(hfi_data)), hfi_added_fat = rep(NA, nrow(hfi_data)), hfi_added_fat_reg = rep(NA, nrow(hfi_data)), hfi_frozen_dessert = rep(NA, nrow(hfi_data)), hfi_frozen_dessert_highfat = rep(NA, nrow(hfi_data)), hfi_prepared_dessert = rep(NA, nrow(hfi_data)), hfi_prepared_dessert_highfat = rep(NA, nrow(hfi_data)), hfi_savory_snacks = rep(NA, nrow(hfi_data)), hfi_savory_snacks_highfat = rep(NA, nrow(hfi_data)), hfi_bread = rep(NA, nrow(hfi_data)), hfi_bread_wheat = rep(NA, nrow(hfi_data)), hfi_cereal = rep(NA, nrow(hfi_data)), hfi_cereal_highsugar = rep(NA, nrow(hfi_data)), hfi_candy = rep(NA, nrow(hfi_data)), hfi_beverages = rep(NA, nrow(hfi_data)), hfi_bev_highsugar = rep(NA, nrow(hfi_data)), hfi_microwave_quickfood = rep(NA, nrow(hfi_data)), hfi_fridge_accessible = rep(NA, nrow(hfi_data)), hfi_fridge_healthy = rep(NA, nrow(hfi_data)), hfi_fridge_unhealthy = rep(NA, nrow(hfi_data)), hfi_kitchen_accessible = rep(NA, nrow(hfi_data)), hfi_kitchen_healthy = rep(NA, nrow(hfi_data)), hfi_kitchen_unhealthy = rep(NA, nrow(hfi_data)), hfi_obesogenic_foods = rep(NA, nrow(hfi_data)))
 
     if (isTRUE(ID_arg)) {
+      if (isTRUE(sessionID_arg)) {
+        hfi_score_dat <- data.frame(hfi_data[[id]], hfi_data[[session_id]], hfi_score_dat)
+        names(hfi_score_dat)[1:2] <- c(id, session_id)
+      } else {
         hfi_score_dat <- data.frame(hfi_data[[id]], hfi_score_dat)
         names(hfi_score_dat)[1] <- id
+      }
     }
     
     # assign hfi scale items to hfi_items, excluding columns in extra_scale_cols
@@ -157,7 +173,11 @@ score_hfi <- function(hfi_data, base_zero = TRUE, id, extra_scale_cols = c()) {
     #### 3. Clean Export/Scored Data #####
     ## merge raw responses with scored data
     if (isTRUE(ID_arg)){
-      hfi_phenotype <- merge(hfi_data, hfi_score_dat, by = id)
+      if (isTRUE(sessionID_arg)){
+        hfi_phenotype <- merge(hfi_data, hfi_score_dat, by = c(id, session_id))
+      } else {
+        hfi_phenotype <- merge(hfi_data, hfi_score_dat, by = id)
+      }
       
       return(list(score_dat = as.data.frame(hfi_score_dat),
                   bids_phenotype = as.data.frame(hfi_phenotype)))

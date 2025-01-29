@@ -8,6 +8,7 @@ score_cbq(
   cbq_data,
   base_zero = TRUE,
   id,
+  session_id,
   does_not_apply_value = NA,
   extra_scale_cols = c()
 )
@@ -18,6 +19,8 @@ score_cbq(
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+
+\item{session_id}{(optional) name of session ID column in input data if there are multiple observations per participant. If included, the output dataset will be matched by id and session id, if not included the output dataset will be in the order of the input data. Required to get the phenotype dataset if have multiple sessions (raw data merged with scores.)}
 
 \item{does_not_apply_value}{value used to code a cbq response of "does not apply". Default is NA}
 

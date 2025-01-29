@@ -27,8 +27,11 @@
 #' Taylor JM. Psychometric analysis of the Ten-Item Perceived Stress Scale. Psychol Assess. 2015 Mar;27(1):90-101. doi: 10.1037/a0038100. Epub 2014 Oct 27. PMID: 25346996.
 #' 
 #' @param pss_data a data.frame all items for the Perceived Stress Scale following the naming conventions described above
-#' @param extra_scale_cols a vector of character strings that begin with 'pss' but are not scale items. Any columns in pss_data that begin with 'pss' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'pss' but are not scale items. Any columns in pss_data that begin with 'pss' but are not scale items must be included here. Default is empty vector.
+#' 
 #'
 #' @return A dataset with subscale scores for the Perceived Stress Scale
 #' @examples
@@ -42,7 +45,7 @@
 #'
 #' @export
 
-score_pss <- function(pss_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_pss <- function(pss_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -64,6 +67,15 @@ score_pss <- function(pss_data, base_zero = TRUE, id, extra_scale_cols = c()) {
     }
   }
   
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(id %in% names(pss_data))) {
+      stop("variable name entered as session_id is not in pss_data")
+    }
+  }
+  
   # check base_zero is logical
   if (!is.logical(base_zero)) {
     stop("base_zero arg must be logical (TRUE/FALSE)")
@@ -75,8 +87,13 @@ score_pss <- function(pss_data, base_zero = TRUE, id, extra_scale_cols = c()) {
   pss_score_dat <- data.frame(pss_total = rep(NA, nrow(pss_data)), pss_helplessness = rep(NA, nrow(pss_data)), pss_selfefficacy = rep(NA, nrow(pss_data)))
   
   if (isTRUE(ID_arg)) {
-    pss_score_dat <- data.frame(pss_data[[id]], pss_score_dat)
-    names(pss_score_dat)[1] <- id
+    if (isTRUE(sessionID_arg)) {
+      pss_score_dat <- data.frame(pss_data[[id]], pss_data[[session_id]], pss_score_dat)
+      names(pss_score_dat)[1:2] <- c(id, session_id)
+    } else {
+      pss_score_dat <- data.frame(pss_data[[id]], pss_score_dat)
+      names(pss_score_dat)[1] <- id
+    }
   }
   
   # assign pss scale items to pss_items, excluding columns in extra_scale_cols
@@ -143,7 +160,11 @@ score_pss <- function(pss_data, base_zero = TRUE, id, extra_scale_cols = c()) {
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    pss_phenotype <- merge(pss_data, pss_score_dat, by = id)
+    if (isTRUE(sessionID_arg)) {
+      pss_phenotype <- merge(pss_data, pss_score_dat, by = c(id, session_id))
+    } else {
+      pss_phenotype <- merge(pss_data, pss_score_dat, by = id)
+    }
     
     return(list(score_dat = as.data.frame(pss_score_dat),
                 bids_phenotype = as.data.frame(pss_phenotype)))

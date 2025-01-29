@@ -25,7 +25,8 @@
 #' @param age_var a string with the name of the age variable in brief_data
 #' @param sex_var a string with the name of the sex variable in brief_data
 #' @param extra_scale_cols a vector of character strings that begin with 'brief' but are not scale items. Any columns in brief_data that begin with 'brief' but are not scale items must be included here. Default is empty vector.
-#' @inheritParams score_pds
+#' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Behavioral Rating Inventory of Executive Function-2
@@ -59,7 +60,7 @@
 #'
 #' @export
 
-score_brief2 <- function(brief_data, age_var, sex_var, base_zero = TRUE, male = 0, female = 1, id, extra_scale_cols = c()) {
+score_brief2 <- function(brief_data, age_var, sex_var, base_zero = TRUE, male = 0, female = 1, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -123,14 +124,28 @@ score_brief2 <- function(brief_data, age_var, sex_var, base_zero = TRUE, male = 
         }
     }
 
+    # check if session_id exists
+    sessionID_arg <- methods::hasArg(session_id)
+    
+    if (isTRUE(sessionID_arg)){
+      if (!(id %in% names(brief_data))) {
+        stop("variable name entered as session_id is not in brief_data")
+      }
+    }
+    
     #### 2. Set Up Data #####
 
     # set up database for results create empty matrix
     brief_score_dat <- data.frame(brief2_inhibit = rep(NA, nrow(brief_data)), brief2_inhibit_t = rep(NA, nrow(brief_data)), brief2_inhibit_p = rep(NA, nrow(brief_data)), brief2_selfmon = rep(NA, nrow(brief_data)), brief2_selfmon_t = rep(NA, nrow(brief_data)), brief2_selfmon_p = rep(NA, nrow(brief_data)), brief2_shift = rep(NA, nrow(brief_data)), brief2_shift_t = rep(NA, nrow(brief_data)), brief2_shift_p = rep(NA, nrow(brief_data)), brief2_emcont = rep(NA, nrow(brief_data)), brief2_emcont_t = rep(NA, nrow(brief_data)), brief2_emcont_p = rep(NA, nrow(brief_data)), brief2_initiate = rep(NA, nrow(brief_data)), brief2_initiate_t = rep(NA, nrow(brief_data)), brief2_initiate_p = rep(NA, nrow(brief_data)), brief2_wm = rep(NA, nrow(brief_data)), brief2_wm_t = rep(NA, nrow(brief_data)), brief2_wm_p = rep(NA, nrow(brief_data)), brief2_planorg = rep(NA, nrow(brief_data)), brief2_planorg_t = rep(NA, nrow(brief_data)), brief2_planorg_p = rep(NA, nrow(brief_data)), brief2_taskmon = rep(NA, nrow(brief_data)), brief2_taskmon_t = rep(NA, nrow(brief_data)), brief2_taskmon_p = rep(NA, nrow(brief_data)), brief2_orgmat = rep(NA, nrow(brief_data)), brief2_orgmat_t = rep(NA, nrow(brief_data)), brief2_orgmat_p = rep(NA, nrow(brief_data)), brief2_bri = rep(NA, nrow(brief_data)), brief2_bri_t = rep(NA, nrow(brief_data)), brief2_bri_p = rep(NA, nrow(brief_data)), brief2_eri = rep(NA, nrow(brief_data)), brief2_eri_t = rep(NA, nrow(brief_data)), brief2_eri_p = rep(NA, nrow(brief_data)), brief2_cri = rep(NA, nrow(brief_data)), brief2_cri_t = rep(NA, nrow(brief_data)), brief2_cri_p = rep(NA, nrow(brief_data)), brief2_gec = rep(NA, nrow(brief_data)), brief2_gec_t = rep(NA, nrow(brief_data)), brief2_gec_p = rep(NA, nrow(brief_data)), brief2_negativity = rep(NA, nrow(brief_data)), brief2_negativity_p = rep(NA, nrow(brief_data)), brief2_negativity_cat = rep(NA, nrow(brief_data)), brief2_inconsistency = rep(NA, nrow(brief_data)), brief2_inconsistency_p = rep(NA, nrow(brief_data)), brief2_inconsistency_cat = rep(NA, nrow(brief_data)), brief2_infrequency = rep(NA, nrow(brief_data)), brief2_infrequency_p = rep(NA, nrow(brief_data)), brief2_infrequency_cat = rep(NA, nrow(brief_data)))
 
     if (isTRUE(ID_arg)) {
+      if (isTRUE(sessionID_arg)) {
+        brief_score_dat <- data.frame(brief_data[[id]], brief_data[[session_id]], brief_score_dat)
+        names(brief_score_dat)[1:2] <- c(id, session_id)
+      } else {
         brief_score_dat <- data.frame(brief_data[[id]], brief_score_dat)
         names(brief_score_dat)[1] <- id
+      }
     }
 
     # assign brief scale items to brief_items, excluding columns in extra_scale_cols
@@ -402,7 +417,11 @@ score_brief2 <- function(brief_data, age_var, sex_var, base_zero = TRUE, male = 
     #### 3. Clean Export/Scored Data #####
     ## merge raw responses with scored data
     if (isTRUE(ID_arg)){
-      brief_phenotype <- merge(brief_data, brief_score_dat, by = id)
+      if (isTRUE(sessionID_arg)) {
+        brief_phenotype <- merge(brief_data, brief_score_dat, by = c(id, session_id))
+      } else {
+        brief_phenotype <- merge(brief_data, brief_score_dat, by = id)
+      }
       
       return(list(score_dat = as.data.frame(brief_score_dat),
                   bids_phenotype = as.data.frame(brief_phenotype)))

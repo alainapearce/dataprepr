@@ -22,6 +22,7 @@
 #' @param male (optional) value for male. Default value is male = 0
 #' @param female (optional) value for female. Default value is female = 1
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #'
 #' @return A dataset with a Pubertal Development Score and the Tanner Stage equivalents.
 #'
@@ -51,7 +52,7 @@
 #' @seealso \code{\link{json_pds}}
 #' @export
 
-score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female = 1, id) {
+score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female = 1, id, session_id) {
   
   #### 1. Set up/initial checks #####
   
@@ -70,6 +71,15 @@ score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female =
   if (isTRUE(ID_arg)){
     if (!(id %in% names(pds_data))) {
       stop('variable name entered as id is not in pds_data')
+    }
+  }
+  
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(id %in% names(pds_data))) {
+      stop("variable name entered as session_id is not in pds_data")
     }
   }
   
@@ -229,7 +239,11 @@ score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female =
   pds_scored <- pds_data_edits[, c(1, which(names(pds_data_edits) %in% c("pds_score_na", "pds_score", "pds_tanner_sum", "pds_tanner_cat")))]
   
   if (isTRUE(ID_arg)){
-    pds_phenotype <- merge(pds_data, pds_scored, by = id)
+    if (isTRUE(sessionID_arg)) {
+      pds_phenotype <- merge(pds_data, pds_score_dat, by = c(id, session_id))
+    } else {
+      pds_phenotype <- merge(pds_data, pds_score_dat, by = id)
+    }
 
     return(list(score_dat = as.data.frame(pds_scored),
                 bids_phenotype = as.data.frame(pds_phenotype)))

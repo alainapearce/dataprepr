@@ -4,12 +4,14 @@
 \alias{score_sleeplog}
 \title{score_sleeplog: Score data from the week-long sleep log}
 \usage{
-score_sleeplog(sleep_data, id, summer_start, summer_end)
+score_sleeplog(sleep_data, id, session_id, summer_start, summer_end)
 }
 \arguments{
 \item{sleep_data}{a data.frame all items for the the week-long sleep log following the naming conventions described above}
 
 \item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+
+\item{session_id}{(optional) name of session ID column in input data if there are multiple observations per participant. If included, the output dataset will be matched by id and session id, if not included the output dataset will be in the order of the input data. Required to get the phenotype dataset if have multiple sessions (raw data merged with scores.)}
 
 \item{summer_start}{a date for the start of summer holiday (check area school districts during data collection). Must be formatted as character string 'YYYY-MM-DD'.}
 

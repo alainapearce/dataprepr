@@ -16,9 +16,10 @@
 #' 
 #' @param pptq_data a data.frame all items for the Pictorial Personality Traits Questionnaire for Children  following the naming conventions described above
 #' @param pptq_scale 3 or 5: indicates if data was collected with a 3-point or 5-point likert scale
-#' @param extra_scale_cols a vector of character strings that begin with 'pptq' but are not scale items. Any columns in pptq_data that begin with 'pptq' but are not scale items must be included here. Default is empty vector.
-
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'pptq' but are not scale items. Any columns in pptq_data that begin with 'pptq' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with subscale scores for the Pictorial Personality Traits Questionnaire for Children 
 #' @examples
@@ -32,7 +33,7 @@
 #'
 #' @export
 
-score_pptq <- function(pptq_data, pptq_scale, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_pptq <- function(pptq_data, pptq_scale, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -51,6 +52,15 @@ score_pptq <- function(pptq_data, pptq_scale, base_zero = TRUE, id, extra_scale_
   if (isTRUE(ID_arg)){
     if (!(id %in% names(pptq_data))) {
       stop("variable name entered as id is not in pptq_data")
+    }
+  }
+  
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(id %in% names(pptq_data))) {
+      stop("variable name entered as session_id is not in pptq_data")
     }
   }
   
@@ -79,8 +89,13 @@ score_pptq <- function(pptq_data, pptq_scale, base_zero = TRUE, id, extra_scale_
                                pptq_agreeableness = rep(NA, nrow(pptq_data)))
   
   if (isTRUE(ID_arg)) {
-    pptq_score_dat <- data.frame(pptq_data[[id]], pptq_score_dat)
-    names(pptq_score_dat)[1] <- id
+    if (isTRUE(sessionID_arg)) {
+      pptq_score_dat <- data.frame(pptq_data[[id]], pptq_data[[session_id]], pptq_score_dat)
+      names(pptq_score_dat)[1:2] <- c(id, session_id)
+    } else {
+      pptq_score_dat <- data.frame(pptq_data[[id]], pptq_score_dat)
+      names(pptq_score_dat)[1] <- id
+    }
   }
   
   # assign pptq scale items to pptq_items, excluding columns in extra_scale_cols
@@ -200,7 +215,11 @@ score_pptq <- function(pptq_data, pptq_scale, base_zero = TRUE, id, extra_scale_
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    pptq_phenotype <- merge(pptq_data, pptq_score_dat, by = id)
+    if (isTRUE(sessionID_arg)) {
+      pptq_phenotype <- merge(pptq_data, pptq_score_dat, by = c(id, session_id))
+    } else {
+      pptq_phenotype <- merge(pptq_data, pptq_score_dat, by = id)
+    }
     
     return(list(score_dat = as.data.frame(pptq_score_dat),
                 bids_phenotype = as.data.frame(pptq_phenotype)))

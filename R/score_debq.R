@@ -22,6 +22,8 @@
 #' 
 #' @param debq_data a data.frame all items for the Dutch Eating Behavior Questionnaire following the naming conventions described above
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'debq' but are not scale items. Any columns in debq_data that begin with 'debq' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with subscale scores for the Dutch Eating Behavior Questionnaire
 #' @examples
@@ -36,7 +38,7 @@
 #'
 #' @export
 
-score_debq <- function(debq_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_debq <- function(debq_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -58,6 +60,15 @@ score_debq <- function(debq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
     }
   }
   
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(id %in% names(debq_data))) {
+      stop("variable name entered as session_id is not in debq_data")
+    }
+  }
+  
   # check base_zero is logical
   if (!is.logical(base_zero)) {
     stop("base_zero arg must be logical (TRUE/FALSE)")
@@ -70,8 +81,13 @@ score_debq <- function(debq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
   
   
   if (isTRUE(ID_arg)) {
-    debq_score_dat <- data.frame(debq_data[[id]], debq_score_dat)
-    names(debq_score_dat)[1] <- id
+    if (isTRUE(sessionID_arg)) {
+      debq_score_dat <- data.frame(debq_data[[id]], debq_data[[session_id]], debq_score_dat)
+      names(debq_score_dat)[1:2] <- c(id, session_id)
+    } else {
+      debq_score_dat <- data.frame(debq_data[[id]], debq_score_dat)
+      names(debq_score_dat)[1] <- id
+    }
   }
   
   # assign debq scale items to debq_items, excluding columns in extra_scale_cols
@@ -123,7 +139,11 @@ score_debq <- function(debq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    debq_phenotype <- merge(debq_data, debq_score_dat, by = id)
+    if (isTRUE(sessionID_arg)) {
+      debq_phenotype <- merge(debq_data, debq_score_dat, by = c(id, session_id))
+    } else {
+      debq_phenotype <- merge(debq_data, debq_score_dat, by = id)
+    }
     
     return(list(score_dat = as.data.frame(debq_score_dat),
                 bids_phenotype = as.data.frame(debq_phenotype)))

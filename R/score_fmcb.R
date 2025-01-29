@@ -22,6 +22,8 @@
 #'
 #' @param fmcb_data a data.frame all items for the Feeding to Manage Child Behavior Questionnaire following the naming conventions described above
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'fmcb' but are not scale items. Any columns in fmcb_data that begin with 'fmcb' but are not scale items must be included here. Default is empty vector.
 #' @return If 'id' argument is used, returns a list with 2 dataframes: (1) bids_phenotype (contains input fmcb_data [values identical to input, underscores removed from fmcb items col names, if they existed] and FMCB scores) and (2) score_dat (contains FMCB subscale scores only). If 'id' argument is not used, returns a list with score_dat dataframe only.
 #' @examples
@@ -32,7 +34,7 @@
 #' 
 #' @export
 
-score_fmcb <- function(fmcb_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_fmcb <- function(fmcb_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -53,6 +55,15 @@ score_fmcb <- function(fmcb_data, base_zero = TRUE, id, extra_scale_cols = c()) 
             stop('variable name entered as id is not in fmcb_data')
         }
     }
+    
+    # check if session_id exists
+    sessionID_arg <- methods::hasArg(session_id)
+    
+    if (isTRUE(sessionID_arg)){
+      if (!(id %in% names(fmcb_data))) {
+        stop("variable name entered as session_id is not in fmcb_data")
+      }
+    }
 
     # check base_zero is logical
     if (!is.logical(base_zero)) {
@@ -65,8 +76,13 @@ score_fmcb <- function(fmcb_data, base_zero = TRUE, id, extra_scale_cols = c()) 
     fmcb_score_dat <- data.frame(fmcb_score = rep(NA, nrow(fmcb_data)))
 
     if (isTRUE(ID_arg)) {
+      if (isTRUE(sessionID_arg)) {
+        fmcb_score_dat <- data.frame(fmcb_data[[id]], fmcb_data[[session_id]], fmcb_score_dat)
+        names(fmcb_score_dat)[1:2] <- c(id, session_id)
+      } else {
         fmcb_score_dat <- data.frame(fmcb_data[[id]], fmcb_score_dat)
         names(fmcb_score_dat)[1] <- id
+      }
     }
 
     # assign fmcb scale items to fmcb_items, excluding columns in extra_scale_cols
@@ -114,7 +130,11 @@ score_fmcb <- function(fmcb_data, base_zero = TRUE, id, extra_scale_cols = c()) 
 
     ## merge raw responses with scored data
     if (isTRUE(ID_arg)){
-      fmcb_phenotype <- merge(fmcb_data, fmcb_score_dat, by = id)
+      if (isTRUE(sessionID_arg)) {
+        fmcb_phenotype <- merge(fmcb_data, fmcb_score_dat, by = c(id, session_id))
+      } else {
+        fmcb_phenotype <- merge(fmcb_data, fmcb_score_dat, by = id)
+      }
       
       return(list(score_dat = as.data.frame(fmcb_score_dat),
                   bids_phenotype = as.data.frame(fmcb_phenotype)))

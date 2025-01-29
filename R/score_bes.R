@@ -21,6 +21,7 @@
 #' @param pna value used when participant prefers not to answer/elects to skip
 #' @param base_zero (logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.
 #' @param id (optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)
+#' @param session_id (optional) name of session ID column in input data if there are multiple observations per participant. If included, the output dataset will be matched by id and session id, if not included the output dataset will be in the order of the input data. Required to get the phenotype dataset if have multiple sessions (raw data merged with scores.)
 #' @param extra_scale_cols a vector of character strings that begin with 'bes' but are not scale items. Any columns in bes_data that begin with 'bes' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with total score for the Binge Eating Scale
 #' @examples
@@ -34,7 +35,7 @@
 #'
 #' @export
 
-score_bes <- function(bes_data, base_zero = TRUE, pna = NA, id, extra_scale_cols = c()) {
+score_bes <- function(bes_data, base_zero = TRUE, pna = NA, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -56,6 +57,15 @@ score_bes <- function(bes_data, base_zero = TRUE, pna = NA, id, extra_scale_cols
     }
   }
   
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(session_id %in% names(bes_data))) {
+      stop('variable name entered as session_id is not in bes_data')
+    }
+  }
+  
   # check base_zero is logical
   if (!is.logical(base_zero)) {
     stop("base_zero arg must be logical (TRUE/FALSE)")
@@ -67,8 +77,13 @@ score_bes <- function(bes_data, base_zero = TRUE, pna = NA, id, extra_scale_cols
   bes_score_dat <- data.frame(bes_total = rep(NA, nrow(bes_data)))
   
   if (isTRUE(ID_arg)) {
-    bes_score_dat <- data.frame(bes_data[[id]], bes_score_dat)
-    names(bes_score_dat)[1] <- id
+    if (isTRUE(sessionID_arg)) {
+      bes_score_dat <- data.frame(bes_data[[id]], bes_data[[session_id]], bes_score_dat)
+      names(bes_score_dat)[1:2] <- c(id, session_id)
+    } else {
+      bes_score_dat <- data.frame(bes_data[[id]], bes_score_dat)
+      names(bes_score_dat)[1] <- id
+    }
   }
   
   # assign bes scale items to bes_items, excluding columns in extra_scale_cols
@@ -129,7 +144,11 @@ score_bes <- function(bes_data, base_zero = TRUE, pna = NA, id, extra_scale_cols
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    bes_phenotype <- merge(bes_data, bes_score_dat, by = id)
+    if (isTRUE(sessionID_arg)) {
+      bes_phenotype <- merge(bes_data, bes_score_dat, by = c(id, session_id))
+    } else {
+      bes_phenotype <- merge(bes_data, bes_score_dat, by = id)
+    }
     
     return(list(score_dat = as.data.frame(bes_score_dat),
                 bids_phenotype = as.data.frame(bes_phenotype)))

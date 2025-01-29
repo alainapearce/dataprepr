@@ -28,8 +28,11 @@
 #'
 #'
 #' @param bisbas_data a data.frame all items for the Behavioral Inhibition Scale/Behavioral Activation Scale following the naming conventions described above
-#' @param extra_scale_cols a vector of character strings that begin with 'bisbas' but are not scale items. Any columns in bisbas_data that begin with 'bisbas' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'bisbas' but are not scale items. Any columns in bisbas_data that begin with 'bisbas' but are not scale items must be included here. Default is empty vector.
+#'
 #'
 #' @return A dataset with subscale scores for the Behavioral Inhibition Scale/Behavioral Activation Scale
 #' @examples
@@ -44,7 +47,7 @@
 #'
 #' @export
 
-score_bisbas <- function(bisbas_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_bisbas <- function(bisbas_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -66,6 +69,15 @@ score_bisbas <- function(bisbas_data, base_zero = TRUE, id, extra_scale_cols = c
     }
   }
   
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(id %in% names(bisbas_data))) {
+      stop("variable name entered as session_id is not in bisbas_data")
+    }
+  }
+  
   # check base_zero is logical
   if (!is.logical(base_zero)) {
     stop("base_zero arg must be logical (TRUE/FALSE)")
@@ -78,8 +90,13 @@ score_bisbas <- function(bisbas_data, base_zero = TRUE, id, extra_scale_cols = c
   
   
   if (isTRUE(ID_arg)) {
-    bisbas_score_dat <- data.frame(bisbas_data[[id]], bisbas_score_dat)
-    names(bisbas_score_dat)[1] <- id
+    if (isTRUE(sessionID_arg)) {
+      bisbas_score_dat <- data.frame(bisbas_data[[id]], bisbas_data[[session_id]], bisbas_score_dat)
+      names(bisbas_score_dat)[1:2] <- c(id, session_id)
+    } else {
+      bisbas_score_dat <- data.frame(bisbas_data[[id]], bisbas_score_dat)
+      names(bisbas_score_dat)[1] <- id
+    }
   }
   
   # assign bisbas scale items to bisbas_items, excluding columns in extra_scale_cols
@@ -158,7 +175,11 @@ score_bisbas <- function(bisbas_data, base_zero = TRUE, id, extra_scale_cols = c
 
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    bisbas_phenotype <- merge(bisbas_data, bisbas_score_dat, by = id)
+    if (isTRUE(sessionID_arg)) {
+      bisbas_phenotype <- merge(bisbas_data, bisbas_score_dat, by = c(id, session_id))
+    } else {
+      bisbas_phenotype <- merge(bisbas_data, bisbas_score_dat, by = id)
+    }
     
     return(list(score_dat = as.data.frame(bisbas_score_dat),
                 bids_phenotype = as.data.frame(bisbas_phenotype)))

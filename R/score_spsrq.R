@@ -26,6 +26,8 @@
 #'
 #' @param spsrq_data a data.frame all items for the Sensitivity to Punishment and Sensitivity to Reward Questionnaire following the naming conventions described above
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'spsrq' but are not scale items. Any columns in spsrq_data that begin with 'spsrq' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with subscale scores for the Sensitivity to Punishment and Sensitivity to Reward Questionnaire
 #' @examples
@@ -40,7 +42,7 @@
 #'
 #' @export
 
-score_spsrq <- function(spsrq_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_spsrq <- function(spsrq_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -61,6 +63,15 @@ score_spsrq <- function(spsrq_data, base_zero = TRUE, id, extra_scale_cols = c()
             stop("variable name entered as id is not in spsrq_data")
         }
     }
+    
+    # check if session_id exists
+    sessionID_arg <- methods::hasArg(session_id)
+    
+    if (isTRUE(sessionID_arg)){
+      if (!(id %in% names(spsrq_data))) {
+        stop("variable name entered as session_id is not in spsrq_data")
+      }
+    }
 
     # check base_zero is logical
     if (!is.logical(base_zero)) {
@@ -74,10 +85,14 @@ score_spsrq <- function(spsrq_data, base_zero = TRUE, id, extra_scale_cols = c()
 
 
     if (isTRUE(ID_arg)) {
+      if (isTRUE(sessionID_arg)) {
+        spsrq_score_dat <- data.frame(spsrq_data[[id]], spsrq_data[[session_id]], spsrq_score_dat)
+        names(spsrq_score_dat)[1:2] <- c(id, session_id)
+      } else {
         spsrq_score_dat <- data.frame(spsrq_data[[id]], spsrq_score_dat)
         names(spsrq_score_dat)[1] <- id
+      }
     }
-
     # assign spsrq scale items to spsrq_items, excluding columns in extra_scale_cols
     spsrq_items <- grep("^spsrq", names(spsrq_data), value = TRUE) %>% setdiff(extra_scale_cols)
     
@@ -141,7 +156,11 @@ score_spsrq <- function(spsrq_data, base_zero = TRUE, id, extra_scale_cols = c()
     #### 3. Clean Export/Scored Data #####
     ## merge raw responses with scored data
     if (isTRUE(ID_arg)){
-      spsrq_phenotype <- merge(spsrq_data_edit, spsrq_score_dat, by = id)
+      if (isTRUE(sessionID_arg)) {
+        spsrq_phenotype <- merge(spsrq_data, spsrq_score_dat, by = c(id, session_id))
+      } else {
+        spsrq_phenotype <- merge(spsrq_data, spsrq_score_dat, by = id)
+      }
       
       return(list(score_dat = as.data.frame(spsrq_score_dat),
                   bids_phenotype = as.data.frame(spsrq_phenotype)))

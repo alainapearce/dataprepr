@@ -19,6 +19,7 @@
 #' @param cshq_data a data.frame all items for the Children Sleep Habits Questionnaire following the naming conventions described above
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#'@inheritParams score_bes
 #' @param reverse_score is data already reversed scored (default = FALSE)
 #'
 #'
@@ -36,7 +37,7 @@
 #'
 #' @export
 
-score_cshq <- function(cshq_data, base_zero = TRUE, id, reverse_score = FALSE) {
+score_cshq <- function(cshq_data, base_zero = TRUE, id, session_id, reverse_score = FALSE) {
   
   #### 1. Set up/initial checks #####
   
@@ -58,6 +59,15 @@ score_cshq <- function(cshq_data, base_zero = TRUE, id, reverse_score = FALSE) {
     }
   }
   
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(id %in% names(cshq_data))) {
+      stop("variable name entered as session_id is not in cshq_data")
+    }
+  }
+  
   # check base_zero is logical
   if (!is.logical(base_zero)) {
     stop("base_zero arg must be logical (TRUE/FALSE)")
@@ -71,8 +81,13 @@ score_cshq <- function(cshq_data, base_zero = TRUE, id, reverse_score = FALSE) {
   cshq_score_dat <- data.frame(cshq_bedtime_resit = rep(NA, nrow(cshq_data)), cshq_sleep_delay = rep(NA, nrow(cshq_data)), cshq_sleepdur = rep(NA, nrow(cshq_data)), cshq_anxiety = rep(NA, nrow(cshq_data)), cshq_nightwake = rep(NA, nrow(cshq_data)), cshq_parasomnias = rep(NA, nrow(cshq_data)), cshq_dis_breathing = rep(NA, nrow(cshq_data)), cshq_daysleepy = rep(NA, nrow(cshq_data)), cshq_total = rep(NA, nrow(cshq_data)))
   
   if (isTRUE(ID_arg)) {
-    cshq_score_dat <- data.frame(cshq_data[[id]], cshq_score_dat)
-    names(cshq_score_dat)[1] <- id
+    if (isTRUE(sessionID_arg)) {
+      cshq_score_dat <- data.frame(cshq_data[[id]], cshq_data[[session_id]], cshq_score_dat)
+      names(cshq_score_dat)[1:2] <- c(id, session_id)
+    } else {
+      cshq_score_dat <- data.frame(cshq_data[[id]], cshq_score_dat)
+      names(cshq_score_dat)[1] <- id
+    }
   }
   
   
@@ -144,7 +159,11 @@ score_cshq <- function(cshq_data, base_zero = TRUE, id, reverse_score = FALSE) {
   #### 3. Clean Export/Scored Data #####
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    cshq_phenotype <- merge(cshq_data, cshq_score_dat, by = id)
+    if (isTRUE(sessionID_arg)) {
+      cshq_phenotype <- merge(cshq_data, cshq_score_dat, by = c(id, session_id))
+    } else {
+      cshq_phenotype <- merge(cshq_data, cshq_score_dat, by = id)
+    }
     
     return(list(score_dat = as.data.frame(cshq_score_dat),
                 bids_phenotype = as.data.frame(cshq_phenotype)))

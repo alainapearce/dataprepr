@@ -13,8 +13,11 @@
 #' B1. Couch SC, Glanz K, Zhou C, Sallis JF, Saelens BE. Home Food Environment in Relation to Children’s Diet Quality and Weight Status. Journal of the Academy of Nutrition and Dietetics. 2014;114(10):1569-1579.e1. doi:10.1016/j.jand.2014.05.015 (\href{https://pubmed.ncbi.nlm.nih.gov/25066057/}{PubMed})
 #'
 #' @param hfe_data a data.frame all items for the Home Food Environment Survey from the Neighborhood Impact on Kids Study following the naming conventions described above
-#' @param extra_scale_cols a vector of character strings that begin with 'hfe' but are not scale items. Any columns in hfe_data that begin with 'hfe' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'hfe' but are not scale items. Any columns in hfe_data that begin with 'hfe' but are not scale items must be included here. Default is empty vector.
+#' 
 #'
 #' @return A dataset with subscale scores for the Home Food Environment Survey from the Neighborhood Impact on Kids Study
 #' @examples
@@ -28,7 +31,7 @@
 #'
 #' @export
 
-score_nik_hfe <- function(hfe_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_nik_hfe <- function(hfe_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -49,6 +52,15 @@ score_nik_hfe <- function(hfe_data, base_zero = TRUE, id, extra_scale_cols = c()
             stop('variable name entered as id is not in hfe_data')
         }
     }
+    
+    # check if session_id exists
+    sessionID_arg <- methods::hasArg(session_id)
+    
+    if (isTRUE(sessionID_arg)){
+      if (!(id %in% names(hfe_data))) {
+        stop("variable name entered as session_id is not in hfe_data")
+      }
+    }
 
     # check base_zero is logical
     if (!is.logical(base_zero)) {
@@ -61,8 +73,13 @@ score_nik_hfe <- function(hfe_data, base_zero = TRUE, id, extra_scale_cols = c()
     hfe_score_dat <- data.frame(hfe_modeling = rep(NA, nrow(hfe_data)), hfe_restrictive_practices = rep(NA, nrow(hfe_data)), hfe_permissive_practices = rep(NA, nrow(hfe_data)), hfe_pressure_eat = rep(NA, nrow(hfe_data)), hfe_food_rules = rep(NA, nrow(hfe_data)), hfe_highED_homefood = rep(NA, nrow(hfe_data)), hfe_lowED_homefood = rep(NA, nrow(hfe_data)), hfe_highED_childlike = rep(NA, nrow(hfe_data)), hfe_lowED_childlike = rep(NA, nrow(hfe_data)), hfe_eat_away = rep(NA, nrow(hfe_data)), hfe_eat_school = rep(NA, nrow(hfe_data)), hfe_eatout = rep(NA, nrow(hfe_data)), hfe_nbh_grocery_available = rep(NA, nrow(hfe_data)), hfe_nbh_grocery_cost = rep(NA, nrow(hfe_data)), hfe_p_healthyeating_conf = rep(NA, nrow(hfe_data)), hfe_p_healthyeating_barriers = rep(NA, nrow(hfe_data)), hfe_fam_pos_influence = rep(NA, nrow(hfe_data)), hfe_fam_neg_influence = rep(NA, nrow(hfe_data)))
 
     if (isTRUE(ID_arg)) {
+      if (isTRUE(sessionID_arg)) {
+        hfe_score_dat <- data.frame(hfe_data[[id]], hfe_data[[session_id]], hfe_score_dat)
+        names(hfe_score_dat)[1:2] <- c(id, session_id)
+      } else {
         hfe_score_dat <- data.frame(hfe_data[[id]], hfe_score_dat)
         names(hfe_score_dat)[1] <- id
+      }
     }
 
     # remove underscore if in column names
@@ -155,7 +172,11 @@ score_nik_hfe <- function(hfe_data, base_zero = TRUE, id, extra_scale_cols = c()
     #### 3. Clean Export/Scored Data #####
     ## merge raw responses with scored data
     if (isTRUE(ID_arg)){
-      hfe_phenotype <- merge(hfe_data, hfe_score_dat, by = id)
+      if (isTRUE(sessionID_arg)) {
+        hfe_phenotype <- merge(hfe_data, hfe_score_dat, by = c(id, session_id))
+      } else {
+        hfe_phenotype <- merge(hfe_data, hfe_score_dat, by = id)
+      }
       
       return(list(score_dat = as.data.frame(hfe_score_dat),
                   bids_phenotype = as.data.frame(hfe_phenotype)))

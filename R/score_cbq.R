@@ -23,9 +23,12 @@
 #' Rothbart MΚ, Ahadi SA, Hershey KL. Temperament and Social Behavior in Childhood. Merrill-Palmer Quarterly. 1994;40(1):21-39 (\href{https://www.jstor.org/stable/23087906}{jstore})
 #'
 #' @param cbq_data a data.frame all items for the Child Behavior Questionnaire following the naming conventions described above
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'cbq' but are not scale items. Any columns in cbq_data that begin with 'cbq' but are not scale items must be included here. Default is empty vector.
 #' @param does_not_apply_value value used to code a cbq response of "does not apply". Default is NA
-#' @inheritParams score_bes
+#' 
 #' @return A dataset with subscale scores for the Child Behavior Questionnaire
 #' @examples
 #'
@@ -41,7 +44,7 @@
 #'
 #' @export
 
-score_cbq <- function(cbq_data, base_zero = TRUE, id, does_not_apply_value = NA, extra_scale_cols = c()) {
+score_cbq <- function(cbq_data, base_zero = TRUE, id, session_id, does_not_apply_value = NA, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -62,6 +65,16 @@ score_cbq <- function(cbq_data, base_zero = TRUE, id, does_not_apply_value = NA,
             stop("variable name entered as id is not in cbq_data")
         }
     }
+    
+    # check if session_id exists
+    sessionID_arg <- methods::hasArg(session_id)
+    
+    if (isTRUE(sessionID_arg)){
+      if (!(id %in% names(cbq_data))) {
+        stop("variable name entered as session_id is not in cbq_data")
+      }
+    }
+    
 
     #### 2. Set Up Data #####
 
@@ -91,8 +104,13 @@ score_cbq <- function(cbq_data, base_zero = TRUE, id, does_not_apply_value = NA,
       )
     
     if (isTRUE(ID_arg)) {
+      if (isTRUE(sessionID_arg)) {
+        cbq_score_dat <- data.frame(cbq_data[[id]], cbq_data[[session_id]], cbq_score_dat)
+        names(cbq_score_dat)[1:2] <- c(id, session_id)
+      } else {
         cbq_score_dat <- data.frame(cbq_data[[id]], cbq_score_dat)
         names(cbq_score_dat)[1] <- id
+      }
     }
     
     # assign cbq scale items to cbq_items, excluding columns in extra_scale_cols
@@ -242,7 +260,11 @@ score_cbq <- function(cbq_data, base_zero = TRUE, id, does_not_apply_value = NA,
 
     ## merge raw responses with scored data
     if (isTRUE(ID_arg)){
-      cbq_phenotype <- merge(cbq_data, cbq_score_dat, by = id)
+      if (isTRUE(sessionID_arg)) {
+        cbq_phenotype <- merge(cbq_data, cbq_score_dat, by = c(id, session_id))
+      } else {
+        cbq_phenotype <- merge(cbq_data, cbq_score_dat, by = id)
+      }
       
       return(list(score_dat = as.data.frame(cbq_score_dat),
                   bids_phenotype = as.data.frame(cbq_phenotype)))

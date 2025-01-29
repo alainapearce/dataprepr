@@ -28,6 +28,8 @@
 #'
 #' @param cebq_data a data.frame all items for the Children's Eating Behavior Questionnaire following the naming conventions described in Details
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'cebq' but are not scale items. Any columns in cebq_data that begin with 'cebq' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return If 'id' argument is used, returns a list with 2 dataframes: (1) bids_phenotype (contains input cebq_data [values identical to input, underscores removed from cebq items col names, if they existed] and cebq subscale scores) and (2) score_dat (contains cebq subscale scores only). If 'id' argument is not used, returns a list with score_dat dataframe only.
@@ -43,7 +45,7 @@
 #' cebq_score_data <- score_cebq(cebq_data = cebq_base1, base_zero = FALSE, id = 'ID')
 #' 
 
-score_cebq <- function(cebq_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_cebq <- function(cebq_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -64,6 +66,15 @@ score_cebq <- function(cebq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
             stop('variable name entered as id is not in cebq_data')
         }
     }
+    
+    # check if session_id exists
+    sessionID_arg <- methods::hasArg(session_id)
+    
+    if (isTRUE(sessionID_arg)){
+      if (!(id %in% names(cebq_data))) {
+        stop("variable name entered as session_id is not in cebq_data")
+      }
+    }
 
     # check base_zero is logical
     if (!is.logical(base_zero)) {
@@ -76,8 +87,13 @@ score_cebq <- function(cebq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
     cebq_score_dat <- data.frame(cebq_fr = rep(NA, nrow(cebq_data)), cebq_eoe = rep(NA, nrow(cebq_data)), cebq_ef = rep(NA, nrow(cebq_data)), cebq_dd = rep(NA, nrow(cebq_data)), cebq_sr = rep(NA, nrow(cebq_data)), cebq_se = rep(NA, nrow(cebq_data)), cebq_eue = rep(NA, nrow(cebq_data)), cebq_ff = rep(NA, nrow(cebq_data)), cebq_approach = rep(NA, nrow(cebq_data)), cebq_avoid = rep(NA, nrow(cebq_data)), cebq_rbe = rep(NA, nrow(cebq_data)), cebq_pe = rep(NA, nrow(cebq_data)), cebq_ee = rep(NA, nrow(cebq_data)))
 
     if (isTRUE(ID_arg)) {
+      if (isTRUE(sessionID_arg)) {
+        cebq_score_dat <- data.frame(cebq_data[[id]], cebq_data[[session_id]], cebq_score_dat)
+        names(cebq_score_dat)[1:2] <- c(id, session_id)
+      } else {
         cebq_score_dat <- data.frame(cebq_data[[id]], cebq_score_dat)
         names(cebq_score_dat)[1] <- id
+      }
     }
     
     # assign cebq scale items to cebq_items, excluding columns in extra_scale_cols
@@ -185,7 +201,11 @@ score_cebq <- function(cebq_data, base_zero = TRUE, id, extra_scale_cols = c()) 
 
     ## merge raw responses with scored data
     if (isTRUE(ID_arg)){
-      cebq_phenotype <- merge(cebq_data, cebq_score_dat, by = id)
+      if (isTRUE(sessionID_arg)) {
+        cebq_phenotype <- merge(cebq_data, cebq_score_dat, by = c(id, session_id))
+      } else {
+        cebq_phenotype <- merge(cebq_data, cebq_score_dat, by = id)
+      }
       
       return(list(score_dat = as.data.frame(cebq_score_dat),
                   bids_phenotype = as.data.frame(cebq_phenotype)))

@@ -28,7 +28,8 @@
 #'
 #' @param ffq_data a data.frame all items for the HELIX Food Fequency Questionnaire following the naming conventions described above
 #' @inheritParams score_bes
-#' @inheritParams score_pds
+#' @inheritParams score_bes
+#' @inheritParams score_bes
 #'
 #' @return A dataset with servings per week calculated for the various food categories
 #' @examples
@@ -42,7 +43,7 @@
 #'
 #' @export
 
-score_ffq_helix <- function(ffq_data, base_zero = TRUE, id) {
+score_ffq_helix <- function(ffq_data, base_zero = TRUE, id, session_id) {
   
   #### 1. Set up/initial checks #####
   
@@ -64,14 +65,28 @@ score_ffq_helix <- function(ffq_data, base_zero = TRUE, id) {
     }
   }
   
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(id %in% names(ffq_data))) {
+      stop("variable name entered as session_id is not in ffq_data")
+    }
+  }
+  
   #### 2. Set Up Data #####
   
   # set up database for results create empty matrix
   ffq_score_dat <- data.frame(dairy = rep(NA, nrow(ffq_data)), eggs = rep(NA, nrow(ffq_data)), meat = rep(NA, nrow(ffq_data)), fish = rep(NA, nrow(ffq_data)), nuts = rep(NA, nrow(ffq_data)), vegetables = rep(NA, nrow(ffq_data)), pulses = rep(NA, nrow(ffq_data)), fruit = rep(NA, nrow(ffq_data)), potatoes = rep(NA, nrow(ffq_data)), breads_cereals = rep(NA, nrow(ffq_data)), sweets = rep(NA, nrow(ffq_data)), beverages = rep(NA, nrow(ffq_data)), sweet_bakery = rep(NA, nrow(ffq_data)), salty_snacks = rep(NA, nrow(ffq_data)), added_fats = rep(NA, nrow(ffq_data)), dressings = rep(NA, nrow(ffq_data)), animal = rep(NA, nrow(ffq_data)), plants = rep(NA, nrow(ffq_data)), upf = rep(NA, nrow(ffq_data)), not_upf = rep(NA, nrow(ffq_data)), prop_upf = rep(NA, nrow(ffq_data)))
   
   if (isTRUE(ID_arg)) {
-    ffq_score_dat <- data.frame(ffq_data[[id]], ffq_score_dat)
-    names(ffq_score_dat)[1] <- id
+    if (isTRUE(sessionID_arg)) {
+      ffq_score_dat <- data.frame(ffq_data[[id]], ffq_data[[session_id]], ffq_score_dat)
+      names(ffq_score_dat)[1:2] <- c(id, session_id)
+    } else {
+      ffq_score_dat <- data.frame(ffq_data[[id]], ffq_score_dat)
+      names(ffq_score_dat)[1] <- id
+    }
   }
   
   # key variable names
@@ -182,7 +197,11 @@ score_ffq_helix <- function(ffq_data, base_zero = TRUE, id) {
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    ffq_phenotype <- merge(ffq_data, ffq_score_dat, by = 'participant_id')
+    if (isTRUE(sessionID_arg)) {
+      ffq_phenotype <- merge(ffq_data, ffq_score_dat, by = c(id, session_id))
+    } else {
+      ffq_phenotype <- merge(ffq_data, ffq_score_dat, by = id)
+    }
     
     ## re-order to make more sense (supplements at end)
     ffq_sup_vars <- c('ffq_suplements', 'ffq_multivit', 'ffq_multivit_brand', 'ffq_multivit_brandname', 'ffq_multivit_current', 'ffq_multivit_freq', 'ffq_minerals', 'ffq_mineral_brand', 'ffq_mineral_brandname', 'ffq_mineral_current', 'ffq_mineral_freq', 'ffq_vitd', 'ffq_vitd_brand', 'ffq_vitd_brandname', 'ffq_vitd_current', 'ffq_vitd_freq', 'ffq_omega3', 'ffq_omega3_brand', 'ffq_omega3_brandname', 'ffq_omega3_current', 'ffq_omega3_freq', 'ffq_sup_other', 'ffq_sup_other_list')

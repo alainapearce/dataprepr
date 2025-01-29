@@ -28,6 +28,8 @@
 #' 
 #' @param hfssm_data a data.frame all items for the U.S. Household Food Security Survey Module following the naming conventions described above
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the U.S. Household Food Security Survey Module
 #' @examples
@@ -40,7 +42,7 @@
 #' }
 #'
 #' @export
-score_hfssm <- function(hfssm_data, base_zero = FALSE, id) {
+score_hfssm <- function(hfssm_data, base_zero = FALSE, id, session_id) {
   
   #### 1. Set up/initial checks #####
   
@@ -59,6 +61,15 @@ score_hfssm <- function(hfssm_data, base_zero = FALSE, id) {
   if (isTRUE(ID_arg)){
     if (!(id %in% names(hfssm_data))) {
       stop("variable name entered as id is not in hfssm_data")
+    }
+  }
+  
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(id %in% names(hfssm_data))) {
+      stop("variable name entered as session_id is not in hfssm_data")
     }
   }
   
@@ -81,8 +92,13 @@ score_hfssm <- function(hfssm_data, base_zero = FALSE, id) {
                                hfssm_children_cat = rep(NA, nrow(hfssm_data)))
   
   if (isTRUE(ID_arg)) {
-    hfssm_score_dat <- data.frame(hfssm_data[[id]], hfssm_score_dat)
-    names(hfssm_score_dat)[1] <- id
+    if (isTRUE(sessionID_arg)) {
+      hfssm_score_dat <- data.frame(hfssm_data[[id]], hfssm_data[[session_id]], hfssm_score_dat)
+      names(hfssm_score_dat)[1:2] <- c(id, session_id)
+    } else {
+      hfssm_score_dat <- data.frame(hfssm_data[[id]], hfssm_score_dat)
+      names(hfssm_score_dat)[1] <- id
+    }
   }
   
   # get hfssm items
@@ -251,7 +267,11 @@ score_hfssm <- function(hfssm_data, base_zero = FALSE, id) {
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    hfssm_phenotype <- merge(hfssm_data, hfssm_score_dat, by = id)
+    if (isTRUE(sessionID_arg)) {
+      hfssm_phenotype <- merge(hfssm_data, hfssm_score_dat, by = c(id, session_id))
+    } else {
+      hfssm_phenotype <- merge(hfssm_data, hfssm_score_dat, by = id)
+    }
     
     return(list(score_dat = as.data.frame(hfssm_score_dat),
                 bids_phenotype = as.data.frame(hfssm_phenotype)))

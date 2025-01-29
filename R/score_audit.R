@@ -6,7 +6,24 @@
 #' \itemize{
 #'  \item{The data must include all individual questionnaire items}
 #'  \item{The columns/variables must match the following naming convention: 'audit#' or 'audit_#' where # is the question number (1-10)}
-#'  \item{Questionnaire responses for items 1-8 must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) where 0/1 is the lowest frequency and 4/5 is the highest frequency}
+#'  \item{Questionnaire responses for items 1-8 must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) where: }
+#'  \itemize{
+#'     \item{question 1: }
+#'     \itemize{
+#'        \item{For base_zero = TRUE: 0 = Never, 1 = Monthly or Less, 2 = 2-4 times a month, 3 = 2-3 times a week, 4 = 4 or more times a week}
+#'        \item{For base_zero = FALSE: 1 = Never, 2 = Monthly or Less, 3 = 2-4 times a month, 4 = 2-3 times a week, 5 = 4 or more times a week}
+#'    }
+#'    \item{question 2: }
+#'     \itemize{
+#'        \item{For base_zero = TRUE: 0 = 1 or 2, 1 = 3 or 4, 2 = 5 or 6, 3 = 7 to 9, 4 = 10}
+#'        \item{For base_zero = FALSE: 1 = 1 or 2, 2 = 3 or 4, 3 = 5 or 6, 4 = 7 to 9, 5 = 10}
+#'    }
+#'    \item{question 3-8: }
+#'     \itemize{
+#'        \item{For base_zero = TRUE: 0 = Never, 1 = Less than Monthly, 2 = Monthly, 3 = Weekly, 4 = Daily or Almost Daily}
+#'        \item{For base_zero = FALSE: 1 = Never, 2 = Less than Monthly, 3 = Monthly, 4 = Weekly, 5 = Daily or Almost Daily}
+#'    }
+#'   }
 #'  \item{Questionnaire responses for items 9-10 must be a numeric value of 0,2,4 (base_zero = TRUE) or 1,3,5 (base_zero = FALSE) where: }
 #'  \itemize{
 #'     \item{For base_zero = TRUE: 0 = No; 2 = Yes, but not in the last year; 4 = Yes, during the last year}
@@ -15,10 +32,6 @@
 #'  \item{Missing values must be coded as NA}
 #' }
 #' \cr
-#' 
-#' 3a) question 1: 0 - Never, 1 - Monthly or Less, 2 - 2-4 times a month, 3 - 2-3 times a week, 4 - 4 or more times a week
-#' 3b) question 2: 0 - 1 or 2, 1 - 3 or 4, 2 - 5 or 6, 3 - 7 to 9, 4 - 10
-#' 3c) question 3-8: 0 - Never, 1 - Less than Monthly, 2 - Monthly, 3 - Weekly, 4 - Daily or Almost Daily
 #'
 #' Note, as long as variable names match those listed, the dataset can include other variables
 #'
@@ -26,8 +39,10 @@
 #' Saunders JB, Aasland OG, Babor TF, De La Fuente JR, Grant M. Development of the Alcohol Use Disorders Identification Test (AUDIT): WHO Collaborative Project on Early Detection of Persons with Harmful Alcohol Consumption-II. Addiction. 1993;88(6):791-804. doi:10.1111/j.1360-0443.1993.tb02093.x (\href{https://pubmed.ncbi.nlm.nih.gov/8329970/}{PubMed})
 #'
 #' @param audit_data a data.frame all items for the Alcohol Use Disorders Identification Test following the naming conventions described above
-#' @param extra_scale_cols a vector of character strings that begin with 'audit' but are not scale items. Any columns in audit_data that begin with 'audit' but are not scale items must be included here. Default is empty vector.
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @param extra_scale_cols vector of character strings that begin with 'audit' but are not scale items. Any columns in audit_data that begin with 'audit' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with a score for the Alcohol Use Disorders Identification Test
 #' @examples
@@ -40,7 +55,7 @@
 #'
 #' @export
 
-score_audit <- function(audit_data, id, base_zero = TRUE, extra_scale_cols = c()) {
+score_audit <- function(audit_data, id, session_id, base_zero = TRUE, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -62,6 +77,15 @@ score_audit <- function(audit_data, id, base_zero = TRUE, extra_scale_cols = c()
     }
   }
   
+  # check if session ID exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(session_id %in% names(audit_data))) {
+      stop("variable name entered as session_id is not in audit_data")
+    }
+  }
+  
   # check base_zero is logical
   if (!is.logical(base_zero)) {
     stop("base_zero arg must be logical (TRUE/FALSE)")
@@ -73,8 +97,13 @@ score_audit <- function(audit_data, id, base_zero = TRUE, extra_scale_cols = c()
   audit_score_dat <- data.frame(audit_total = rep(NA, nrow(audit_data)), audit_cat = rep(NA, nrow(audit_data)))
   
   if (isTRUE(ID_arg)) {
-    audit_score_dat <- data.frame(audit_data[[id]], audit_score_dat)
-    names(audit_score_dat)[1] <- id
+    if (isTRUE(sessionID_arg)){
+      audit_score_dat <- data.frame(audit_data[[id]], audit_data[[session_id]], audit_score_dat)
+      names(audit_score_dat)[1:2] <- c(id, session_id)
+    } else {
+      audit_score_dat <- data.frame(audit_data[[id]], audit_score_dat)
+      names(audit_score_dat)[1] <- id
+    }
   }
   
   # assign audit scale items to audit_items, excluding columns in extra_scale_cols
@@ -133,7 +162,11 @@ score_audit <- function(audit_data, id, base_zero = TRUE, extra_scale_cols = c()
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    audit_phenotype <- merge(audit_data, audit_score_dat, by = id)
+    if(isTRUE(sessionID_arg)){
+      audit_phenotype <- merge(audit_data, audit_score_dat, by = c(id, session_id))
+    } else {
+      audit_phenotype <- merge(audit_data, audit_score_dat, by = id)
+    }
     
     return(list(score_dat = as.data.frame(audit_score_dat),
                 bids_phenotype = as.data.frame(audit_phenotype)))

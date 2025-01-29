@@ -4,7 +4,7 @@
 \alias{score_cshq}
 \title{score_cshq: Scored data from the Children Sleep Habits Questionnaire}
 \usage{
-score_cshq(cshq_data, base_zero = TRUE, id, reverse_score = FALSE)
+score_cshq(cshq_data, base_zero = TRUE, id, session_id, reverse_score = FALSE)
 }
 \arguments{
 \item{cshq_data}{a data.frame all items for the Children Sleep Habits Questionnaire following the naming conventions described above}
@@ -12,6 +12,8 @@ score_cshq(cshq_data, base_zero = TRUE, id, reverse_score = FALSE)
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+
+\item{session_id}{(optional) name of session ID column in input data if there are multiple observations per participant. If included, the output dataset will be matched by id and session id, if not included the output dataset will be in the order of the input data. Required to get the phenotype dataset if have multiple sessions (raw data merged with scores.)}
 
 \item{reverse_score}{is data already reversed scored (default = FALSE)}
 }

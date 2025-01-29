@@ -35,6 +35,8 @@
 #'
 #' @param lbc_data a data.frame all items for the Lifestyle Behavior Checklist following the naming conventions described above
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'lbc' but are not scale items. Any columns in lbc_data that begin with 'lbc' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with subscale scores for the Lifestyle Behavior Checklist
 #' @examples
@@ -45,7 +47,7 @@
 #'
 #' @export
 
-score_lbc <- function(lbc_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_lbc <- function(lbc_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -66,6 +68,15 @@ score_lbc <- function(lbc_data, base_zero = TRUE, id, extra_scale_cols = c()) {
             stop('variable name entered as id is not in lbc_data')
         }
     }
+    
+    # check if session_id exists
+    sessionID_arg <- methods::hasArg(session_id)
+    
+    if (isTRUE(sessionID_arg)){
+      if (!(id %in% names(lbc_data))) {
+        stop("variable name entered as session_id is not in lbc_data")
+      }
+    }
 
     # check base_zero is logical
     if (!is.logical(base_zero)) {
@@ -78,8 +89,13 @@ score_lbc <- function(lbc_data, base_zero = TRUE, id, extra_scale_cols = c()) {
     lbc_score_dat <- data.frame(lbc_misbeh = rep(NA, nrow(lbc_data)), lbc_overeat = rep(NA, nrow(lbc_data)), lbc_em_overweight = rep(NA, nrow(lbc_data)), lbc_pa = rep(NA, nrow(lbc_data)), lbc_problem_total = rep(NA, nrow(lbc_data)), lbc_conf_total = rep(NA, nrow(lbc_data)))
 
     if (isTRUE(ID_arg)) {
+      if (isTRUE(sessionID_arg)) {
+        lbc_score_dat <- data.frame(lbc_data[[id]], lbc_data[[session_id]], lbc_score_dat)
+        names(lbc_score_dat)[1:2] <- c(id, session_id)
+      } else {
         lbc_score_dat <- data.frame(lbc_data[[id]], lbc_score_dat)
         names(lbc_score_dat)[1] <- id
+      }
     }
 
     # assign lbc scale items to lbc_items, excluding columns in extra_scale_cols
@@ -172,7 +188,11 @@ score_lbc <- function(lbc_data, base_zero = TRUE, id, extra_scale_cols = c()) {
 
     ## merge raw responses with scored data
     if (isTRUE(ID_arg)){
-      lbc_phenotype <- merge(lbc_data, lbc_score_dat, by = id)
+      if (isTRUE(sessionID_arg)) {
+        lbc_phenotype <- merge(lbc_data, lbc_score_dat, by = c(id, session_id))
+      } else {
+        lbc_phenotype <- merge(lbc_data, lbc_score_dat, by = id)
+      }
       
       return(list(score_dat = as.data.frame(lbc_score_dat),
                   bids_phenotype = as.data.frame(lbc_phenotype)))

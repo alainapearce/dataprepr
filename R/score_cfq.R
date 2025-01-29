@@ -42,9 +42,10 @@
 #' @param cfq_data a data.frame all items for the Child Feeding Questionnaire following the naming conventions described above
 #' @param pcw_na_value (integer) integer used for items 8-13 (Perceived Child Weight items) to indicate "not applicable" response.
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param restriction_split logical indicating if the Restriction subscale should be split to remove food as reward items. Default = FALSE. The standard Restriction subscale will always be available. If restriction_split = TRUE, then two additional scales will be computed: 1) cfq_rest_noreward: questions 17-20, 23-24 and 1) cfq_foodreward: questions 21-22
 #' @param extra_scale_cols a vector of character strings that begin with 'cfq' but are not scale items. Any columns in cfq_data that begin with 'cfq' but are not scale items must be included here. Default is empty vector.
-#' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Child Feeding Questionnaire
 #'
@@ -62,7 +63,7 @@
 #'
 #' @export
 
-score_cfq <- function(cfq_data, base_zero = TRUE, restriction_split = FALSE, id, extra_scale_cols = c(), pcw_na_value) {
+score_cfq <- function(cfq_data, base_zero = TRUE, restriction_split = FALSE, id, session_id, extra_scale_cols = c(), pcw_na_value) {
   
   #### 1. Set up/initial checks #####
   
@@ -103,6 +104,15 @@ score_cfq <- function(cfq_data, base_zero = TRUE, restriction_split = FALSE, id,
     }
   }
   
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(id %in% names(cfq_data))) {
+      stop("variable name entered as session_id is not in cfq_data")
+    }
+  }
+  
   # check base_zero is logical
   if (!is.logical(base_zero)) {
     stop("base_zero arg must be logical (TRUE/FALSE)")
@@ -120,8 +130,13 @@ score_cfq <- function(cfq_data, base_zero = TRUE, restriction_split = FALSE, id,
   }
   
   if (isTRUE(ID_arg)) {
-    cfq_score_dat <- data.frame(cfq_data[[id]], cfq_score_dat)
-    names(cfq_score_dat)[1] <- id
+    if (isTRUE(sessionID_arg)) {
+      cfq_score_dat <- data.frame(cfq_data[[id]], cfq_data[[session_id]], cfq_score_dat)
+      names(cfq_score_dat)[1:2] <- c(id, session_id)
+    } else {
+      cfq_score_dat <- data.frame(cfq_data[[id]], cfq_score_dat)
+      names(cfq_score_dat)[1] <- id
+    }
   }
   
   # assign cfq scale items to cfq_items, excluding columns in extra_scale_cols
@@ -223,7 +238,11 @@ score_cfq <- function(cfq_data, base_zero = TRUE, restriction_split = FALSE, id,
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    cfq_phenotype <- merge(cfq_data, cfq_score_dat, by = id)
+    if (isTRUE(sessionID_arg)) {
+      cfq_phenotype <- merge(cfq_data, cfq_score_dat, by = c(id, session_id))
+    } else {
+      cfq_phenotype <- merge(cfq_data, cfq_score_dat, by = id)
+    }
     
     return(list(score_dat = as.data.frame(cfq_score_dat),
                 bids_phenotype = as.data.frame(cfq_phenotype)))

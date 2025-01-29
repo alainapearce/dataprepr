@@ -4,7 +4,7 @@
 \alias{score_hfssm}
 \title{score_hfssm: Scored data from the U.S. Household Food Security Survey Module}
 \usage{
-score_hfssm(hfssm_data, base_zero = FALSE, id)
+score_hfssm(hfssm_data, base_zero = FALSE, id, session_id)
 }
 \arguments{
 \item{hfssm_data}{a data.frame all items for the U.S. Household Food Security Survey Module following the naming conventions described above}
@@ -12,6 +12,8 @@ score_hfssm(hfssm_data, base_zero = FALSE, id)
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+
+\item{session_id}{(optional) name of session ID column in input data if there are multiple observations per participant. If included, the output dataset will be matched by id and session id, if not included the output dataset will be in the order of the input data. Required to get the phenotype dataset if have multiple sessions (raw data merged with scores.)}
 }
 \value{
 A dataset with subscale scores for the U.S. Household Food Security Survey Module

@@ -4,7 +4,15 @@
 \alias{score_pds}
 \title{score_pds: Scored data from Parent- or Self-Report Pubertal Development Scale}
 \usage{
-score_pds(pds_data, respondent, base_zero = TRUE, male = 0, female = 1, id)
+score_pds(
+  pds_data,
+  respondent,
+  base_zero = TRUE,
+  male = 0,
+  female = 1,
+  id,
+  session_id
+)
 }
 \arguments{
 \item{pds_data}{a data.frame with child sex and all questions from the Pubertal Development Scale. The required data to score the Pubertal Development Scale include sex, questions 1-3, and male/female specific questions 4-5. These questions must have the following names in the dataset: 'sex', 'pds_1', 'pds_2', 'pds_3', 'pds_4m', 'pds_5m', 'pds_4f', 'pds_5fa'. Note, as long as variable names match those listed, pds_data can include only data from male and/or female version scales.}
@@ -18,6 +26,8 @@ score_pds(pds_data, respondent, base_zero = TRUE, male = 0, female = 1, id)
 \item{female}{(optional) value for female. Default value is female = 1}
 
 \item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+
+\item{session_id}{(optional) name of session ID column in input data if there are multiple observations per participant. If included, the output dataset will be matched by id and session id, if not included the output dataset will be in the order of the input data. Required to get the phenotype dataset if have multiple sessions (raw data merged with scores.)}
 }
 \value{
 A dataset with a Pubertal Development Score and the Tanner Stage equivalents.

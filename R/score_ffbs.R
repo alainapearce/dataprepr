@@ -16,6 +16,8 @@
 #'
 #' @param ffbs_data a data.frame all items for the Family Food Behavior Survey following the naming conventions described above
 #' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'ffbs' but are not scale items. Any columns in ffbs_data that begin with 'ffbs' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with subscale scores for the Family Food Behavior Survey
@@ -30,7 +32,7 @@
 #'
 #' @export
 
-score_ffbs <- function(ffbs_data, base_zero = TRUE, id, extra_scale_cols = c()) {
+score_ffbs <- function(ffbs_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -52,6 +54,15 @@ score_ffbs <- function(ffbs_data, base_zero = TRUE, id, extra_scale_cols = c()) 
         }
     }
     
+    # check if session_id exists
+    sessionID_arg <- methods::hasArg(session_id)
+    
+    if (isTRUE(sessionID_arg)){
+      if (!(id %in% names(ffbs_data))) {
+        stop("variable name entered as session_id is not in ffbs_data")
+      }
+    }
+    
     # check base_zero is logical
     if (!is.logical(base_zero)) {
       stop("base_zero arg must be logical (TRUE/FALSE)")
@@ -65,10 +76,15 @@ score_ffbs <- function(ffbs_data, base_zero = TRUE, id, extra_scale_cols = c()) 
         nrow(ffbs_data)))
 
     if (isTRUE(ID_arg)) {
+      if (isTRUE(sessionID_arg)) {
+        ffbs_score_dat <- data.frame(ffbs_data[[id]], ffbs_data[[session_id]], ffbs_score_dat)
+        names(ffbs_score_dat)[1:2] <- c(id, session_id)
+      } else {
         ffbs_score_dat <- data.frame(ffbs_data[[id]], ffbs_score_dat)
         names(ffbs_score_dat)[1] <- id
+      }
     }
-
+    
     # assign ffbs scale items to ffbs_items, excluding columns in extra_scale_cols
     ffbs_items <- grep("^ffbs", names(ffbs_data), value = TRUE) %>% setdiff(extra_scale_cols)
     
@@ -126,7 +142,11 @@ score_ffbs <- function(ffbs_data, base_zero = TRUE, id, extra_scale_cols = c()) 
     #### 3. Clean Export/Scored Data #####
     ## merge raw responses with scored data
     if (isTRUE(ID_arg)){
-      ffbs_phenotype <- merge(ffbs_data, ffbs_score_dat, by = id)
+      if (isTRUE(sessionID_arg)) {
+        ffbs_phenotype <- merge(ffbs_data, ffbs_score_dat, by = c(id, session_id))
+      } else {
+        ffbs_phenotype <- merge(ffbs_data, ffbs_score_dat, by = id)
+      }
       
       return(list(score_dat = as.data.frame(ffbs_score_dat),
                   bids_phenotype = as.data.frame(ffbs_phenotype)))

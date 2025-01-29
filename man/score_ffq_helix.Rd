@@ -4,7 +4,7 @@
 \alias{score_ffq_helix}
 \title{score_ffq_helix: Scored data from the HELIX study Food Frequency Questionnaire}
 \usage{
-score_ffq_helix(ffq_data, base_zero = TRUE, id)
+score_ffq_helix(ffq_data, base_zero = TRUE, id, session_id)
 }
 \arguments{
 \item{ffq_data}{a data.frame all items for the HELIX Food Fequency Questionnaire following the naming conventions described above}
@@ -12,6 +12,8 @@ score_ffq_helix(ffq_data, base_zero = TRUE, id)
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
+
+\item{session_id}{(optional) name of session ID column in input data if there are multiple observations per participant. If included, the output dataset will be matched by id and session id, if not included the output dataset will be in the order of the input data. Required to get the phenotype dataset if have multiple sessions (raw data merged with scores.)}
 }
 \value{
 A dataset with servings per week calculated for the various food categories
