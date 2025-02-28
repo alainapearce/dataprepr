@@ -97,7 +97,7 @@ score_pss <- function(pss_data, base_zero = TRUE, id, session_id, extra_scale_co
   }
   
   # assign pss scale items to pss_items, excluding columns in extra_scale_cols
-  pss_items <- grep("^pss", names(pss_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  pss_items <- setdiff(grep("^pss", names(pss_data), value = TRUE), extra_scale_cols)
   
   # remove underscore in column names for pss_items
   names(pss_data)[names(pss_data) %in% pss_items] <- gsub('pss_', 'pss', names(pss_data)[names(pss_data) %in% pss_items])

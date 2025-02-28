@@ -99,7 +99,7 @@ score_lbc <- function(lbc_data, base_zero = TRUE, id, session_id, extra_scale_co
     }
 
     # assign lbc scale items to lbc_items, excluding columns in extra_scale_cols
-    lbc_items <- grep("^lbc", names(lbc_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    lbc_items <- setdiff(grep("^lbc", names(lbc_data), value = TRUE), extra_scale_cols)
     
     # count number of LBC items
     n_items <- length(lbc_items)/2

@@ -86,7 +86,7 @@ score_ffbs <- function(ffbs_data, base_zero = TRUE, id, session_id, extra_scale_
     }
     
     # assign ffbs scale items to ffbs_items, excluding columns in extra_scale_cols
-    ffbs_items <- grep("^ffbs", names(ffbs_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    ffbs_items <- setdiff(grep("^ffbs", names(ffbs_data), value = TRUE), extra_scale_cols)
     
     # remove underscore in column names for ffbs_items
     names(ffbs_data)[names(ffbs_data) %in% ffbs_items] <- gsub('ffbs_', 'ffbs', names(ffbs_data)[names(ffbs_data) %in% ffbs_items])

@@ -88,7 +88,7 @@ score_nik_hfe <- function(hfe_data, base_zero = TRUE, id, session_id, extra_scal
     names(hfe_data) <- ifelse(grepl('_a$', names(hfe_data)), gsub('_a', '_taste', names(hfe_data)), ifelse(grepl('_b$', names(hfe_data)), gsub('_b', '_nutr', names(hfe_data)), ifelse(grepl('_c$', names(hfe_data)), gsub('_c', '_cost', names(hfe_data)), ifelse(grepl('_d$', names(hfe_data)), gsub('_d', '_convenience', names(hfe_data)), ifelse(grepl('_e$', names(hfe_data)), gsub('_e', '_weightcontrol', names(hfe_data)), names(hfe_data))))))
     
     # get primary questions
-    hfe_primary_qs <- grep("^hfe", names(hfe_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    hfe_primary_qs <- setdiff(grep("^hfe", names(hfe_data), value = TRUE), extra_scale_cols)
     
     # re-scale data
     hfe_data_edit <- hfe_data

@@ -114,7 +114,7 @@ score_cbq <- function(cbq_data, base_zero = TRUE, id, session_id, does_not_apply
     }
     
     # assign cbq scale items to cbq_items, excluding columns in extra_scale_cols
-    cbq_items <- grep("^cbq", names(cbq_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    cbq_items <- setdiff(grep("^cbq", names(cbq_data), value = TRUE), extra_scale_cols)
     
     # remove underscore in column names for cbq_items
     names(cbq_data)[names(cbq_data) %in% cbq_items] <- gsub('cbq_', 'cbq', names(cbq_data)[names(cbq_data) %in% cbq_items])

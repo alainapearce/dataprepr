@@ -90,7 +90,7 @@ score_sic <- function(sic_data, base_zero = TRUE, id, session_id, extra_scale_co
     }
 
     # assign sic scale items to sic_items, excluding columns in extra_scale_cols
-    sic_items <- grep("^sic", names(sic_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    sic_items <- setdiff(grep("^sic", names(sic_data), value = TRUE), extra_scale_cols)
     
     # remove underscore in column names for sic_items
     names(sic_data)[names(sic_data) %in% sic_items] <- gsub('sic_', 'sic', names(sic_data)[names(sic_data) %in% sic_items])

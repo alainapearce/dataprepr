@@ -83,7 +83,7 @@ score_hfias <- function(hfias_data, base_zero = TRUE, id, session_id, extra_scal
   
   
   # assign hfias scale items to hfias_items, excluding columns in extra_scale_cols
-  hfias_items <- grep("^hfias", names(hfias_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  hfias_items <- setdiff(grep("^hfias", names(hfias_data), value = TRUE), extra_scale_cols)
   
   # remove underscore in column names for hfias_items
   names(hfias_data)[names(hfias_data) %in% hfias_items] <- gsub('hfias_', 'hfias', names(hfias_data)[names(hfias_data) %in% hfias_items])

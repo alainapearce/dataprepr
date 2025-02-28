@@ -240,9 +240,9 @@ score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female =
   
   if (isTRUE(ID_arg)){
     if (isTRUE(sessionID_arg)) {
-      pds_phenotype <- merge(pds_data, pds_score_dat, by = c(id, session_id))
+      pds_phenotype <- merge(pds_data, pds_scored, by = c(id, session_id))
     } else {
-      pds_phenotype <- merge(pds_data, pds_score_dat, by = id)
+      pds_phenotype <- merge(pds_data, pds_scored, by = id)
     }
 
     return(list(score_dat = as.data.frame(pds_scored),

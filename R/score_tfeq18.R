@@ -86,7 +86,7 @@ score_tfeq18 <- function(tfeq_data, base_zero = TRUE, id, session_id, extra_scal
   }
   
   # assign tfeq scale items to tfeq_items, excluding columns in extra_scale_cols
-  tfeq_items <- grep("^tfeq", names(tfeq_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  tfeq_items <- setdiff(grep("^tfeq", names(tfeq_data), value = TRUE), extra_scale_cols)
   
   # remove underscore in column names for tfeq_items
   names(tfeq_data)[names(tfeq_data) %in% tfeq_items] <- gsub('tfeq_', 'tfeq', names(tfeq_data)[names(tfeq_data) %in% tfeq_items])

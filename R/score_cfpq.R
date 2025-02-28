@@ -103,7 +103,7 @@ score_cfpq <- function(cfpq_data, base_zero = TRUE, id, session_id, extra_scale_
   }
   
   # assign cfpq scale items to cfpq_items, excluding columns in extra_scale_cols
-  cfpq_items <- grep("^cfpq", names(cfpq_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  cfpq_items <- setdiff(grep("^cfpq", names(cfpq_data), value = TRUE), extra_scale_cols)
   
   # remove underscore in column names for cfpq_items
   names(cfpq_data)[names(cfpq_data) %in% cfpq_items] <- gsub('cfpq_', 'cfpq', names(cfpq_data)[names(cfpq_data) %in% cfpq_items])

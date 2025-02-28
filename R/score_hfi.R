@@ -79,7 +79,7 @@ score_hfi <- function(hfi_data, base_zero = TRUE, id, session_id, extra_scale_co
     }
     
     # assign hfi scale items to hfi_items, excluding columns in extra_scale_cols
-    hfi_items <- grep("^hfi", names(hfi_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    hfi_items <- setdiff(grep("^hfi", names(hfi_data), value = TRUE), extra_scale_cols)
     
     # subset hfi items for scoring
     hfi_data_edit <- hfi_data[c(hfi_items)]

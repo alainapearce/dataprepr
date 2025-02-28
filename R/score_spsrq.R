@@ -94,7 +94,7 @@ score_spsrq <- function(spsrq_data, base_zero = TRUE, id, session_id, extra_scal
       }
     }
     # assign spsrq scale items to spsrq_items, excluding columns in extra_scale_cols
-    spsrq_items <- grep("^spsrq", names(spsrq_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    spsrq_items <- setdiff(grep("^spsrq", names(spsrq_data), value = TRUE), extra_scale_cols)
     
     # remove underscore in column names for spsrq_items
     names(spsrq_data)[names(spsrq_data) %in% spsrq_items] <- gsub('spsrq_', 'spsrq', names(spsrq_data)[names(spsrq_data) %in% spsrq_items])

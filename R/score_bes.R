@@ -87,7 +87,7 @@ score_bes <- function(bes_data, base_zero = TRUE, pna = NA, id, session_id, extr
   }
   
   # assign bes scale items to bes_items, excluding columns in extra_scale_cols
-  bes_items <- grep("^bes", names(bes_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  bes_items <- setdiff(grep("^bes", names(bes_data), value = TRUE), extra_scale_cols)
 
   # remove underscore in column names for bes_items
   names(bes_data)[names(bes_data) %in% bes_items] <- gsub('bes_', 'bes', names(bes_data)[names(bes_data) %in% bes_items])

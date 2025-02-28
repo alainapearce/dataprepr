@@ -91,7 +91,7 @@ score_debq <- function(debq_data, base_zero = TRUE, id, session_id, extra_scale_
   }
   
   # assign debq scale items to debq_items, excluding columns in extra_scale_cols
-  debq_items <- grep("^debq", names(debq_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  debq_items <- setdiff(grep("^debq", names(debq_data), value = TRUE), extra_scale_cols)
   
   # remove underscore in column names for debq_items
   names(debq_data)[names(debq_data) %in% debq_items] <- gsub('debq_', 'debq', names(debq_data)[names(debq_data) %in% debq_items])

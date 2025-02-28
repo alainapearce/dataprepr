@@ -96,7 +96,7 @@ score_scpf <- function(scpf_data, base_zero = TRUE, id, session_id, extra_scale_
   }
   
   # assign scpf scale items to scpf_items, excluding columns in extra_scale_cols
-  scpf_items <- grep("^scpf", names(scpf_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  scpf_items <- setdiff(grep("^scpf", names(scpf_data), value = TRUE), extra_scale_cols)
   
   # remove underscore in column names for scpf_items
   names(scpf_data)[names(scpf_data) %in% scpf_items] <- gsub('scpf_', 'scpf', names(scpf_data)[names(scpf_data) %in% scpf_items])

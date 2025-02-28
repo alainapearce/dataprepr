@@ -100,7 +100,7 @@ score_bisbas <- function(bisbas_data, base_zero = TRUE, id, session_id, extra_sc
   }
   
   # assign bisbas scale items to bisbas_items, excluding columns in extra_scale_cols
-  bisbas_items <- grep("^bisbas", names(bisbas_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  bisbas_items <- setdiff(grep("^bisbas", names(bisbas_data), value = TRUE), extra_scale_cols)
   
   # remove underscore in column names for bisbas_items
   names(bisbas_data)[names(bisbas_data) %in% bisbas_items] <- gsub('bisbas_', 'bisbas', names(bisbas_data)[names(bisbas_data) %in% bisbas_items])

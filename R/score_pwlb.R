@@ -90,7 +90,7 @@ score_pwlb <- function(pwlb_data, base_zero = TRUE, id, session_id, extra_scale_
     }
 
     # assign pwlb scale items to pwlb_items, excluding columns in extra_scale_cols
-    pwlb_items <- grep("^pwlb", names(pwlb_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    pwlb_items <- setdiff(grep("^pwlb", names(pwlb_data), value = TRUE), extra_scale_cols)
     
     # remove underscore in column names for pwlb_items
     names(pwlb_data)[names(pwlb_data) %in% pwlb_items] <- gsub('pwlb_', 'pwlb', names(pwlb_data)[names(pwlb_data) %in% pwlb_items])

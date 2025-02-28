@@ -92,7 +92,7 @@ score_chaos <- function(chaos_data, base_zero = FALSE, id, session_id, extra_sca
   }
   
   # assign chaos scale items to chaos_items, excluding columns in extra_scale_cols
-  chaos_items <- grep("^chaos", names(chaos_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  chaos_items <- setdiff(grep("^chaos", names(chaos_data), value = TRUE), extra_scale_cols)
   
   # remove underscore in column names for chaos_items
   names(chaos_data)[names(chaos_data) %in% chaos_items] <- gsub('chaos_', 'chaos', names(chaos_data)[names(chaos_data) %in% chaos_items])

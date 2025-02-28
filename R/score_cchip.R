@@ -77,7 +77,7 @@ score_cchip <- function(cchip_data, id, session_id, extra_scale_cols = c()) {
   }
   
   # assign cchip scale items to cchip_items, excluding columns in extra_scale_cols
-  cchip_items <- grep("^cchip", names(cchip_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  cchip_items <- setdiff(grep("^cchip", names(cchip_data), value = TRUE), extra_scale_cols)
   
   # remove underscore in column names for cchip_items
   names(cchip_data)[names(cchip_data) %in% cchip_items] <- gsub('cchip_', 'cchip', names(cchip_data)[names(cchip_data) %in% cchip_items])

@@ -149,7 +149,7 @@ score_brief2 <- function(brief_data, age_var, sex_var, base_zero = TRUE, male = 
     }
 
     # assign brief scale items to brief_items, excluding columns in extra_scale_cols
-    brief_items <- grep("^brief", names(brief_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    brief_items <- setdiff(grep("^brief", names(brief_data), value = TRUE), extra_scale_cols)
     
     # remove underscore in column names for brief_items
     names(brief_data)[names(brief_data) %in% brief_items] <- gsub('brief_', 'brief', names(brief_data)[names(brief_data) %in% brief_items])

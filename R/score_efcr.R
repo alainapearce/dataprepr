@@ -88,7 +88,7 @@ score_efcr <- function(efcr_data, base_zero = TRUE, id, session_id, extra_scale_
     }
 
     # assign efcr scale items to efcr_items, excluding columns in extra_scale_cols
-    efcr_items <- grep("^efcr", names(efcr_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    efcr_items <- setdiff(grep("^efcr", names(efcr_data), value = TRUE), extra_scale_cols)
     
     # remove underscore in column names for efcr_items
     names(efcr_data)[names(efcr_data) %in% efcr_items] <- gsub('efcr_', 'efcr', names(efcr_data)[names(efcr_data) %in% efcr_items])

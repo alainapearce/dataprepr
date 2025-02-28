@@ -97,7 +97,7 @@ score_cebq <- function(cebq_data, base_zero = TRUE, id, session_id, extra_scale_
     }
     
     # assign cebq scale items to cebq_items, excluding columns in extra_scale_cols
-    cebq_items <- grep("^cebq", names(cebq_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    cebq_items <- setdiff(grep("^cebq", names(cebq_data), value = TRUE), extra_scale_cols)
     
     # remove underscore in column names for cebq_items
     names(cebq_data)[names(cebq_data) %in% cebq_items] <- gsub('cebq_', 'cebq', names(cebq_data)[names(cebq_data) %in% cebq_items])

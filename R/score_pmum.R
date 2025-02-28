@@ -88,7 +88,7 @@ score_pmum <- function(pmum_data, base_zero = TRUE, id, session_id, extra_scale_
   }
   
   # assign pmum scale items to pmum_items, excluding columns in extra_scale_cols
-  pmum_items <- grep("^pmum", names(pmum_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  pmum_items <- setdiff(grep("^pmum", names(pmum_data), value = TRUE), extra_scale_cols)
   
   # remove underscore in column names for pmum_items
   names(pmum_data)[names(pmum_data) %in% pmum_items] <- gsub('pmum_', 'pmum', names(pmum_data)[names(pmum_data) %in% pmum_items])

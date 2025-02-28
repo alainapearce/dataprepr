@@ -44,6 +44,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param restriction_split logical indicating if the Restriction subscale should be split to remove food as reward items. Default = FALSE. The standard Restriction subscale will always be available. If restriction_split = TRUE, then two additional scales will be computed: 1) cfq_rest_noreward: questions 17-20, 23-24 and 1) cfq_foodreward: questions 21-22
 #' @param extra_scale_cols a vector of character strings that begin with 'cfq' but are not scale items. Any columns in cfq_data that begin with 'cfq' but are not scale items must be included here. Default is empty vector.
 #'
@@ -63,7 +64,7 @@
 #'
 #' @export
 
-score_cfq <- function(cfq_data, base_zero = TRUE, restriction_split = FALSE, id, session_id, extra_scale_cols = c(), pcw_na_value) {
+score_cfq <- function(cfq_data, pcw_na_value, base_zero = TRUE, restriction_split = FALSE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -140,7 +141,11 @@ score_cfq <- function(cfq_data, base_zero = TRUE, restriction_split = FALSE, id,
   }
   
   # assign cfq scale items to cfq_items, excluding columns in extra_scale_cols
-  cfq_items <- grep("^cfq", names(cfq_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  cfq_items <- setdiff(grep("^cfq", names(cfq_data), value = TRUE), extra_scale_cols)
+
+  if (isTRUE(sessionID_arg)) {
+    cfq_items <- setdiff(grep("^cfq", names(cfq_data), value = TRUE), session_id)
+  }
   
   # remove underscore in column names for cfq_items
   names(cfq_data)[names(cfq_data) %in% cfq_items] <- gsub('cfq_', 'cfq', names(cfq_data)[names(cfq_data) %in% cfq_items])
@@ -150,6 +155,9 @@ score_cfq <- function(cfq_data, base_zero = TRUE, restriction_split = FALSE, id,
   
   # make copy of data
   cfq_data_edit <- cfq_data
+  
+  # replace pna value with NA
+  # cfq_data_edit[c(cfq_items)] <- sapply(cfq_items, function(x) ifelse(cfq_data_edit[[x]] == pna, NA, cfq_data_edit[[x]]), simplify = TRUE)
 
   # if pcw_na_value arg, replace not applicable values with NA
   if (isTRUE(methods::hasArg(pcw_na_value))) {

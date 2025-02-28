@@ -86,7 +86,7 @@ score_fmcb <- function(fmcb_data, base_zero = TRUE, id, session_id, extra_scale_
     }
 
     # assign fmcb scale items to fmcb_items, excluding columns in extra_scale_cols
-    fmcb_items <- grep("^fmcb", names(fmcb_data), value = TRUE) %>% setdiff(extra_scale_cols)
+    fmcb_items <- setdiff(grep("^fmcb", names(fmcb_data), value = TRUE), extra_scale_cols)
     
     # remove underscore in column names for fmcb_items
     names(fmcb_data)[names(fmcb_data) %in% fmcb_items] <- gsub('fmcb_', 'fmcb', names(fmcb_data)[names(fmcb_data) %in% fmcb_items])

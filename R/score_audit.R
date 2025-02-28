@@ -107,7 +107,7 @@ score_audit <- function(audit_data, id, session_id, base_zero = TRUE, extra_scal
   }
   
   # assign audit scale items to audit_items, excluding columns in extra_scale_cols
-  audit_items <- grep("^audit", names(audit_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  audit_items <- setdiff(grep("^audit", names(audit_data), value = TRUE), extra_scale_cols)
   
   # remove underscore in column names for audit_items
   names(audit_data)[names(audit_data) %in% audit_items] <- gsub('audit_', 'audit', names(audit_data)[names(audit_data) %in% audit_items])

@@ -99,7 +99,7 @@ score_pptq <- function(pptq_data, pptq_scale, base_zero = TRUE, id, session_id, 
   }
   
   # assign pptq scale items to pptq_items, excluding columns in extra_scale_cols
-  pptq_items <- grep("^pptq", names(pptq_data), value = TRUE) %>% setdiff(extra_scale_cols)
+  pptq_items <- setdiff(grep("^pptq", names(pptq_data), value = TRUE), extra_scale_cols)
   
   # remove underscore in column names for pptq_items
   names(pptq_data)[names(pptq_data) %in% pptq_items] <- gsub('pptq_', 'pptq', names(pptq_data)[names(pptq_data) %in% pptq_items])
