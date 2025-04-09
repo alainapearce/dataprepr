@@ -190,23 +190,28 @@ score_ffq_helix <- function(ffq_data, base_zero = TRUE, id, session_id) {
   #### 3. Clean Export/Scored Data #####
   ## round data
   if (isTRUE(ID_arg)){
-    ffq_score_dat[2:ncol(ffq_score_dat)] <- round(ffq_score_dat[2:ncol(ffq_score_dat)], digits = 3)
+    if (isTRUE(sessionID_arg)) {
+      ffq_score_dat[3:ncol(ffq_score_dat)] <- round(ffq_score_dat[3:ncol(ffq_score_dat)], digits = 3)
+    } else {
+      ffq_score_dat[2:ncol(ffq_score_dat)] <- round(ffq_score_dat[2:ncol(ffq_score_dat)], digits = 3)
+    }
   } else {
     ffq_score_dat <- round(ffq_score_dat, digits = 3)
   }
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
-    if (isTRUE(sessionID_arg)) {
-      ffq_phenotype <- merge(ffq_data, ffq_score_dat, by = c(id, session_id))
-    } else {
-      ffq_phenotype <- merge(ffq_data, ffq_score_dat, by = id)
-    }
     
     ## re-order to make more sense (supplements at end)
-    ffq_sup_vars <- c('ffq_suplements', 'ffq_multivit', 'ffq_multivit_brand', 'ffq_multivit_brandname', 'ffq_multivit_current', 'ffq_multivit_freq', 'ffq_minerals', 'ffq_mineral_brand', 'ffq_mineral_brandname', 'ffq_mineral_current', 'ffq_mineral_freq', 'ffq_vitd', 'ffq_vitd_brand', 'ffq_vitd_brandname', 'ffq_vitd_current', 'ffq_vitd_freq', 'ffq_omega3', 'ffq_omega3_brand', 'ffq_omega3_brandname', 'ffq_omega3_current', 'ffq_omega3_freq', 'ffq_sup_other', 'ffq_sup_other_list')
-
-    ffq_phenotype <- ffq_phenotype[c(id, ffq_var_names, names(ffq_score_dat)[2:ncol(ffq_score_dat)], ffq_sup_vars)]
+    ffq_sup_vars <- c('ffq_suplements', 'ffq_multivit', 'ffq_multivit_brand', 'ffq_multivit_brandname', 'ffq_multivit_current', 'ffq_multivit_freq', 'ffq_minerals', 'ffq_mineral_brand', 'ffq_mineral_current', 'ffq_mineral_freq', 'ffq_vitd', 'ffq_vitd_brand', 'ffq_vitd_brandname', 'ffq_vitd_current', 'ffq_vitd_freq', 'ffq_omega3', 'ffq_omega3_brand', 'ffq_omega3_brandname', 'ffq_omega3_current', 'ffq_omega3_freq', 'ffq_sup_other', 'ffq_sup_other_list')
+    
+    if (isTRUE(sessionID_arg)) {
+      ffq_phenotype <- merge(ffq_data, ffq_score_dat, by = c(id, session_id))
+      ffq_phenotype <- ffq_phenotype[c(id, session_id, ffq_var_names, names(ffq_score_dat)[3:ncol(ffq_score_dat)], ffq_sup_vars)]
+    } else {
+      ffq_phenotype <- merge(ffq_data, ffq_score_dat, by = id)
+      ffq_phenotype <- ffq_phenotype[c(id, ffq_var_names, names(ffq_score_dat)[2:ncol(ffq_score_dat)], ffq_sup_vars)]
+    }
     
     return(list(score_dat = as.data.frame(ffq_score_dat),
                 bids_phenotype = as.data.frame(ffq_phenotype)))
