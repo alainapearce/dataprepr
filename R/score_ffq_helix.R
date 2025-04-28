@@ -119,58 +119,58 @@ score_ffq_helix <- function(ffq_data, base_zero = TRUE, id, session_id) {
   ## Score - used sum to get total servings per week
   
   ### Dairy
-  ffq_score_dat[['dairy']] <- base::rowMeans(ffq_data_edit[ , grepl('dairy', names(ffq_data_edit))])
+  ffq_score_dat[['dairy']] <- base::rowSums(ffq_data_edit[ , grepl('dairy', names(ffq_data_edit))])
   
   ### Eggs
   ffq_score_dat[['eggs']] <- ffq_data_edit[ , grepl('egg', names(ffq_data_edit))]
   
   ### Meat
-  ffq_score_dat[['meat']] <- base::rowMeans(ffq_data_edit[ , grepl('meat', names(ffq_data_edit))])
+  ffq_score_dat[['meat']] <- base::rowSums(ffq_data_edit[ , grepl('meat', names(ffq_data_edit))])
   
   ### Fish/Seafood
-  ffq_score_dat[['fish']] <- base::rowMeans(ffq_data_edit[ , grepl('fish', names(ffq_data_edit))])
+  ffq_score_dat[['fish']] <- base::rowSums(ffq_data_edit[ , grepl('fish', names(ffq_data_edit))])
   
   ### Nuts
   ffq_score_dat[['nuts']] <- ffq_data_edit[ , grepl('nut', names(ffq_data_edit))]
   
   ### Vegetables
-  ffq_score_dat[['vegetables']] <- base::rowMeans(ffq_data_edit[ , grepl('veg', names(ffq_data_edit))])
+  ffq_score_dat[['vegetables']] <- base::rowSums(ffq_data_edit[ , grepl('veg', names(ffq_data_edit))])
   
   ### Pulses
   ffq_score_dat[['pulses']] <- ffq_data_edit[ , grepl('legume', names(ffq_data_edit))]
   
   ### Fruit
-  ffq_score_dat[['fruit']] <- base::rowMeans(ffq_data_edit[ , grepl('fruit', names(ffq_data_edit))])
+  ffq_score_dat[['fruit']] <- base::rowSums(ffq_data_edit[ , grepl('fruit', names(ffq_data_edit))])
   
   ### Potatoes
-  ffq_score_dat[['potatoes']] <- base::rowMeans(ffq_data_edit[ , grepl('potato', names(ffq_data_edit))])
+  ffq_score_dat[['potatoes']] <- base::rowSums(ffq_data_edit[ , grepl('potato', names(ffq_data_edit))])
   
   ### Breads/Cereals
-  ffq_score_dat[['breads_cereals']] <- base::rowMeans(ffq_data_edit[ , grepl('cereal', names(ffq_data_edit))])
+  ffq_score_dat[['breads_cereals']] <- base::rowSums(ffq_data_edit[ , grepl('cereal', names(ffq_data_edit))])
   
   ### Sweets
-  ffq_score_dat[['sweets']] <- base::rowMeans(ffq_data_edit[ , grepl('sweet', names(ffq_data_edit))])
+  ffq_score_dat[['sweets']] <- base::rowSums(ffq_data_edit[ , grepl('sweet', names(ffq_data_edit))])
   
   ### Beverages
-  ffq_score_dat[['beverages']] <- base::rowMeans(ffq_data_edit[ , grepl('bev', names(ffq_data_edit))])
+  ffq_score_dat[['beverages']] <- base::rowSums(ffq_data_edit[ , grepl('bev', names(ffq_data_edit))])
   
   ### Sweet Bakery
-  ffq_score_dat[['sweet_bakery']] <- base::rowMeans(ffq_data_edit[ , grepl('bakery', names(ffq_data_edit))])
+  ffq_score_dat[['sweet_bakery']] <- base::rowSums(ffq_data_edit[ , grepl('bakery', names(ffq_data_edit))])
   
   ### Salty Snack
   ffq_score_dat[['salty_snacks']] <- ffq_data_edit[ , grepl('salt', names(ffq_data_edit))]
   
   ### Added Fats
-  ffq_score_dat[['added_fats']] <- base::rowMeans(ffq_data_edit[ , grepl('fats', names(ffq_data_edit))])
+  ffq_score_dat[['added_fats']] <- base::rowSums(ffq_data_edit[ , grepl('fats', names(ffq_data_edit))])
   
   ### Dressings
   ffq_score_dat[['dressings']] <- ffq_data_edit[ , grepl('dressing', names(ffq_data_edit))]
   
   ### Animal
-  ffq_score_dat[['animal']] <- base::rowMeans(ffq_data_edit[ , grepl('dairy|egg|meat|fish', names(ffq_data_edit))])
+  ffq_score_dat[['animal']] <- base::rowSums(ffq_data_edit[ , grepl('dairy|egg|meat|fish', names(ffq_data_edit))])
   
   ### Plants
-  ffq_score_dat[['plants']] <- base::rowMeans(ffq_data_edit[ , grepl('veg|fruit|nuts|legume|potato|cereal', names(ffq_data_edit))])
+  ffq_score_dat[['plants']] <- base::rowSums(ffq_data_edit[ , grepl('veg|fruit|nuts|legume|potato|cereal', names(ffq_data_edit))])
   
   ### UPF
   upf_vars <- c('ffq_bakery1', 'ffq_bakery2', 'ffq_bev1', 'ffq_bev2', 'ffq_meat3', 'ffq_meat4', 'ffq_dairy5', 'ffq_cereal3', 'ffq_cereal4', 'ffq_cereal6', 'ffq_sweet1', 'ffq_sweet3', 'ffq_fats4', 'ffq_dressing1', 'ffq_saltysnack1')

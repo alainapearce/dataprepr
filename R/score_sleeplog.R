@@ -86,8 +86,6 @@ score_sleeplog <- function(sleep_data, id, session_id, summer_start, summer_end)
   # new data set
   sleep_data_edit <- sleep_data
   
-  ## Score - used sum to get total servings per week
-  
   #need to check for low military time (e.g., 1 am = 01:00 and add 24 hours to them before getting mean bedtime)
   time_hours <- function(time){
     #add hours to min/60 to get numeric value of time
