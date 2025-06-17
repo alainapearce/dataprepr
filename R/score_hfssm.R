@@ -30,6 +30,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' #' @param extra_scale_cols a vector of character strings that begin with 'hfssm' but are not scale items. Any columns in scpf_data that begin with 'hfssm' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with subscale scores for the U.S. Household Food Security Survey Module
 #' @examples
@@ -42,7 +43,7 @@
 #' }
 #'
 #' @export
-score_hfssm <- function(hfssm_data, base_zero = FALSE, id, session_id) {
+score_hfssm <- function(hfssm_data, base_zero = FALSE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   

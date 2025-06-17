@@ -116,7 +116,7 @@ score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female =
   female_arg <- methods::hasArg(female)
   
   # check number of unique values in dataset
-  nsex_unique <- length(unique(pds_data_edits[['sex']]))
+  nsex_unique <- length(unique(!is.na(pds_data_edits[['sex']])))
   
   if (!('sex' %in% names(pds_data_edits))) {
     stop('There is no variable "sex" in pds_data')
@@ -157,7 +157,7 @@ score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female =
   
   ## determine single or mixed sex
   
-  sex_levels <- unique(pds_data_edits[['sex']])
+  sex_levels <- unique(!is.na(pds_data_edits[['sex']]))
 
   # check male variable names
   if (length(sex_levels) == 2) {
@@ -213,6 +213,10 @@ score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female =
   #### 3. Score Data ##### pds_score
   male_vars <- pds_varnames[c(1:5)]
   female_vars <- pds_varnames[c(1:3, 6:7)]
+  
+  ## ensure numeric class
+  pds_data_edits[male_vars] <- sapply(pds_data_edits[male_vars], function(x) as.numeric(x))
+  pds_data_edits[female_vars] <- sapply(pds_data_edits[female_vars], function(x) as.numeric(x))
   
   ## number of NAs
   pds_data_edits[['pds_score_na']] <- ifelse(pds_data_edits[['sex']] == 0, rowSums(is.na(pds_data_edits[male_vars])), rowSums(is.na(pds_data_edits[female_vars])))

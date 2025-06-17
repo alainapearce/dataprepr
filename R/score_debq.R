@@ -24,6 +24,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @param na_handling logical - remove NAs when computing subscales: TRUE will remove and comput means; FALSE will not remove NAs and subscale will not be computed if NA is present. Default is FALSE.
 #' @param extra_scale_cols a vector of character strings that begin with 'debq' but are not scale items. Any columns in debq_data that begin with 'debq' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with subscale scores for the Dutch Eating Behavior Questionnaire
 #' @examples
@@ -38,7 +39,7 @@
 #'
 #' @export
 
-score_debq <- function(debq_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_debq <- function(debq_data, base_zero = TRUE, id, session_id, na_handling = FALSE, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -124,15 +125,15 @@ score_debq <- function(debq_data, base_zero = TRUE, id, session_id, extra_scale_
   
   # Emotional Eating
   emotional_vars <- c('debq1', 'debq3', 'debq5', 'debq8', 'debq10', 'debq13', 'debq16', "debq20", 'debq23', 'debq25', 'debq28', 'debq30', 'debq32')
-  debq_score_dat[['debq_emotional']] <- rowMeans(debq_data_edit[emotional_vars])
+  debq_score_dat[['debq_emotional']] <- rowMeans(debq_data_edit[emotional_vars], na.rm = na_handling)
   
   # External Eating
   external_vars <- c('debq2', 'debq6', 'debq9', 'debq12', 'debq15', 'debq18', 'debq21', 'debq24', 'debq27', 'debq33')
-  debq_score_dat[['debq_external']] <- rowMeans(debq_data_edit[external_vars])
+  debq_score_dat[['debq_external']] <- rowMeans(debq_data_edit[external_vars], na.rm = na_handling)
   
   # Restrained Eating
   restrained_vars <- c('debq4', 'debq7', 'debq11', 'debq14', 'debq17', 'debq19', 'debq22', 'debq26', 'debq29', 'debq31')
-  debq_score_dat[['debq_restrained']] <- rowMeans(debq_data_edit[restrained_vars])
+  debq_score_dat[['debq_restrained']] <- rowMeans(debq_data_edit[restrained_vars], na.rm = na_handling)
   
   #### 3. Clean Export/Scored Data #####
 

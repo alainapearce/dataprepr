@@ -19,7 +19,7 @@
 #' @param cshq_data a data.frame all items for the Children Sleep Habits Questionnaire following the naming conventions described above
 #' @inheritParams score_bes
 #' @inheritParams score_bes
-#'@inheritParams score_bes
+#' @inheritParams score_bes
 #' @param reverse_score is data already reversed scored (default = FALSE)
 #'
 #'
