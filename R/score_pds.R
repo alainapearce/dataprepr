@@ -116,7 +116,7 @@ score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female =
   female_arg <- methods::hasArg(female)
   
   # check number of unique values in dataset
-  nsex_unique <- length(unique(!is.na(pds_data_edits[['sex']])))
+  nsex_unique <- length(unique(pds_data_edits[!is.na(pds_data_edits[['sex']]), 'sex']))
   
   if (!('sex' %in% names(pds_data_edits))) {
     stop('There is no variable "sex" in pds_data')
@@ -185,7 +185,7 @@ score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female =
   
   # re-scale data except when value = 99
   if (isTRUE(base_zero)){
-    pds_data[, names(puberty_data) %in% pds_varnames] <- sapply(names(pds_data[, names(puberty_data) %in% pds_varnames]), function(x) ifelse(pds_data[[x]] != 99, pds_data[[x]] + 1, pds_data[[x]]), simplify = TRUE)
+    pds_data[, names(pds_data) %in% pds_varnames] <- sapply(names(pds_data[, names(puberty_data) %in% pds_varnames]), function(x) ifelse(pds_data[[x]] != 99, pds_data[[x]] + 1, pds_data[[x]]), simplify = TRUE)
   }
 
   # check if variables are coded in appropriate range and change 99/'I Don't
