@@ -185,7 +185,7 @@ score_pds <- function(pds_data, respondent, base_zero = TRUE, male = 0, female =
   
   # re-scale data except when value = 99
   if (isTRUE(base_zero)){
-    pds_data[, names(pds_data) %in% pds_varnames] <- sapply(names(pds_data[, names(puberty_data) %in% pds_varnames]), function(x) ifelse(pds_data[[x]] != 99, pds_data[[x]] + 1, pds_data[[x]]), simplify = TRUE)
+    pds_data[, names(pds_data) %in% pds_varnames] <- sapply(names(pds_data[, names(pds_data) %in% pds_varnames]), function(x) ifelse(pds_data[[x]] != 99, pds_data[[x]] + 1, pds_data[[x]]), simplify = TRUE)
   }
 
   # check if variables are coded in appropriate range and change 99/'I Don't
