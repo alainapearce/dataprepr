@@ -24,6 +24,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param na_handling logical - remove NAs when computing subscales: TRUE will remove and comput means; FALSE will not remove NAs and subscale will not be computed if NA is present. Default is FALSE.
 #' @param extra_scale_cols a vector of character strings that begin with 'debq' but are not scale items. Any columns in debq_data that begin with 'debq' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with subscale scores for the Dutch Eating Behavior Questionnaire
@@ -39,7 +40,7 @@
 #'
 #' @export
 
-score_debq <- function(debq_data, base_zero = TRUE, id, session_id, na_handling = FALSE, extra_scale_cols = c()) {
+score_debq <- function(debq_data, pna_value, base_zero = TRUE, id, session_id, na_handling = FALSE, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -99,6 +100,14 @@ score_debq <- function(debq_data, base_zero = TRUE, id, session_id, na_handling 
   
   # remove underscore in debq_items
   debq_items <- gsub("debq_", "debq", debq_items)
+  
+  # if pna_value arg, replace not applicable values with NA
+  if (isTRUE(methods::hasArg(pna_value))) {
+    
+    # replace pna_value with NA in pcw_vars
+    debq_data[debq_items] <- lapply(debq_data[debq_items] , function(x) ifelse(x == pna_value, NA, x))
+    
+  }
   
   # check range of data and print warnings
   min <- min(debq_data[c(debq_items)], na.rm = TRUE)

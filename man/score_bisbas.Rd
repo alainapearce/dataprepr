@@ -6,6 +6,7 @@
 \usage{
 score_bisbas(
   bisbas_data,
+  pna_value,
   base_zero = TRUE,
   id,
   session_id,
@@ -14,6 +15,8 @@ score_bisbas(
 }
 \arguments{
 \item{bisbas_data}{a data.frame all items for the Behavioral Inhibition Scale/Behavioral Activation Scale following the naming conventions described above}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 

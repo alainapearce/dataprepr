@@ -4,10 +4,19 @@
 \alias{score_cfpq}
 \title{score_cfpq: Scored data from the Comprehensive Feeding Practices Questionnaire}
 \usage{
-score_cfpq(cfpq_data, base_zero = TRUE, id, session_id, extra_scale_cols = c())
+score_cfpq(
+  cfpq_data,
+  pna_value,
+  base_zero = TRUE,
+  id,
+  session_id,
+  extra_scale_cols = c()
+)
 }
 \arguments{
 \item{cfpq_data}{a data.frame all items for the Comprehensive Feeding Practices Questionnaire following the naming conventions described above}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 

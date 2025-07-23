@@ -4,10 +4,19 @@
 \alias{score_pss}
 \title{score_pss: Scored data from the 10-item Perceived Stress Scale}
 \usage{
-score_pss(pss_data, base_zero = TRUE, id, session_id, extra_scale_cols = c())
+score_pss(
+  pss_data,
+  pna_value,
+  base_zero = TRUE,
+  id,
+  session_id,
+  extra_scale_cols = c()
+)
 }
 \arguments{
 \item{pss_data}{a data.frame all items for the Perceived Stress Scale following the naming conventions described above}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 

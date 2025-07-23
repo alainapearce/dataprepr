@@ -20,6 +20,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'tfeq' but are not scale items. Any columns in tfeq_data that begin with 'tfeq' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with scores for the Three-Factor Eating Questionnaire-R18
 #' @examples
@@ -34,7 +35,7 @@
 #'
 #' @export
 
-score_tfeq18 <- function(tfeq_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_tfeq18 <- function(tfeq_data, pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -93,6 +94,14 @@ score_tfeq18 <- function(tfeq_data, base_zero = TRUE, id, session_id, extra_scal
   
   # remove underscore in tfeq_items
   tfeq_items <- gsub("tfeq_", "tfeq", tfeq_items)
+  
+  # if pna_value arg, replace not applicable values with NA
+  if (isTRUE(methods::hasArg(pna_value))) {
+    
+    # replace pna_value with NA in pcw_vars
+    tfeq_data[tfeq_items] <- lapply(tfeq_data[tfeq_items] , function(x) ifelse(x == pna_value, NA, x))
+    
+  }
   
   # re-scale data
   tfeq_data_edit <- tfeq_data

@@ -6,23 +6,23 @@
 \usage{
 score_cbq(
   cbq_data,
+  pna_value,
   base_zero = TRUE,
   id,
   session_id,
-  does_not_apply_value = NA,
   extra_scale_cols = c()
 )
 }
 \arguments{
 \item{cbq_data}{a data.frame all items for the Child Behavior Questionnaire following the naming conventions described above}
 
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
+
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 
 \item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 
 \item{session_id}{(optional) name of session ID column in input data if there are multiple observations per participant. If included, the output dataset will be matched by id and session id, if not included the output dataset will be in the order of the input data. Required to get the phenotype dataset if have multiple sessions (raw data merged with scores.)}
-
-\item{does_not_apply_value}{value used to code a cbq response of "does not apply". Default is NA}
 
 \item{extra_scale_cols}{a vector of character strings that begin with 'cbq' but are not scale items. Any columns in cbq_data that begin with 'cbq' but are not scale items must be included here. Default is empty vector.}
 }
@@ -39,8 +39,8 @@ For data to be scored correctly, the data must be prepared according to the foll
  \item{The columns/variables must match the following naming convention: 'cbq#' or 'cbq_#' where # is the question number (1-94)}
  \item{All questionnaire responses must be a numeric value ranging from 0-6 (base_zero = TRUE) or 1-7 (base_zero = FALSE) where: }
  \itemize{
-    \item{For base_zero = TRUE: 0 = Extremely Untrue; 1 = Quite Untrue; 2 = Sightly Untrue; 3 = Neither True nor False; 4 = Slightly True; 5 - Quite True; 6 - Extremely True, does_not_apply_value (param) = does not apply }
-    \item{For base_zero = FALSE: 1 = Extremely Untrue; 2 = Quite Untrue; 3 = Sightly Untrue; 4 = Neither True nor False; 5 = Slightly True; 6 - Quite True; 7 - Extremely True, does_not_apply_value (param) = does not apply }
+    \item{For base_zero = TRUE: 0 = Extremely Untrue; 1 = Quite Untrue; 2 = Sightly Untrue; 3 = Neither True nor False; 4 = Slightly True; 5 - Quite True; 6 - Extremely True, pna_value (param) = does not apply }
+    \item{For base_zero = FALSE: 1 = Extremely Untrue; 2 = Quite Untrue; 3 = Sightly Untrue; 4 = Neither True nor False; 5 = Slightly True; 6 - Quite True; 7 - Extremely True, pna_value (param) = does not apply }
   }
  \item{Missing values must be coded as NA}
  \item{Values must not be reversed scored. This script will apply reverse scoring so all levels must be true to the scale described above}
@@ -51,10 +51,10 @@ Note, as long as variable names match those listed, the dataset can include othe
 \examples{
 
 # scoring for the cbq with IDs, when cbq values range from 0-6, and "does not apply" responses are scored as 7
-cbq_score_data <- score_cbq(cbq_data, base_zero = TRUE, id = 'ID', does_not_apply_value = 7)
+cbq_score_data <- score_cbq(cbq_data, base_zero = TRUE, id = 'ID', pna_value = 7)
 
 # scoring for the cbq with IDs, when cbq values range from 1-7, and "does not apply" responses are scored as NA
-cbq_score_data <- score_cbq(cbq_data, base_zero = FALSE, id = 'ID', does_not_apply_value = NA)
+cbq_score_data <- score_cbq(cbq_data, base_zero = FALSE, id = 'ID')
 
 \dontrun{
 }

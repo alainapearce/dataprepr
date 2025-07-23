@@ -4,10 +4,12 @@
 \alias{score_cchip}
 \title{score_cchip: Scored data from the Community Childhood Hunger Identification Project}
 \usage{
-score_cchip(cchip_data, id, session_id, extra_scale_cols = c())
+score_cchip(cchip_data, pna_value, id, session_id, extra_scale_cols = c())
 }
 \arguments{
 \item{cchip_data}{a data.frame all items for the Community Childhood Hunger Identification Project following the naming conventions described above}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 

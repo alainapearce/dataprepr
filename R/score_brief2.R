@@ -28,6 +28,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #'
 #' @return A dataset with subscale scores for the Behavioral Rating Inventory of Executive Function-2
 #' @examples
@@ -60,7 +61,7 @@
 #'
 #' @export
 
-score_brief2 <- function(brief_data, age_var, sex_var, base_zero = TRUE, male = 0, female = 1, id, session_id, extra_scale_cols = c()) {
+score_brief2 <- function(brief_data, age_var, sex_var, pna_value, base_zero = TRUE, male = 0, female = 1, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -156,6 +157,14 @@ score_brief2 <- function(brief_data, age_var, sex_var, base_zero = TRUE, male = 
     
     # remove underscore in brief_items
     brief_items <- gsub("brief_", "brief", brief_items)
+    
+    # if pna_value arg, replace not applicable values with NA
+    if (isTRUE(methods::hasArg(pna_value))) {
+      
+      # replace pna_value with NA in pcw_vars
+      brief_data[brief_items] <- lapply(brief_data[brief_items] , function(x) ifelse(x == pna_value, NA, x))
+      
+    }
     
     # check range of data and print warnings
     min <- min(brief_data[c(brief_items)], na.rm = TRUE)

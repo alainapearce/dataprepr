@@ -7,7 +7,7 @@
 score_bes(
   bes_data,
   base_zero = TRUE,
-  pna = NA,
+  pna_value = NA,
   id,
   session_id,
   extra_scale_cols = c()
@@ -18,7 +18,7 @@ score_bes(
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 
-\item{pna}{value used when participant prefers not to answer/elects to skip}
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 

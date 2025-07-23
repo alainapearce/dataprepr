@@ -19,6 +19,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'pptq' but are not scale items. Any columns in pptq_data that begin with 'pptq' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with subscale scores for the Pictorial Personality Traits Questionnaire for Children 
@@ -33,7 +34,7 @@
 #'
 #' @export
 
-score_pptq <- function(pptq_data, pptq_scale, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_pptq <- function(pptq_data, pptq_scale, pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -106,6 +107,14 @@ score_pptq <- function(pptq_data, pptq_scale, base_zero = TRUE, id, session_id, 
   
   # remove underscore in pptq_items
   pptq_items <- gsub("pptq_", "pptq", pptq_items)
+  
+  # if pna_value arg, replace not applicable values with NA
+  if (isTRUE(methods::hasArg(pna_value))) {
+    
+    # replace pna_value with NA in pcw_vars
+    pptq_data[pptq_items] <- lapply(pptq_data[pptq_items] , function(x) ifelse(x == pna_value, NA, x))
+    
+  }
   
   # check range of data and print warnings
   min <- min(pptq_data[c(pptq_items)], na.rm = TRUE)

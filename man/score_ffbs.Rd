@@ -4,10 +4,19 @@
 \alias{score_ffbs}
 \title{score_ffbs: Scored data from the Family Food Behavior Survey}
 \usage{
-score_ffbs(ffbs_data, base_zero = TRUE, id, session_id, extra_scale_cols = c())
+score_ffbs(
+  ffbs_data,
+  pna_value,
+  base_zero = TRUE,
+  id,
+  session_id,
+  extra_scale_cols = c()
+)
 }
 \arguments{
 \item{ffbs_data}{a data.frame all items for the Family Food Behavior Survey following the naming conventions described above}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 

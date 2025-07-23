@@ -1,0 +1,176 @@
+#' score_cfsq: Scored data from the Caregiver's Feeding Style Questionnaire
+#'
+#' This function scores the Caregiver's Feeding Style Questionnaire and provides subscale scores for the following behaviors: Demandingness and Responsiveness
+#' 
+#' 
+#' For data to be scored correctly, the data must be prepared according to the following criteria: \cr
+#' \itemize{
+#'  \item{The data must include all individual questionnaire items except for question 13:}
+#'  \item{The columns/variables must match the following naming convention: 'cfsq#' or 'cfsq_#' where # is the question number (1-19).}
+#'  \item{All questionnaire responses must be a numeric value ranging from 0-4 (base_zero = TRUE) or 1-5 (base_zero = FALSE) where: }
+#'  \itemize{
+  #'    \item{For base_zero = TRUE: 0 = Never; 1 = Rarely; 2 = Sometimes; 3 = Often; 4 = Always}
+#'    \item{For base_zero = TRUE: 1 = Never; 2 = Rarely; 3 = Sometimes; 4 = Often; 5 = Always}
+#'   }
+#'  \item{Missing values must be coded as NA}
+#' }
+#' \cr
+#' Note, as long as variable names match those listed, the dataset can include other variables
+#'
+#' @references
+#' Hughes SO, Power TG, Orlet Fisher J, Mueller S, Nicklas TA. Revisiting a neglected construct: parenting styles in a child-feeding context. Appetite. 2005 Feb;44(1):83-92. doi: 10.1016/j.appet.2004.08.007. Epub 2004 Nov 13. PMID: 15604035.(\href{https://pubmed.ncbi.nlm.nih.gov/15604035/}{PubMed})
+#'
+#' @param cfsq_data a data.frame all items for the Caregiver's Feeding Style Questionnaire following the naming conventions described above
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @inheritParams score_bes
+#' @param extra_scale_cols a vector of character strings that begin with 'cfsq' but are not scale items. Any columns in cfsq_data that begin with 'cfsq' but are not scale items must be included here. Default is empty vector.
+#'
+#' @return A dataset with subscale scores for the Caregiver's Feeding Style Questionnaire
+#'
+#' @examples
+#'
+#' # scoring for the cfsq with IDs, with scale from 0-1, prefer not to answer indicated with 2
+#' cfsq_score_data <- score_cfsq(cfsq_data, base_zero = TRUE, id = 'ID', pna_value = 2)
+#'
+#'
+#' \dontrun{
+#' }
+#'
+#'
+#' @export
+
+score_cfsq <- function(cfsq_data, pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+  
+  #### 1. Set up/initial checks #####
+  
+  # check that cfsq_data exist and is a data.frame
+  data_arg <- methods::hasArg(cfsq_data)
+  
+  if (isTRUE(data_arg) & !is.data.frame(cfsq_data)) {
+    stop('cfsq_data must be entered as a data.frame')
+  } else if (isFALSE(data_arg)) {
+    stop('cfsq_data must set to the data.frame with amount consumed for each food item')
+  }
+  
+  # check if id exists
+  ID_arg <- methods::hasArg(id)
+  
+  if (isTRUE(ID_arg)){
+    if (!(id %in% names(cfsq_data))) {
+      stop('variable name entered as id is not in cfsq_data')
+    }
+  }
+  
+  # check if session_id exists
+  sessionID_arg <- methods::hasArg(session_id)
+  
+  if (isTRUE(sessionID_arg)){
+    if (!(id %in% names(cfsq_data))) {
+      stop("variable name entered as session_id is not in cfsq_data")
+    }
+  }
+  
+  # check base_zero is logical
+  if (!is.logical(base_zero)) {
+    stop("base_zero arg must be logical (TRUE/FALSE)")
+  }
+  
+  #### 2. Set Up Data #####
+  
+  # set up database for results
+  
+  # create empty matrix
+  cfsq_score_dat <- data.frame(cfsq_demand = rep(NA, nrow(cfsq_data)), cfsq_resp = rep(NA, nrow(cfsq_data)))
+  
+  if (isTRUE(ID_arg)) {
+    if (isTRUE(sessionID_arg)) {
+      cfsq_score_dat <- data.frame(cfsq_data[[id]], cfsq_data[[session_id]], cfsq_score_dat)
+      names(cfsq_score_dat)[1:2] <- c(id, session_id)
+    } else {
+      cfsq_score_dat <- data.frame(cfsq_data[[id]], cfsq_score_dat)
+      names(cfsq_score_dat)[1] <- id
+    }
+  }
+  
+  # assign cfsq scale items to cfsq_items, excluding columns in extra_scale_cols
+  cfsq_items <- setdiff(grep("^cfsq", names(cfsq_data), value = TRUE), extra_scale_cols)
+  
+  if (isTRUE(sessionID_arg)) {
+    cfsq_items <- setdiff(grep("^cfsq", names(cfsq_data), value = TRUE), session_id)
+  }
+  
+  # remove underscore in column names for cfsq_items
+  names(cfsq_data)[names(cfsq_data) %in% cfsq_items] <- gsub('cfsq_', 'cfsq', names(cfsq_data)[names(cfsq_data) %in% cfsq_items])
+  
+  # remove underscore in cfsq_items
+  cfsq_items <- gsub("cfsq_", "cfsq", cfsq_items)
+  
+  # make copy of data
+  cfsq_data_edit <- cfsq_data
+  
+  # if pna_value arg, replace not applicable values with NA
+  if (isTRUE(methods::hasArg(pna_value))) {
+    
+    # replace pna_value with NA in pcw_vars
+    cfsq_data_edit[cfsq_items] <- lapply(cfsq_data_edit[cfsq_items], function(x) ifelse(x == pna_value, NA, x))
+    
+  }
+  
+  # check range of data and print warnings (check in cfsq_data_edit where not_applicable_value has been replaced with NA)
+  min <- min(cfsq_data_edit[c(cfsq_items)], na.rm = TRUE)
+  max <- max(cfsq_data_edit[c(cfsq_items)], na.rm = TRUE)
+  
+  if (isTRUE(base_zero)){
+    if (min < 0 | max > 4) {
+      warning("range in cfsq data (excluding pna_value, if specified) is outside expected range given base_zero = TRUE (expected range: 0-4). Scoring may be incorrect")
+    } 
+  } else {
+    if (min < 1 | max > 5) {
+      warning("range in cfsq data (excluding pna_value, if specified) is outside expected range given base_zero = FALSE (expected range: 1-5). Scoring may be incorrect")
+    } 
+  }
+  
+  # re-scale data to base 1
+  if (isTRUE(base_zero)){
+    cfsq_data_edit[cfsq_items] <- sapply(cfsq_items, function(x) cfsq_data_edit[[x]] + 1, simplify = TRUE)
+  }
+  
+  
+  ## Score Subscales
+  
+  # Demanding
+  demanding_vars <- cfsq_items[!grepl('cfsq4$|cfsq8$', cfsq_items)]
+  cfsq_score_dat['cfsq_demand'] <- rowMeans(cfsq_data_edit[demanding_vars])
+  
+  # Responsiveness
+  child_resp_vars <- c('cfsq3', 'cfsq4', 'cfsq6', 'cfsq8', 'cfsq9', 'cfsq15', 'cfsq17')
+
+  cfsq_score_dat['cfsq_resp'] <- (rowMeans(cfsq_data_edit[child_resp_vars]))/(rowMeans(cfsq_data_edit[cfsq_items]))
+ 
+  #### 3. Clean Export/Scored Data #####
+  ## round data
+  if (isTRUE(ID_arg)){
+    cfsq_score_dat[2:ncol(cfsq_score_dat)] <- round(cfsq_score_dat[2:ncol(cfsq_score_dat)], digits = 3)
+  } else {
+    cfsq_score_dat <- round(cfsq_score_dat, digits = 3)
+  }
+  
+  ## merge raw responses with scored data
+  if (isTRUE(ID_arg)){
+    if (isTRUE(sessionID_arg)) {
+      cfsq_phenotype <- merge(cfsq_data, cfsq_score_dat, by = c(id, session_id))
+    } else {
+      cfsq_phenotype <- merge(cfsq_data, cfsq_score_dat, by = id)
+    }
+    
+    return(list(score_dat = as.data.frame(cfsq_score_dat),
+                bids_phenotype = as.data.frame(cfsq_phenotype)))
+  } else {
+    return(list(score_dat = as.data.frame(cfsq_score_dat)))
+  }
+  
+}
+

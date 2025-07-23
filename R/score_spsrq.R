@@ -28,6 +28,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'spsrq' but are not scale items. Any columns in spsrq_data that begin with 'spsrq' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with subscale scores for the Sensitivity to Punishment and Sensitivity to Reward Questionnaire
 #' @examples
@@ -42,7 +43,7 @@
 #'
 #' @export
 
-score_spsrq <- function(spsrq_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_spsrq <- function(spsrq_data, pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -101,6 +102,14 @@ score_spsrq <- function(spsrq_data, base_zero = TRUE, id, session_id, extra_scal
     
     # remove underscore in spsrq_items
     spsrq_items <- gsub("spsrq_", "spsrq", spsrq_items)
+    
+    # if pna_value arg, replace not applicable values with NA
+    if (isTRUE(methods::hasArg(pna_value))) {
+      
+      # replace pna_value with NA in pcw_vars
+      spsrq_data[spsrq_items] <- lapply(spsrq_data[spsrq_items] , function(x) ifelse(x == pna_value, NA, x))
+      
+    }
     
     # check range of data and print warnings
     min <- min(spsrq_data[c(spsrq_items)], na.rm = TRUE)

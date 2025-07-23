@@ -4,10 +4,19 @@
 \alias{score_cshq}
 \title{score_cshq: Scored data from the Children Sleep Habits Questionnaire}
 \usage{
-score_cshq(cshq_data, base_zero = TRUE, id, session_id, reverse_score = FALSE)
+score_cshq(
+  cshq_data,
+  pna_value,
+  base_zero = TRUE,
+  id,
+  session_id,
+  reverse_score = FALSE
+)
 }
 \arguments{
 \item{cshq_data}{a data.frame all items for the Children Sleep Habits Questionnaire following the naming conventions described above}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 

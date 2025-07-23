@@ -4,10 +4,22 @@
 \alias{score_pwlb}
 \title{score_pwlb: Scored data from the Parent Weight-Loss Behavior Questionnaire}
 \usage{
-score_pwlb(pwlb_data, base_zero = TRUE, id, session_id, extra_scale_cols = c())
+score_pwlb(
+  pwlb_data,
+  var_24describe = "pwlb24a",
+  pna_value,
+  base_zero = TRUE,
+  id,
+  session_id,
+  extra_scale_cols = c()
+)
 }
 \arguments{
 \item{pwlb_data}{a data.frame all items for the Parent Weight-Loss Behavior Questionnaire following the naming conventions described above}
+
+\item{var_24describe}{string with the name of the variable for describing answer for item 24}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 

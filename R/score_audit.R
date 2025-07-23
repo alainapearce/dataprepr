@@ -42,6 +42,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols vector of character strings that begin with 'audit' but are not scale items. Any columns in audit_data that begin with 'audit' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with a score for the Alcohol Use Disorders Identification Test
@@ -55,7 +56,7 @@
 #'
 #' @export
 
-score_audit <- function(audit_data, id, session_id, base_zero = TRUE, extra_scale_cols = c()) {
+score_audit <- function(audit_data, pna_value, id, session_id, base_zero = TRUE, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -114,6 +115,14 @@ score_audit <- function(audit_data, id, session_id, base_zero = TRUE, extra_scal
   
   # remove underscore in audit_items
   audit_items <- gsub("audit_", "audit", audit_items)
+  
+  # if pna_value arg, replace not applicable values with NA
+  if (isTRUE(methods::hasArg(pna_value))) {
+    
+    # replace pna_value with NA in pcw_vars
+    audit_data[audit_items] <- lapply(audit_data[audit_items] , function(x) ifelse(x == pna_value, NA, x))
+    
+  }
   
   # check ranges for items 1-8
   min = min(audit_data[c("audit1", "audit2", "audit3", "audit4", "audit5", "audit6", "audit7", "audit8")], na.rm = TRUE)

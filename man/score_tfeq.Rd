@@ -4,10 +4,19 @@
 \alias{score_tfeq}
 \title{score_tfeq: Scored data from the Three Factor Eating Questionnaire}
 \usage{
-score_tfeq(tfeq_data, base_zero = TRUE, id, session_id, extra_scale_cols = c())
+score_tfeq(
+  tfeq_data,
+  pna_value,
+  base_zero = TRUE,
+  id,
+  session_id,
+  extra_scale_cols = c()
+)
 }
 \arguments{
 \item{tfeq_data}{a data.frame all items for the Three Factor Eating Questionnaire following the naming conventions described above}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 
@@ -42,11 +51,10 @@ tfeq_score_data <- score_tfeq(tfeq_data, id = 'ID')
 \dontrun{
 }
 
+
+
 }
 \references{
 Primary References for the Three Factor Eating Questionnaire and Scoring:
 Stunkard AJ, Messick S. The three-factor eating questionnaire to measure dietary restraint, disinhibition and hunger. Journal of Psychosomatic Research. 1985;29(1):71-83. doi:10.1016/0022-3999(85)90010-8
-}
-\seealso{
-Raw data from Qualtrics was processed using the following script: \code{\link{util_fbs_parent_v3dat}}
 }

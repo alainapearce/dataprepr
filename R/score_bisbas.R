@@ -31,6 +31,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'bisbas' but are not scale items. Any columns in bisbas_data that begin with 'bisbas' but are not scale items must be included here. Default is empty vector.
 #'
 #'
@@ -47,7 +48,7 @@
 #'
 #' @export
 
-score_bisbas <- function(bisbas_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_bisbas <- function(bisbas_data, pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -107,6 +108,14 @@ score_bisbas <- function(bisbas_data, base_zero = TRUE, id, session_id, extra_sc
   
   # remove underscore in bisbas_items
   bisbas_items <- gsub("bisbas_", "bisbas", bisbas_items)
+  
+  # if pna_value arg, replace not applicable values with NA
+  if (isTRUE(methods::hasArg(pna_value))) {
+    
+    # replace pna_value with NA in pcw_vars
+    bisbas_data[bisbas_items] <- lapply(bisbas_data[bisbas_items] , function(x) ifelse(x == pna_value, NA, x))
+    
+  }
   
   # check range of data and print warnings
   min <- min(bisbas_data[c(bisbas_items)], na.rm = TRUE)

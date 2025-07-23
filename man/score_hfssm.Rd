@@ -6,6 +6,7 @@
 \usage{
 score_hfssm(
   hfssm_data,
+  pna_value,
   base_zero = FALSE,
   id,
   session_id,
@@ -14,6 +15,8 @@ score_hfssm(
 }
 \arguments{
 \item{hfssm_data}{a data.frame all items for the U.S. Household Food Security Survey Module following the naming conventions described above}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 

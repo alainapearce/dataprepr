@@ -4,10 +4,19 @@
 \alias{score_sic}
 \title{score_sic: INCOMPLETE FUNCTION Scored data from the Stress in Children Questionnaire}
 \usage{
-score_sic(sic_data, base_zero = TRUE, id, session_id, extra_scale_cols = c())
+score_sic(
+  sic_data,
+  pna_value,
+  base_zero = TRUE,
+  id,
+  session_id,
+  extra_scale_cols = c()
+)
 }
 \arguments{
 \item{sic_data}{a data.frame all items for the Child Behavior Questionnaire following the naming conventions described above}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 

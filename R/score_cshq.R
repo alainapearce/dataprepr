@@ -20,6 +20,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param reverse_score is data already reversed scored (default = FALSE)
 #'
 #'
@@ -37,7 +38,7 @@
 #'
 #' @export
 
-score_cshq <- function(cshq_data, base_zero = TRUE, id, session_id, reverse_score = FALSE) {
+score_cshq <- function(cshq_data, pna_value, base_zero = TRUE, id, session_id, reverse_score = FALSE) {
   
   #### 1. Set up/initial checks #####
   
@@ -103,6 +104,14 @@ score_cshq <- function(cshq_data, base_zero = TRUE, id, session_id, reverse_scor
   
   if (isTRUE(base_zero)){
     cshq_data_edit[cshq_primary_qs] <- sapply(cshq_primary_qs, function(x) cshq_data_edit[[x]] + 1, simplify = TRUE)
+  }
+  
+  # if pna_value arg, replace not applicable values with NA
+  if (isTRUE(methods::hasArg(pna_value))) {
+    
+    # replace pna_value with NA in pcw_vars
+    cshq_data_edit[cshq_primary_qs] <- lapply(cshq_data_edit[cshq_primary_qs] , function(x) ifelse(x == pna_value, NA, x))
+    
   }
   
   # calculate reversed scores

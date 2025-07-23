@@ -8,6 +8,7 @@ score_brief2(
   brief_data,
   age_var,
   sex_var,
+  pna_value,
   base_zero = TRUE,
   male = 0,
   female = 1,
@@ -22,6 +23,8 @@ score_brief2(
 \item{age_var}{a string with the name of the age variable in brief_data}
 
 \item{sex_var}{a string with the name of the sex variable in brief_data}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 

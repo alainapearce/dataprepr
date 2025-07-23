@@ -21,7 +21,7 @@
 #' Mendelson, B. K., & White, D. R. (1982). Relation between body-esteem and self-esteem of obese and normal children. Perceptual and motor skills, 54(3), 899-905. https://doi.org/10.2466/pms.1982.54.3.899 (\href{https://pubmed.ncbi.nlm.nih.gov/7099901/}{PubMed})
 #'
 #' @param bes_data a data.frame all items for the Body Esteem Scale following the naming conventions described above
-#' @param pna_value (integer) integer used for items participants indicate "prefer not to answer".
+#' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
@@ -152,7 +152,7 @@ score_body_es <- function(bes_data, pna_value, base_zero = TRUE, id, session_id,
   ## Score Subscales
   
   # total
-  resp_vars <- c(names(bes_data_edit)[names(bes_data_edit) %in% reverse_qs], names(bes_data_edit)[grepl('rev', names(bes_data_edit))])
+  resp_vars <- c(bes_items[!(bes_items %in% reverse_qs)], names(bes_data_edit)[grepl('rev', names(bes_data_edit))])
   
   bes_score_dat['bes_total'] <- rowSums(bes_data_edit[resp_vars])
   

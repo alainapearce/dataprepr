@@ -4,10 +4,19 @@
 \alias{score_fmcb}
 \title{score_fmcb: Scored data from the Feeding to Manage Child Behavior Questionnaire}
 \usage{
-score_fmcb(fmcb_data, base_zero = TRUE, id, session_id, extra_scale_cols = c())
+score_fmcb(
+  fmcb_data,
+  pna_value,
+  base_zero = TRUE,
+  id,
+  session_id,
+  extra_scale_cols = c()
+)
 }
 \arguments{
 \item{fmcb_data}{a data.frame all items for the Feeding to Manage Child Behavior Questionnaire following the naming conventions described above}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 

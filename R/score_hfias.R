@@ -18,6 +18,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'hfias' but are not scale items. Any columns in sic_data that begin with 'hfias' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with subscale scores for the Pictorial Personality Traits Questionnaire for Children 
 #' @examples
@@ -31,7 +32,7 @@
 #'
 #' @export
 
-score_hfias <- function(hfias_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_hfias <- function(hfias_data, pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -90,6 +91,14 @@ score_hfias <- function(hfias_data, base_zero = TRUE, id, session_id, extra_scal
   
   # remove underscores in hfias_items
   hfias_items <- gsub("hfias_", "hfias", hfias_items)
+  
+  # if pna_value arg, replace not applicable values with NA
+  if (isTRUE(methods::hasArg(pna_value))) {
+    
+    # replace pna_value with NA in pcw_vars
+    hfias_data[hfias_items] <- lapply(hfias_data[hfias_items] , function(x) ifelse(x == pna_value, NA, x))
+    
+  }
   
   # get primary questions to score
   hfias_categorical_qs <- c("hfias1", "hfias2", "hfias3", "hfias4", "hfias5", "hfias6", "hfias7", "hfias8", "hfias9")

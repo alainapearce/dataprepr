@@ -24,6 +24,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'fmcb' but are not scale items. Any columns in fmcb_data that begin with 'fmcb' but are not scale items must be included here. Default is empty vector.
 #' @return If 'id' argument is used, returns a list with 2 dataframes: (1) bids_phenotype (contains input fmcb_data [values identical to input, underscores removed from fmcb items col names, if they existed] and FMCB scores) and (2) score_dat (contains FMCB subscale scores only). If 'id' argument is not used, returns a list with score_dat dataframe only.
 #' @examples
@@ -34,7 +35,7 @@
 #' 
 #' @export
 
-score_fmcb <- function(fmcb_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_fmcb <- function(fmcb_data, pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -93,6 +94,14 @@ score_fmcb <- function(fmcb_data, base_zero = TRUE, id, session_id, extra_scale_
     
     # remove underscore in fmcb_items
     fmcb_items <- gsub("fmcb_", "fmcb", fmcb_items)
+    
+    # if pna_value arg, replace not applicable values with NA
+    if (isTRUE(methods::hasArg(pna_value))) {
+      
+      # replace pna_value with NA in pcw_vars
+      fmcb_data[fmcb_items] <- lapply(fmcb_data[fmcb_items] , function(x) ifelse(x == pna_value, NA, x))
+      
+    }
     
     # check range of data and print warnings
     min <- min(fmcb_data[c(fmcb_items)], na.rm = TRUE)

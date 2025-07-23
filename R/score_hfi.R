@@ -16,6 +16,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 
 #' @return A dataset with subscale scores for the Fulkerson Home Food Inventory
 #' @examples
@@ -26,7 +27,7 @@
 #'
 #' @export
 
-score_hfi <- function(hfi_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_hfi <- function(hfi_data, pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -80,6 +81,14 @@ score_hfi <- function(hfi_data, base_zero = TRUE, id, session_id, extra_scale_co
     
     # assign hfi scale items to hfi_items, excluding columns in extra_scale_cols
     hfi_items <- setdiff(grep("^hfi", names(hfi_data), value = TRUE), extra_scale_cols)
+    
+    # if pna_value arg, replace not applicable values with NA
+    if (isTRUE(methods::hasArg(pna_value))) {
+      
+      # replace pna_value with NA in pcw_vars
+      hfi_data[hfi_items] <- lapply(hfi_data[hfi_items] , function(x) ifelse(x == pna_value, NA, x))
+      
+    }
     
     # subset hfi items for scoring
     hfi_data_edit <- hfi_data[c(hfi_items)]

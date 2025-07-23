@@ -37,6 +37,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'lbc' but are not scale items. Any columns in lbc_data that begin with 'lbc' but are not scale items must be included here. Default is empty vector.
 #' @return A dataset with subscale scores for the Lifestyle Behavior Checklist
 #' @examples
@@ -47,7 +48,7 @@
 #'
 #' @export
 
-score_lbc <- function(lbc_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_lbc <- function(lbc_data, pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -114,10 +115,19 @@ score_lbc <- function(lbc_data, base_zero = TRUE, id, session_id, extra_scale_co
     # remove underscore in lbc_items
     lbc_items <- gsub("lbc_", "lbc", lbc_items)
     
+    # if pna_value arg, replace not applicable values with NA
+    if (isTRUE(methods::hasArg(pna_value))) {
+      
+      # replace pna_value with NA in pcw_vars
+      lbc_data[lbc_items] <- lapply(lbc_data[lbc_items] , function(x) ifelse(x == pna_value, NA, x))
+      
+    }
+    
     # check range of data and print warnings
     
     conf_items <- grep("conf", lbc_items,value = TRUE)
     prob_items <- grep("conf", lbc_items,value = TRUE, invert = TRUE)
+    
     
     min_prob <- min(lbc_data[c(prob_items)], na.rm = TRUE)
     max_prob <- max(lbc_data[c(prob_items)], na.rm = TRUE)

@@ -18,6 +18,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'ffbs' but are not scale items. Any columns in ffbs_data that begin with 'ffbs' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with subscale scores for the Family Food Behavior Survey
@@ -32,7 +33,7 @@
 #'
 #' @export
 
-score_ffbs <- function(ffbs_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_ffbs <- function(ffbs_data, pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -93,6 +94,14 @@ score_ffbs <- function(ffbs_data, base_zero = TRUE, id, session_id, extra_scale_
     
     # remove underscore in ffbs_items
     ffbs_items <- gsub("ffbs_", "ffbs", ffbs_items)
+    
+    # if pna_value arg, replace not applicable values with NA
+    if (isTRUE(methods::hasArg(pna_value))) {
+      
+      # replace pna_value with NA in pcw_vars
+      ffbs_data[ffbs_items] <- lapply(ffbs_data[ffbs_items] , function(x) ifelse(x == pna_value, NA, x))
+      
+    }
     
     # re-scale data
     ffbs_data_edit <- ffbs_data

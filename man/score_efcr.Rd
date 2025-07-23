@@ -4,10 +4,19 @@
 \alias{score_efcr}
 \title{score_efcr: Scored data from the External Food Cue Responsiveness Scale}
 \usage{
-score_efcr(efcr_data, base_zero = TRUE, id, session_id, extra_scale_cols = c())
+score_efcr(
+  efcr_data,
+  pna_value,
+  base_zero = TRUE,
+  id,
+  session_id,
+  extra_scale_cols = c()
+)
 }
 \arguments{
 \item{efcr_data}{a data.frame all items for the External Food Cue Responsiveness Scale following the naming conventions described above}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 

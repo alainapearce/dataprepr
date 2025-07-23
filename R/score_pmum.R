@@ -23,6 +23,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'pmum' but are not scale items. Any columns in pmum_data that begin with 'pmum' but are not scale items must be included here. Default is empty vector.
 #' 
 #'
@@ -39,7 +40,7 @@
 #'
 #' @export
 
-score_pmum <- function(pmum_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_pmum <- function(pmum_data, pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -95,6 +96,14 @@ score_pmum <- function(pmum_data, base_zero = TRUE, id, session_id, extra_scale_
   
   # remove underscore in pmum_items
   pmum_items <- gsub("pmum_", "pmum", pmum_items)
+  
+  # if pna_value arg, replace not applicable values with NA
+  if (isTRUE(methods::hasArg(pna_value))) {
+    
+    # replace pna_value with NA in pcw_vars
+    pmum_data[pmum_items] <- lapply(pmum_data[pmum_items] , function(x) ifelse(x == pna_value, NA, x))
+    
+  }
   
   # check range of data and print warnings
   min <- min(pmum_data[c(pmum_items)], na.rm = TRUE)

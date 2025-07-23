@@ -24,6 +24,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'chaos' but are not scale items. Any columns in chaos_data that begin with 'chaos' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with subscale scores for the Confusion, Hubbub, and Order Scale 
@@ -40,7 +41,7 @@
 #'
 #' @export
 
-score_chaos <- function(chaos_data, base_zero = FALSE, id, session_id, extra_scale_cols = c()) {
+score_chaos <- function(chaos_data, pna_value, base_zero = FALSE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -99,6 +100,14 @@ score_chaos <- function(chaos_data, base_zero = FALSE, id, session_id, extra_sca
   
   # remove underscore in chaos_items
   chaos_items <- gsub("chaos_", "chaos", chaos_items)
+  
+  # if pna_value arg, replace not applicable values with NA
+  if (isTRUE(methods::hasArg(pna_value))) {
+    
+    # replace pna_value with NA in pcw_vars
+    chaos_data[chaos_items] <- lapply(chaos_data[chaos_items] , function(x) ifelse(x == pna_value, NA, x))
+    
+  }
   
   # check range of data and print warnings
   min <- min(chaos_data[c(chaos_items)], na.rm = TRUE)

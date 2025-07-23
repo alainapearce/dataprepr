@@ -30,6 +30,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'pss' but are not scale items. Any columns in pss_data that begin with 'pss' but are not scale items must be included here. Default is empty vector.
 #' 
 #'
@@ -45,7 +46,7 @@
 #'
 #' @export
 
-score_pss <- function(pss_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_pss <- function(pss_data, pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -104,6 +105,14 @@ score_pss <- function(pss_data, base_zero = TRUE, id, session_id, extra_scale_co
   
   # remove underscore in pss_items
   pss_items <- gsub("pss_", "pss", pss_items)
+  
+  # if pna_value arg, replace not applicable values with NA
+  if (isTRUE(methods::hasArg(pna_value))) {
+    
+    # replace pna_value with NA in pcw_vars
+    pss_data[pss_items] <- lapply(pss_data[pss_items] , function(x) ifelse(x == pna_value, NA, x))
+    
+  }
   
   # check range of data and print warnings
   min <- min(pss_data[c(pss_items)], na.rm = TRUE)

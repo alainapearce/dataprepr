@@ -6,6 +6,7 @@
 \usage{
 score_spsrq(
   spsrq_data,
+  pna_value,
   base_zero = TRUE,
   id,
   session_id,
@@ -14,6 +15,8 @@ score_spsrq(
 }
 \arguments{
 \item{spsrq_data}{a data.frame all items for the Sensitivity to Punishment and Sensitivity to Reward Questionnaire following the naming conventions described above}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 

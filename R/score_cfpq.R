@@ -24,6 +24,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'cfpq' but are not scale items. Any columns in cfpq_data that begin with 'cfpq' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with subscale scores for the Comprehensive Feeding Practices Questionnaire 
@@ -40,7 +41,7 @@
 #'
 #' @export
 
-score_cfpq <- function(cfpq_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_cfpq <- function(cfpq_data, pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -110,6 +111,15 @@ score_cfpq <- function(cfpq_data, base_zero = TRUE, id, session_id, extra_scale_
   
   # remove underscore in cfpq_items
   cfpq_items <- gsub("cfpq_", "cfpq", cfpq_items)
+  
+  # if pna_value arg, replace not applicable values with NA
+  if (isTRUE(methods::hasArg(pna_value))) {
+    
+    # replace pna_value with NA in pcw_vars
+    cfpq_data[cfpq_items] <- lapply(cfpq_data[cfpq_items] , function(x) ifelse(x == pna_value, NA, x))
+    
+  }
+  
   
   # check range of data and print warnings
   min <- min(cfpq_data[c(cfpq_items)], na.rm = TRUE)

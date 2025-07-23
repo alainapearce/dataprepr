@@ -6,6 +6,7 @@
 \usage{
 score_audit(
   audit_data,
+  pna_value,
   id,
   session_id,
   base_zero = TRUE,
@@ -14,6 +15,8 @@ score_audit(
 }
 \arguments{
 \item{audit_data}{a data.frame all items for the Alcohol Use Disorders Identification Test following the naming conventions described above}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{id}{(optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)}
 

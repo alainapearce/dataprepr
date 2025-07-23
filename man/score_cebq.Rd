@@ -4,10 +4,19 @@
 \alias{score_cebq}
 \title{score_cebq: Scored data from the Children's Eating Behavior Questionnaire}
 \usage{
-score_cebq(cebq_data, base_zero = TRUE, id, session_id, extra_scale_cols = c())
+score_cebq(
+  cebq_data,
+  pna_value,
+  base_zero = TRUE,
+  id,
+  session_id,
+  extra_scale_cols = c()
+)
 }
 \arguments{
 \item{cebq_data}{a data.frame all items for the Children's Eating Behavior Questionnaire following the naming conventions described in Details}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 

@@ -6,6 +6,7 @@
 \usage{
 score_chaos(
   chaos_data,
+  pna_value,
   base_zero = FALSE,
   id,
   session_id,
@@ -14,6 +15,8 @@ score_chaos(
 }
 \arguments{
 \item{chaos_data}{a data.frame all items for the Confusion, Hubbub, and Order Scale following the naming conventions described in Details}
+
+\item{pna_value}{value used when participant prefers not to answer/elects to skip}
 
 \item{base_zero}{(logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.}
 

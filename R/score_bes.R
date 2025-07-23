@@ -18,7 +18,7 @@
 #' Timmerman, G. M. (1999). Binge Eating Scale: Further Assessment of Validity and Reliability. Journal of Applied Biobehavioral Research, 4(1), 1–12. https://doi.org/10.1111/j.1751-9861.1999.tb00051.x
 #'
 #' @param bes_data a data.frame all items for the Binge Eating Scale following the naming conventions described above
-#' @param pna value used when participant prefers not to answer/elects to skip
+#' @param pna_value value used when participant prefers not to answer/elects to skip
 #' @param base_zero (logical) TRUE indicates the smallest value assigned to a choice is 0. FALSE indicates indicates the smallest value assigned to a choice is 1. Default = TRUE.
 #' @param id (optional) name of participant ID column in input data. If included, the output dataset will be matched by id, if not included the output dataset will be in the order of the input data but will have no participant identifier. Required to get the phenotype dataset (raw data merged with scores.)
 #' @param session_id (optional) name of session ID column in input data if there are multiple observations per participant. If included, the output dataset will be matched by id and session id, if not included the output dataset will be in the order of the input data. Required to get the phenotype dataset if have multiple sessions (raw data merged with scores.)
@@ -35,7 +35,7 @@
 #'
 #' @export
 
-score_bes <- function(bes_data, base_zero = TRUE, pna = NA, id, session_id, extra_scale_cols = c()) {
+score_bes <- function(bes_data, base_zero = TRUE, pna_value = NA, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -98,8 +98,8 @@ score_bes <- function(bes_data, base_zero = TRUE, pna = NA, id, session_id, extr
   # make copy of data
   bes_data_edit <- bes_data
   
-  # set pna value to NA
-  bes_data_edit[bes_items] <- sapply(bes_items, function(x) ifelse(bes_data_edit[[x]] == pna, NA, bes_data_edit[[x]]), simplify = TRUE)
+  # set pna_value value to NA
+  bes_data_edit[bes_items] <- sapply(bes_items, function(x) ifelse(bes_data_edit[[x]] == pna_value, NA, bes_data_edit[[x]]), simplify = TRUE)
   
   # check range of data and print warnings
   min <- min(bes_data_edit[c(bes_items)], na.rm = TRUE)

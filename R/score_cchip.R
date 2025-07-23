@@ -15,6 +15,7 @@
 #' @param cchip_data a data.frame all items for the Community Childhood Hunger Identification Project following the naming conventions described above
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'cchip' but are not scale items. Any columns in cchip_data that begin with 'cchip' but are not scale items must be included here. Default is empty vector.
 #'
 #' @return A dataset with scores for the Community Childhood Hunger Identification Project
@@ -30,7 +31,7 @@
 #'
 #' @export
 
-score_cchip <- function(cchip_data, id, session_id, extra_scale_cols = c()) {
+score_cchip <- function(cchip_data, pna_value, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -81,6 +82,14 @@ score_cchip <- function(cchip_data, id, session_id, extra_scale_cols = c()) {
   
   # remove underscore in column names for cchip_items
   names(cchip_data)[names(cchip_data) %in% cchip_items] <- gsub('cchip_', 'cchip', names(cchip_data)[names(cchip_data) %in% cchip_items])
+  
+  # if pna_value arg, replace not applicable values with NA
+  if (isTRUE(methods::hasArg(pna_value))) {
+    
+    # replace pna_value with NA in pcw_vars
+    cchip_data[cchip_items] <- lapply(cchip_data[cchip_items] , function(x) ifelse(x == pna_value, NA, x))
+    
+  }
   
   ## Score Subscales
   # CCHIP score

@@ -17,6 +17,8 @@
 #' French SA, Perry CL, Leon GR, Fulkerson JA. Dieting behaviors and weight change history in female adolescents. Health Psychology. 1995;14(6):548-555. doi:http://dx.doi.org/10.1037/0278-6133.14.6.548 (\href{https://pubmed.ncbi.nlm.nih.gov/8565929/}{PubMed})
 #'
 #' @param pwlb_data a data.frame all items for the Parent Weight-Loss Behavior Questionnaire following the naming conventions described above
+#' @param var_24describe string with the name of the variable for describing answer for item 24
+#' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
@@ -37,7 +39,7 @@
 #'
 #' @export
 
-score_pwlb <- function(pwlb_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_pwlb <- function(pwlb_data, var_24describe = 'pwlb24a', pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
 
     #### 1. Set up/initial checks #####
 
@@ -45,9 +47,9 @@ score_pwlb <- function(pwlb_data, base_zero = TRUE, id, session_id, extra_scale_
     data_arg <- methods::hasArg(pwlb_data)
 
     if (isTRUE(data_arg) & !is.data.frame(pwlb_data)) {
-        stop("pwlb_data must be entered as a data.frame")
+        stop('pwlb_data must be entered as a data.frame')
     } else if (isFALSE(data_arg)) {
-        stop("pwlb_data must set to the data.frame with amount consumed for each food item")
+        stop('pwlb_data must set to the data.frame with amount consumed for each food item')
     }
 
     # check if id exists
@@ -55,7 +57,7 @@ score_pwlb <- function(pwlb_data, base_zero = TRUE, id, session_id, extra_scale_
 
     if (isTRUE(ID_arg)){
         if (!(id %in% names(pwlb_data))) {
-            stop("variable name entered as id is not in pwlb_data")
+            stop('variable name entered as id is not in pwlb_data')
         }
     }
     
@@ -64,13 +66,13 @@ score_pwlb <- function(pwlb_data, base_zero = TRUE, id, session_id, extra_scale_
     
     if (isTRUE(sessionID_arg)){
       if (!(id %in% names(pwlb_data))) {
-        stop("variable name entered as session_id is not in pwlb_data")
+        stop('variable name entered as session_id is not in pwlb_data')
       }
     }
 
     # check base_zero is logical
     if (!is.logical(base_zero)) {
-      stop("base_zero arg must be logical (TRUE/FALSE)")
+      stop('base_zero arg must be logical (TRUE/FALSE)')
     }
     
     #### 2. Set Up Data #####
@@ -90,34 +92,41 @@ score_pwlb <- function(pwlb_data, base_zero = TRUE, id, session_id, extra_scale_
     }
 
     # assign pwlb scale items to pwlb_items, excluding columns in extra_scale_cols
-    pwlb_items <- setdiff(grep("^pwlb", names(pwlb_data), value = TRUE), extra_scale_cols)
+    pwlb_items <- setdiff(grep('^pwlb', names(pwlb_data), value = TRUE), extra_scale_cols)
     
     # remove underscore in column names for pwlb_items
     names(pwlb_data)[names(pwlb_data) %in% pwlb_items] <- gsub('pwlb_', 'pwlb', names(pwlb_data)[names(pwlb_data) %in% pwlb_items])
     
     # remove underscore in pwlb_items
-    pwlb_items <- gsub("pwlb_", "pwlb", pwlb_items)
+    pwlb_items <- gsub('pwlb_', 'pwlb', pwlb_items)
+    
+    # if pna_value arg, replace not applicable values with NA
+    if (isTRUE(methods::hasArg(pna_value))) {
+      
+      # replace pna_value with NA in pcw_vars
+      pwlb_data[pwlb_items] <- lapply(pwlb_data[pwlb_items] , function(x) ifelse(x == pna_value, NA, x))
+      
+    }
     
     # re-scale data
     pwlb_data_edit <- pwlb_data
     
     if (isTRUE(base_zero)){
-      pwlb_data_edit[pwlb_items[!grepl('pwlb24a', pwlb_items)]] <- sapply(pwlb_items[!grepl('pwlb24a', pwlb_items)], function(x) pwlb_data[[x]] + 1, simplify = TRUE)
+      pwlb_data_edit[pwlb_items[!grepl(var_24describe, pwlb_items)]] <- sapply(pwlb_items[!grepl(var_24describe, pwlb_items)], function(x) pwlb_data[[x]] + 1, simplify = TRUE)
     }
     
     ## Score Subscales
 
     # Healthy
-    healthy_vars <- c("pwlb1", "pwlb2", "pwlb3", "pwlb4", "pwlb5", "pwlb6", "pwlb7", "pwlb8", "pwlb10", "pwlb14",
-                      "pwlb15")
-    pwlb_score_dat[["pwlb_healthy"]] <- rowSums(pwlb_data_edit[healthy_vars])
+    healthy_vars <- c('pwlb1', 'pwlb2', 'pwlb3', 'pwlb4', 'pwlb5', 'pwlb6', 'pwlb7', 'pwlb8', 'pwlb10', 'pwlb14', 'pwlb15')
+    pwlb_score_dat[['pwlb_healthy']] <- rowSums(pwlb_data_edit[healthy_vars])
 
     # Unhealthy
-    unhealthy_vars <- c("pwlb9", "pwlb11", "pwlb12", "pwlb13", "pwlb16", "pwlb17", "pwlb19", "pwlb20", "pwlb23")
-    pwlb_score_dat[["pwlb_unhealthy"]] <- rowSums(pwlb_data_edit[unhealthy_vars])
+    unhealthy_vars <- c('pwlb9', 'pwlb11', 'pwlb12', 'pwlb13', 'pwlb16', 'pwlb17', 'pwlb19', 'pwlb20', 'pwlb23')
+    pwlb_score_dat[['pwlb_unhealthy']] <- rowSums(pwlb_data_edit[unhealthy_vars])
 
     ## Total
-    pwlb_score_dat[["pwlb_total"]] <- rowSums(pwlb_data_edit[c(healthy_vars, unhealthy_vars)])
+    pwlb_score_dat[['pwlb_total']] <- rowSums(pwlb_data_edit[c(healthy_vars, unhealthy_vars)])
 
     #### 3. Clean Export/Scored Data #####
 

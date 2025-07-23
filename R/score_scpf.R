@@ -23,6 +23,7 @@
 #' @inheritParams score_bes
 #' @inheritParams score_bes
 #' @inheritParams score_bes
+#' @inheritParams score_bes
 #' @param extra_scale_cols a vector of character strings that begin with 'scpf' but are not scale items. Any columns in scpf_data that begin with 'scpf' but are not scale items must be included here. Default is empty vector.
 #' 
 #'
@@ -38,7 +39,7 @@
 #'
 #' @export
 
-score_scpf <- function(scpf_data, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
+score_scpf <- function(scpf_data, pna_value, base_zero = TRUE, id, session_id, extra_scale_cols = c()) {
   
   #### 1. Set up/initial checks #####
   
@@ -103,6 +104,14 @@ score_scpf <- function(scpf_data, base_zero = TRUE, id, session_id, extra_scale_
   
   # remove underscore in scpf_items
   scpf_items <- gsub("scpf_", "scpf", scpf_items)
+  
+  # if pna_value arg, replace not applicable values with NA
+  if (isTRUE(methods::hasArg(pna_value))) {
+    
+    # replace pna_value with NA in pcw_vars
+    scpf_data[scpf_items] <- lapply(scpf_data[scpf_items] , function(x) ifelse(x == pna_value, NA, x))
+    
+  }
   
   # check range of data and print warnings
   min <- min(scpf_data[c(scpf_items)], na.rm = TRUE)
