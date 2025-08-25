@@ -45,9 +45,9 @@ score_sic <- function(sic_data, pna_value, base_zero = TRUE, id, session_id, ext
     data_arg <- methods::hasArg(sic_data)
 
     if (isTRUE(data_arg) & !is.data.frame(sic_data)) {
-        stop("sic_data must be entered as a data.frame")
+        stop('sic_data must be entered as a data.frame')
     } else if (isFALSE(data_arg)) {
-        stop("sic_data must set to the data.frame with amount consumed for each food item")
+        stop('sic_data must set to the data.frame with amount consumed for each food item')
     }
 
     # check if id exists
@@ -55,7 +55,7 @@ score_sic <- function(sic_data, pna_value, base_zero = TRUE, id, session_id, ext
 
     if (isTRUE(ID_arg)){
         if (!(id %in% names(sic_data))) {
-            stop("variable name entered as id is not in sic_data")
+            stop('variable name entered as id is not in sic_data')
         }
     }
 
@@ -64,13 +64,13 @@ score_sic <- function(sic_data, pna_value, base_zero = TRUE, id, session_id, ext
     
     if (isTRUE(sessionID_arg)){
       if (!(id %in% names(sic_data))) {
-        stop("variable name entered as session_id is not in sic_data")
+        stop('variable name entered as session_id is not in sic_data')
       }
     }
     
     # check base_zero is logical
     if (!is.logical(base_zero)) {
-      stop("base_zero arg must be logical (TRUE/FALSE)")
+      stop('base_zero arg must be logical (TRUE/FALSE)')
     }
     
     #### 2. Set Up Data #####
@@ -91,13 +91,13 @@ score_sic <- function(sic_data, pna_value, base_zero = TRUE, id, session_id, ext
     }
 
     # assign sic scale items to sic_items, excluding columns in extra_scale_cols
-    sic_items <- setdiff(grep("^sic", names(sic_data), value = TRUE), extra_scale_cols)
+    sic_items <- setdiff(grep('^sic', names(sic_data), value = TRUE), extra_scale_cols)
     
     # remove underscore in column names for sic_items
     names(sic_data)[names(sic_data) %in% sic_items] <- gsub('sic_', 'sic', names(sic_data)[names(sic_data) %in% sic_items])
     
     # remove underscore in sic_items
-    sic_items <- gsub("sic_", "sic", sic_items)
+    sic_items <- gsub('sic_', 'sic', sic_items)
     
     # if pna_value arg, replace not applicable values with NA
     if (isTRUE(methods::hasArg(pna_value))) {
@@ -113,11 +113,11 @@ score_sic <- function(sic_data, pna_value, base_zero = TRUE, id, session_id, ext
     
     if (isTRUE(base_zero)){
       if (min < 0 | max > 3) {
-        warning("range in SIC data is outside expected range given base_zero = TRUE (expected range: 0-3). Scoring may be incorrect")
+        warning('range in SIC data is outside expected range given base_zero = TRUE (expected range: 0-3). Scoring may be incorrect')
       } 
     } else {
       if (min < 1 | max > 4) {
-        warning("range in SIC data is outside expected range given base_zero = FALSE (expected range: 1-4). Scoring may be incorrect")
+        warning('range in SIC data is outside expected range given base_zero = FALSE (expected range: 1-4). Scoring may be incorrect')
       } 
     }
     
@@ -128,23 +128,34 @@ score_sic <- function(sic_data, pna_value, base_zero = TRUE, id, session_id, ext
       sic_data_edit[sic_items] <- sapply(sic_items, function(x) sic_data[[x]] + 1, simplify = TRUE)
     }
 
+    # calculate reversed scores - just guessing
+    reverse_qs <- c('sic3', 'sic4', 'sic8', 'sic10', 'sic11', 'sic12', 'sic13', 'sic14', 'sic16', 'sic18', 'sic19', 'sic20', 'sic21')
+    
+    for (var in 1:length(reverse_qs)) {
+      var_name <- reverse_qs[var]
+      reverse_name <- paste0(var_name, '_rev')
+      
+      sic_data_edit[[reverse_name]] <- ifelse(sic_data_edit[[var_name]] == 1, 4, ifelse(sic_data_edit[[var_name]] == 2, 3, ifelse(sic_data_edit[[var_name]] == 3, 2, ifelse(sic_data_edit[[var_name]] == 4, 1, NA))))
+      
+    }
+    
     ## Score Subscales
 
     # Lack of Well Being
-    lackwellbeing_vars <- c("")
-    sic_score_dat[["sic_lackwellbeing"]] <- rowMeans(sic_data[lackwellbeing_vars], na.rm = TRUE)
+    lackwellbeing_vars <- c('sic3_rev', 'sic4_rev', 'sic8_rev', 'sic10_rev', 'sic11_rev', 'sic13_rev', 'sic14_rev')
+    sic_score_dat[['sic_lackwellbeing']] <- rowMeans(sic_data_edit[lackwellbeing_vars], na.rm = TRUE)
 
     # Distress
-    distress_vars <- c("")
-    sic_score_dat[["sic_distress"]] <- rowMeans(sic_data[distress_vars], na.rm = TRUE)
+    distress_vars <- c('sic1', 'sic2', 'sic5', 'sic6', 'sic7', 'sic15', 'sic18', 'sic21_rev')
+    sic_score_dat[['sic_distress']] <- rowMeans(sic_data_edit[distress_vars], na.rm = TRUE)
 
     # Lack of Social Support
-    lacksocialsupport_vars <- c("")
-    sic_score_dat[["sic_lacksocialsupport"]] <- rowMeans(sic_data[lacksocialsupport_vars], na.rm = TRUE)
+    lacksocialsupport_vars <- c('sic9', 'sic12_rev', 'sic16_rev', 'sic17', 'sic19_rev', 'sic20_rev')
+    sic_score_dat[['sic_lacksocialsupport']] <- rowMeans(sic_data_edit[lacksocialsupport_vars], na.rm = TRUE)
 
     # Grand Mean
-    grandmean_vars <- sic_primary_qs
-    sic_score_dat[["sic_grand_mean"]] <- rowMeans(sic_data[grandmean_vars], na.rm = TRUE)
+    grandmean_vars <- c(sic_items[!(sic_items %in% reverse_qs)], paste0(reverse_qs, '_rev'))
+    sic_score_dat[['sic_grand_mean']] <- rowMeans(sic_data_edit[grandmean_vars], na.rm = TRUE)
 
     #### 3. Clean Export/Scored Data #####
     ## round data

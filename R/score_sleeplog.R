@@ -73,15 +73,27 @@ score_sleeplog <- function(sleep_data, id, session_id, summer_start, summer_end)
   }
   
   # fix non-military times
+  military_time_convert <- function(time){
+    if (lubridate::hour(as.POSIXct(time, format = '%H:%M:%S')) > 5 && lubridate::hour(as.POSIXct(time, format = '%H:%M:%S')) <= 11) {
+      hours <- lubridate::hour(as.POSIXct(time, format = '%H:%M')) + 12
+      mins <- lubridate::minute(as.POSIXct(time, format = '%H:%M'))
+      fix_time <- sprintf("%02d:%02d:00", hours, mins)
+    } else {
+      fix_time <- time
+    }
+    
+    return(as.character(fix_time))
+  }
+  
   
   ## bedtime 
-  sleep_data[, grepl('bedtime', names(sleep_data))] <- lapply(sleep_data[, grepl('bedtime', names(sleep_data))], function(x) ifelse(lubridate::hour(as.POSIXct(x, format = '%H:%M')) > 5 & lubridate::hour(as.POSIXct(x, format = '%H:%M')) <= 11, paste0(lubridate::hour(as.POSIXct(x, format = '%H:%M')) + 12, ':', sprintf("%02d", lubridate::minute(as.POSIXct(x, format = '%H:%M')))), x))
+  sleep_data[, grepl('bedtime', names(sleep_data))] <- lapply(sleep_data[, grepl('bedtime', names(sleep_data))], function(x) sapply(x, function(x2) ifelse(is.na(x2) | x2 == '', '', military_time_convert(as.character(x2)))))
   
   ## attempt sleep
-  sleep_data[, grepl('attempt', names(sleep_data))] <- lapply(sleep_data[, grepl('attempt', names(sleep_data))], function(x) ifelse(lubridate::hour(as.POSIXct(x, format = '%H:%M')) > 5 & lubridate::hour(as.POSIXct(x, format = '%H:%M')) <= 11, paste0(lubridate::hour(as.POSIXct(x, format = '%H:%M')) + 12, ':', sprintf("%02d", lubridate::minute(as.POSIXct(x, format = '%H:%M')))), x))
+  sleep_data[, grepl('attempt', names(sleep_data))] <- lapply(sleep_data[, grepl('attempt', names(sleep_data))], function(x) sapply(x, function(x2) ifelse(is.na(x2) | x2 == '', '', military_time_convert(as.character(x2)))))
   
   ## fall asleep
-  sleep_data[, grepl('asleep', names(sleep_data))] <- lapply(sleep_data[, grepl('asleep', names(sleep_data))], function(x) ifelse(lubridate::hour(as.POSIXct(x, format = '%H:%M')) > 5 & lubridate::hour(as.POSIXct(x, format = '%H:%M')) <= 11, paste0(lubridate::hour(as.POSIXct(x, format = '%H:%M')) + 12, ':', sprintf("%02d", lubridate::minute(as.POSIXct(x, format = '%H:%M')))), x))
+  sleep_data[, grepl('asleep', names(sleep_data))] <- lapply(sleep_data[, grepl('asleep', names(sleep_data))], function(x) sapply(x, function(x2) ifelse(is.na(x2) | x2 == '', '', military_time_convert(as.character(x2)))))
   
   # new data set
   sleep_data_edit <- sleep_data
