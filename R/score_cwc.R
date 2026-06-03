@@ -132,29 +132,37 @@ score_cwc <- function(cwc_data, pna_value, id, session_id, base_zero = TRUE, ext
   cwc_data_edit[c(qs_5scale)] <- sapply(qs_5scale, function(x) ifelse(is.na(cwc_data_edit[[x]]), NA, ifelse(cwc_data_edit[[x]] == 1, 0, ifelse(cwc_data_edit[[x]] == 2, 16.67, ifelse(cwc_data_edit[[x]] == 3, 50, ifelse(cwc_data_edit[[x]] == 4, 75, ifelse(cwc_data_edit[[x]] == 5, 100, NA)))))))
   
   # 7-chioce question
-  cwc_data[['cwc3']] <- ifelse(is.na(cwc_data_edit[['cwc3']]), NA, ifelse(cwc_data_edit[['cwc3']] == 1, 0, ifelse(cwc_data_edit[['cwc3']] == 2, 25, ifelse(cwc_data_edit[['cwc3']] == 3, 33.34, ifelse(cwc_data_edit[['cwc3']] == 4, 50, ifelse(cwc_data_edit[['cwc3']] == 5, 66.68, ifelse(cwc_data_edit[['cwc3']] == 6, 83.35, ifelse(cwc_data_edit[['cwc3']] == 7, 100, NA))))))))
+  cwc_data_edit[['cwc3']] <- ifelse(is.na(cwc_data_edit[['cwc3']]), NA, ifelse(cwc_data_edit[['cwc3']] == 1, 0, ifelse(cwc_data_edit[['cwc3']] == 2, 25, ifelse(cwc_data_edit[['cwc3']] == 3, 33.34, ifelse(cwc_data_edit[['cwc3']] == 4, 50, ifelse(cwc_data_edit[['cwc3']] == 5, 66.68, ifelse(cwc_data_edit[['cwc3']] == 6, 83.35, ifelse(cwc_data_edit[['cwc3']] == 7, 100, NA))))))))
   
   # 4-chioce question
   cwc_data_edit[['cwc4']] <- ifelse(is.na(cwc_data_edit[['cwc4']]), NA, ifelse(cwc_data_edit[['cwc4']] == 1, 0, ifelse(cwc_data_edit[['cwc4']] == 2, 33.33, ifelse(cwc_data_edit[['cwc4']] == 3, 66.66, ifelse(cwc_data_edit[['cwc4']] == 4, 100, NA)))))
   
-  #score if have at least 2 scores
-  cwc_score_dat[['cwc_total']] <- rowMeans(cwc_data_edit[cwc_items])
+  
+  #score
+  cwc_score_dat[['cwc_total']] <- rowMeans(cwc_data_edit[cwc_items], na.rm = TRUE)
+  
+  
   
   
   #### 3. Clean Export/Scored Data #####
   ## round data
   if (isTRUE(ID_arg)){
-    cwc_score_dat[2:ncol(cwc_score_dat)] <- round(cwc_score_dat[2:ncol(cwc_score_dat)], digits = 3)
+    cwc_score_dat[2:ncol(cwc_score_dat)] <- round(cwc_score_dat[2:ncol(cwc_score_dat)], digits = 2)
   } else {
-    cwc_score_dat <- round(cwc_score_dat, digits = 3)
+    cwc_score_dat <- round(cwc_score_dat, digits = 2)
   }
+  
+  #names
+  names(cwc_data_edit)[names(cwc_data_edit) %in% cwc_items] <- paste0(names(cwc_data_edit[cwc_items]), '_scored')
   
   ## merge raw responses with scored data
   if (isTRUE(ID_arg)){
     if (isTRUE(sessionID_arg)) {
-      cwc_phenotype <- merge(cwc_data, cwc_score_dat, by = c(id, session_id))
+      cwc_phenotype <- merge(cwc_data, cwc_data_edit[c(id, session_id, names(cwc_data_edit)[grepl('_scored', names(cwc_data_edit))])], by = c(id, session_id))
+      cwc_phenotype <- merge(cwc_phenotype, cwc_score_dat, by = c(id, session_id))
     } else {
-      cwc_phenotype <- merge(cwc_data, cwc_score_dat, by = id)
+      cwc_phenotype <- merge(cwc_data, cwc_data_edit[c(id, names(cwc_data_edit)[grepl('_scored', names(cwc_data_edit))])], by = id)
+      cwc_phenotype <- merge(cwc_phenotype, cwc_score_dat, by = id)
     }
     
     return(list(score_dat = as.data.frame(cwc_score_dat),
