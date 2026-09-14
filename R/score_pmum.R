@@ -129,7 +129,7 @@ score_pmum <- function(pmum_data, pna_value, base_zero = TRUE, id, session_id, e
   
   ## Score 
   
-  pmum_score_dat[["pmum_total"]] <- rowMeans(pmum_data_edit[c(pmum_items)])
+  pmum_score_dat[["pmum_score"]] <- rowMeans(pmum_data_edit[c(pmum_items)])
   
   #### 3. Clean Export/Scored Data #####
   

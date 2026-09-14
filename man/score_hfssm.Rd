@@ -24,7 +24,7 @@ score_hfssm(
 
 \item{session_id}{(optional) name of session ID column in input data if there are multiple observations per participant. If included, the output dataset will be matched by id and session id, if not included the output dataset will be in the order of the input data. Required to get the phenotype dataset if have multiple sessions (raw data merged with scores.)}
 
-\item{extra_scale_cols}{a vector of character strings that begin with 'bes' but are not scale items. Any columns in bes_data that begin with 'bes' but are not scale items must be included here. Default is empty vector.}
+\item{extra_scale_cols}{a vector of character strings that begin with 'hfssm' but are not scale items. Any columns in scpf_data that begin with 'hfssm' but are not scale items must be included here. Default is empty vector.}
 }
 \value{
 A dataset with subscale scores for the U.S. Household Food Security Survey Module

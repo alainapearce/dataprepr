@@ -48,6 +48,8 @@ export(score_spsrq)
 export(score_tfeq)
 export(score_tfeq18)
 importFrom(magrittr,"%>%")
-importFrom(minpack.lm,nls.lm)
-importFrom(minpack.lm,nls.lm.control)
+importFrom(minpack.lm,
+  nls.lm,
+  nls.lm.control
+)
 importFrom(rlang,enexpr)
