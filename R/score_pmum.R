@@ -80,7 +80,7 @@ score_pmum <- function(pmum_data, pna_value, base_zero = TRUE, id, session_id, e
   #### 2. Set Up Data #####
   
   # set up database for results create empty matrix
-  pmum_score_dat <- data.frame(pmum_total = rep(NA, nrow(pmum_data)))
+  pmum_score_dat <- data.frame(pmum_score = rep(NA, nrow(pmum_data)))
   
   
   if (isTRUE(ID_arg)) {
